@@ -384,9 +384,12 @@
       if (activeFilters.notable !== 'all') {
         const quality = checkResponseQuality(r);
         if (activeFilters.notable === 'no_response' && quality !== 'NO RESPONSE') return false;
-        if (activeFilters.notable === 'generic' && quality !== 'GENERIC TEMPLATE') return false;
-        if (activeFilters.notable === 'vpn_issue' && !r.themes?.some(t => t.toLowerCase().includes('vpn'))) return false;
-        if (activeFilters.notable === 'negative_sentiment' && r.sentiment?.label !== 'negative') return false;
+        if (activeFilters.notable === 'high_rating_apology' && quality !== 'HIGH RATING + APOLOGY') return false;
+        if (activeFilters.notable === 'low_rating_no_empathy' && quality !== 'LOW RATING + NO EMPATHY') return false;
+        if (activeFilters.notable === 'generic_template' && quality !== 'GENERIC TEMPLATE') return false;
+        if (activeFilters.notable === 'no_solution' && quality !== 'NO SOLUTION') return false;
+        if (activeFilters.notable === 'wrong_issue' && quality !== 'WRONG ISSUE') return false;
+        if (activeFilters.notable === 'critical' && r.rating !== 1) return false;
       }
       
       // Case-insensitive search
