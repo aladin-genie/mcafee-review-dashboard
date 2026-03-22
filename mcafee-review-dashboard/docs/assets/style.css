@@ -1084,6 +1084,99 @@ body {
   .kpi-grid {
     grid-template-columns: 1fr;
   }
+  
+  .header-title {
+    font-size: 1rem;
+  }
+  
+  .header-subtitle {
+    font-size: 0.7rem;
+  }
+  
+  .date-preset-btn {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.7rem;
+  }
+  
+  .review-card {
+    padding: 1rem;
+  }
+  
+  .review-header {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .review-text {
+    font-size: 0.85rem;
+  }
+  
+  .chart-container {
+    min-height: 200px;
+  }
+  
+  .pagination {
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+  
+  .pagination-btn {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+  .nav-tab {
+    padding: 0.875rem 1.25rem;
+  }
+  
+  .filter-select, .filter-input, .date-filter-input {
+    min-height: 44px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  .date-preset-btn {
+    min-height: 36px;
+  }
+  
+  .pagination-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --gray-50: #0F172A;
+    --gray-100: #1E293B;
+    --gray-200: #334155;
+    --gray-300: #475569;
+    --gray-400: #64748B;
+    --gray-500: #94A3B8;
+    --gray-600: #CBD5E1;
+    --gray-700: #E2E8F0;
+    --gray-800: #F1F5F9;
+    --gray-900: #F8FAFC;
+  }
+  
+  body {
+    background: #0F172A;
+    color: #F1F5F9;
+  }
 }
 
 /* ---- Scrollbar ---- */

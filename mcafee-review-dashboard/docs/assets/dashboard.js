@@ -1,4 +1,4 @@
-/* McAfee Review Dashboard - Revamped Reviews Tab */
+/* McAfee Review Dashboard - Revamped Reviews Tab v2.1 */
 (function() {
   'use strict';
   
@@ -6,7 +6,7 @@
   let FILTERED_STATS = null;
   let FILTERED_REVIEWS = null;
   let currentPage = 1;
-  const REVIEWS_PER_PAGE = 25; // Increased from 15
+  const REVIEWS_PER_PAGE = 25;
   let activeFilters = {
     platform: 'all',
     rating: 'all',
@@ -15,13 +15,93 @@
     search: ''
   };
   
+  // Data Schema Validation
+  function validateData(data) {
+    const errors = [];
+    
+    if (!data || typeof data !== 'object') {
+      errors.push('Data is not a valid object');
+      return { valid: false, errors };
+    }
+    
+    if (!data.metadata) errors.push('Missing metadata');
+    if (!Array.isArray(data.daily_stats)) errors.push('daily_stats must be an array');
+    if (!Array.isArray(data.recent_reviews)) errors.push('recent_reviews must be an array');
+    
+    if (data.recent_reviews && data.recent_reviews.length > 0) {
+      const sample = data.recent_reviews[0];
+      const requiredFields = ['id', 'platform', 'rating', 'text', 'date', 'sentiment'];
+      requiredFields.forEach(field => {
+        if (!(field in sample)) errors.push(`Missing required field: ${field}`);
+      });
+    }
+    
+    return { valid: errors.length === 0, errors };
+  }
+  
+  // Show error state
+  function showErrorState(message, details = '') {
+    const main = document.querySelector('.main-content');
+    if (main) {
+      main.innerHTML = `
+        <div style="padding: 3rem; text-align: center; color: var(--gray-600);">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">⚠️</div>
+          <h2 style="color: var(--danger); margin-bottom: 0.5rem;">Dashboard Error</h2>
+          <p style="margin-bottom: 1rem;">${message}</p>
+          ${details ? `<pre style="background: var(--gray-100); padding: 1rem; border-radius: 8px; text-align: left; font-size: 0.8rem; overflow-x: auto;">${details}</pre>` : ''}
+        </div>
+      `;
+    }
+  }
+  
+  // Show loading state
+  function showLoadingState() {
+    const main = document.querySelector('.main-content');
+    if (main) {
+      main.innerHTML = `
+        <div style="padding: 3rem; text-align: center; color: var(--gray-600);">
+          <div style="font-size: 3rem; margin-bottom: 1rem; animation: spin 1s linear infinite;">⏳</div>
+          <h2>Loading Dashboard...</h2>
+          <p>Fetching review data and initializing charts</p>
+        </div>
+      `;
+    }
+  }
+  
+  // Show empty state for reviews
+  function showEmptyState(containerId, message = 'No reviews found') {
+    const container = document.getElementById(containerId);
+    if (container) {
+      container.innerHTML = `
+        <div style="padding: 3rem; text-align: center; color: var(--gray-500);">
+          <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🔍</div>
+          <p style="font-size: 1rem; margin-bottom: 0.5rem;">${message}</p>
+          <p style="font-size: 0.85rem; color: var(--gray-400);">Try adjusting your filters</p>
+        </div>
+      `;
+    }
+  }
+  
   // Initialize
   async function init() {
     console.log('Dashboard initializing...');
+    showLoadingState();
+    
     try {
       const resp = await fetch('data/dashboard_data.json');
-      if (!resp.ok) throw new Error('Failed to load data');
+      if (!resp.ok) throw new Error(`Failed to load data: ${resp.status} ${resp.statusText}`);
+      
       DATA = await resp.json();
+      
+      // Validate data integrity
+      const validation = validateData(DATA);
+      if (!validation.valid) {
+        console.error('Data validation failed:', validation.errors);
+        showErrorState('Data validation failed', validation.errors.join('\n'));
+        return;
+      }
+      
+      console.log(`✅ Data validated: ${DATA.recent_reviews.length} reviews loaded`);
       
       // Default to Last 1 Month for both tabs
       const cutoff = new Date();
@@ -32,17 +112,87 @@
       document.getElementById('total-reviews-meta').textContent = 
         FILTERED_REVIEWS.length + ' reviews (Last 30 days)';
       
+      // Show last updated time
+      const lastUpdated = document.getElementById('last-updated');
+      if (lastUpdated && DATA.metadata?.generated_at) {
+        const date = new Date(DATA.metadata.generated_at);
+        lastUpdated.textContent = 'Updated: ' + date.toLocaleDateString();
+      }
+      
       initTabs();
       initDateFilters();
       initReviewFilters();
+      initExportButton();
       renderKPIs();
       renderOverviewCharts();
       renderReviews();
       
-      console.log('Dashboard ready - showing Last 1 Month');
+      console.log('Dashboard ready - showing Last 30 days');
     } catch(e) {
       console.error('Error:', e);
+      showErrorState('Failed to load dashboard data', e.message);
     }
+  }
+  
+  // CSV Export functionality
+  function initExportButton() {
+    // Add export button to header
+    const headerMeta = document.querySelector('.header-meta');
+    if (headerMeta && !document.getElementById('export-btn')) {
+      const exportBtn = document.createElement('button');
+      exportBtn.id = 'export-btn';
+      exportBtn.className = 'header-meta-item export-btn';
+      exportBtn.innerHTML = '📥 Export CSV';
+      exportBtn.style.cssText = 'background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.75rem; color: white; transition: all 0.2s;';
+      exportBtn.onclick = exportToCSV;
+      exportBtn.onmouseover = () => exportBtn.style.background = 'rgba(255,255,255,0.2)';
+      exportBtn.onmouseout = () => exportBtn.style.background = 'rgba(255,255,255,0.1)';
+      headerMeta.appendChild(exportBtn);
+    }
+  }
+  
+  function exportToCSV() {
+    if (!FILTERED_REVIEWS || FILTERED_REVIEWS.length === 0) {
+      alert('No reviews to export');
+      return;
+    }
+    
+    // CSV headers
+    const headers = ['Date', 'Platform', 'Rating', 'Sentiment', 'Themes', 'Review Text', 'McAfee Response', 'Response Quality'];
+    
+    // Convert reviews to CSV rows
+    const rows = FILTERED_REVIEWS.map(r => {
+      const themes = (r.themes || []).join('; ');
+      const responseQuality = checkResponseQuality(r);
+      return [
+        r.date,
+        r.platform,
+        r.rating,
+        r.sentiment?.label || 'neutral',
+        themes,
+        `"${(r.text || '').replace(/"/g, '""')}"`,
+        `"${(r.developer_reply || '').replace(/"/g, '""')}"`,
+        responseQuality
+      ];
+    });
+    
+    // Build CSV content
+    const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    
+    // Download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    const dateStr = new Date().toISOString().split('T')[0];
+    
+    link.setAttribute('href', url);
+    link.setAttribute('download', `mcafee_reviews_${dateStr}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    console.log(`✅ Exported ${FILTERED_REVIEWS.length} reviews to CSV`);
   }
   
   // Tab switching
@@ -55,7 +205,6 @@
         document.getElementById('tab-' + this.dataset.tab).classList.add('active');
         window.dispatchEvent(new Event('resize'));
         
-        // Render analysis charts when analysis tab is clicked
         if (this.dataset.tab === 'analysis') {
           setTimeout(renderAnalysisCharts, 100);
         }
@@ -63,17 +212,64 @@
     });
   }
   
-  // Date filtering - Applies to BOTH tabs
+  // Date filtering
   function initDateFilters() {
     document.querySelectorAll('.date-preset-btn').forEach(btn => {
       btn.addEventListener('click', function() {
         document.querySelectorAll('.date-preset-btn').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
-        
-        const range = this.dataset.range;
-        applyDateFilter(range);
+        applyDateFilter(this.dataset.range);
       });
     });
+    
+    // Custom date range
+    const applyBtn = document.getElementById('date-apply');
+    const clearBtn = document.getElementById('date-clear');
+    
+    if (applyBtn) {
+      applyBtn.addEventListener('click', function() {
+        const start = document.getElementById('date-start').value;
+        const end = document.getElementById('date-end').value;
+        
+        if (!start || !end) {
+          alert('Please select both start and end dates');
+          return;
+        }
+        
+        if (new Date(start) > new Date(end)) {
+          alert('Start date must be before end date');
+          return;
+        }
+        
+        document.querySelectorAll('.date-preset-btn').forEach(b => b.classList.remove('active'));
+        
+        FILTERED_STATS = DATA.daily_stats.filter(d => {
+          const date = new Date(d.date);
+          return date >= new Date(start) && date <= new Date(end);
+        });
+        
+        FILTERED_REVIEWS = DATA.recent_reviews.filter(r => {
+          const date = new Date(r.date);
+          return date >= new Date(start) && date <= new Date(end);
+        });
+        
+        document.getElementById('total-reviews-meta').textContent = 
+          `${FILTERED_REVIEWS.length} reviews (${start} to ${end})`;
+        
+        currentPage = 1;
+        renderKPIs();
+        renderOverviewCharts();
+        renderReviews();
+      });
+    }
+    
+    if (clearBtn) {
+      clearBtn.addEventListener('click', function() {
+        document.getElementById('date-start').value = '';
+        document.getElementById('date-end').value = '';
+        applyDateFilter('30');
+      });
+    }
   }
   
   function applyDateFilter(range) {
@@ -102,11 +298,98 @@
     document.getElementById('total-reviews-meta').textContent = 
       `${FILTERED_REVIEWS.length} reviews (${label})`;
     
-    // Reset to page 1 and re-render
     currentPage = 1;
     renderKPIs();
     renderOverviewCharts();
     renderReviews();
+  }
+  
+  // Review filters
+  function initReviewFilters() {
+    const filters = ['platform', 'rating', 'sentiment', 'notable'];
+    
+    filters.forEach(filter => {
+      const el = document.getElementById('filter-' + filter);
+      if (el) {
+        el.addEventListener('change', applyReviewFilters);
+      }
+    });
+    
+    const searchEl = document.getElementById('filter-search');
+    if (searchEl) {
+      searchEl.addEventListener('input', debounce(applyReviewFilters, 300));
+    }
+  }
+  
+  function debounce(fn, delay) {
+    let timeout;
+    return function(...args) {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => fn.apply(this, args), delay);
+    };
+  }
+  
+  function applyReviewFilters() {
+    activeFilters.platform = document.getElementById('filter-platform')?.value || 'all';
+    activeFilters.rating = document.getElementById('filter-rating')?.value || 'all';
+    activeFilters.sentiment = document.getElementById('filter-sentiment')?.value || 'all';
+    activeFilters.notable = document.getElementById('filter-notable')?.value || 'all';
+    activeFilters.search = document.getElementById('filter-search')?.value?.toLowerCase().trim() || '';
+    
+    currentPage = 1;
+    renderReviews();
+  }
+  
+  function checkResponseQuality(review) {
+    const hasReply = review.developer_reply && review.developer_reply.length > 0;
+    const replyLower = (review.developer_reply || '').toLowerCase();
+    const textLower = (review.text || '').toLowerCase();
+    
+    if (!hasReply) return 'NO RESPONSE';
+    if (review.rating >= 4 && (replyLower.includes('sorry') || replyLower.includes('apologize'))) {
+      return 'HIGH RATING + APOLOGY';
+    }
+    if (review.rating <= 2 && !replyLower.includes('understand') && !replyLower.includes('frustrat')) {
+      return 'LOW RATING + NO EMPATHY';
+    }
+    if (replyLower.includes('contact support') && replyLower.length < 200) {
+      return 'GENERIC TEMPLATE';
+    }
+    if (!replyLower.includes('step') && !replyLower.includes('try') && !replyLower.includes('setting')) {
+      return 'NO SOLUTION';
+    }
+    if (review.themes?.some(t => textLower.includes(t.toLowerCase())) && 
+        !review.themes.some(t => replyLower.includes(t.toLowerCase()))) {
+      return 'WRONG ISSUE';
+    }
+    return 'CORRECT';
+  }
+  
+  function filterReviews(reviews) {
+    return reviews.filter(r => {
+      if (activeFilters.platform !== 'all' && r.platform !== activeFilters.platform) return false;
+      if (activeFilters.rating !== 'all' && r.rating !== parseInt(activeFilters.rating)) return false;
+      if (activeFilters.sentiment !== 'all' && r.sentiment?.label !== activeFilters.sentiment) return false;
+      
+      if (activeFilters.notable !== 'all') {
+        const quality = checkResponseQuality(r);
+        if (activeFilters.notable === 'no_response' && quality !== 'NO RESPONSE') return false;
+        if (activeFilters.notable === 'generic' && quality !== 'GENERIC TEMPLATE') return false;
+        if (activeFilters.notable === 'vpn_issue' && !r.themes?.some(t => t.toLowerCase().includes('vpn'))) return false;
+        if (activeFilters.notable === 'negative_sentiment' && r.sentiment?.label !== 'negative') return false;
+      }
+      
+      // Case-insensitive search
+      if (activeFilters.search) {
+        const searchTerm = activeFilters.search.toLowerCase();
+        const textMatch = (r.text || '').toLowerCase().includes(searchTerm);
+        const themeMatch = (r.themes || []).some(t => t.toLowerCase().includes(searchTerm));
+        const replyMatch = (r.developer_reply || '').toLowerCase().includes(searchTerm);
+        if (!textMatch && !themeMatch && !replyMatch) return false;
+      }
+      
+      return true;
+    });
   }
   
   // KPI Cards
@@ -117,7 +400,7 @@
       : 0;
     
     const sentiments = { positive: 0, neutral: 0, negative: 0 };
-    FILTERED_REVIEWS.forEach(r => sentiments[r.sentiment.label]++);
+    FILTERED_REVIEWS.forEach(r => sentiments[r.sentiment?.label || 'neutral']++);
     
     const grid = document.getElementById('kpi-grid');
     if (grid) {
@@ -144,10 +427,14 @@
   
   // Overview Charts
   function renderOverviewCharts() {
-    const stats = FILTERED_STATS;
-    if (!stats.length) return;
+    if (!FILTERED_STATS?.length) {
+      showEmptyState('chart-combined-sentiment-volume', 'No data available for selected date range');
+      return;
+    }
     
+    const stats = FILTERED_STATS;
     const dates = stats.map(d => d.date);
+    
     const layout = { 
       height: 300, 
       margin: { t: 30, r: 20, b: 40, l: 50 },
@@ -155,7 +442,6 @@
       plot_bgcolor: 'transparent'
     };
     
-    // Purge existing charts
     ['chart-rating-trend', 'chart-sentiment-dist', 
      'chart-rating-dist', 'chart-platform-breakdown', 'chart-themes',
      'chart-combined-sentiment-volume']
@@ -164,7 +450,7 @@
         if (el && typeof Plotly !== 'undefined') Plotly.purge(el);
       });
     
-    // 1. COMBINED: Sentiment Trend + Daily Volume by Platform
+    // Combined Sentiment + Volume
     const platformVolumeData = {};
     FILTERED_REVIEWS.forEach(r => {
       if (!platformVolumeData[r.date]) platformVolumeData[r.date] = {};
@@ -209,26 +495,26 @@
     };
     
     Plotly.newPlot('chart-combined-sentiment-volume', [
-      { x: dates, y: stats.map(d => d.sentiment_distribution.positive), 
+      { x: dates, y: stats.map(d => d.sentiment_distribution?.positive || 0), 
         name: 'Positive Sentiment', type: 'scatter', mode: 'lines', 
         line: { color: '#10B981', width: 2 }, yaxis: 'y' },
-      { x: dates, y: stats.map(d => d.sentiment_distribution.negative), 
+      { x: dates, y: stats.map(d => d.sentiment_distribution?.negative || 0), 
         name: 'Negative Sentiment', type: 'scatter', mode: 'lines', 
         line: { color: '#EF4444', width: 2 }, yaxis: 'y' },
       ...volumeTraces
     ], combinedLayout, {displayModeBar: false});
     
-    // 2. Rating Trend
+    // Rating Trend
     Plotly.newPlot('chart-rating-trend', [{
       x: dates, y: stats.map(d => d.avg_rating),
       type: 'scatter', mode: 'lines+markers', line: { color: '#F59E0B' }
     }], { ...layout, yaxis: { range: [0, 5] }}, {displayModeBar: false});
     
-    // 3. Sentiment Distribution
+    // Sentiment Distribution
     const totalSent = stats.reduce((acc, d) => {
-      acc.positive += d.sentiment_distribution.positive;
-      acc.negative += d.sentiment_distribution.negative;
-      acc.neutral += d.sentiment_distribution.neutral;
+      acc.positive += d.sentiment_distribution?.positive || 0;
+      acc.negative += d.sentiment_distribution?.negative || 0;
+      acc.neutral += d.sentiment_distribution?.neutral || 0;
       return acc;
     }, {positive: 0, negative: 0, neutral: 0});
     
@@ -239,7 +525,7 @@
       marker: { colors: ['#10B981', '#F59E0B', '#EF4444'] }
     }], layout, {displayModeBar: false});
     
-    // 4. Rating Distribution
+    // Rating Distribution
     const ratings = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
     FILTERED_REVIEWS.forEach(r => ratings[r.rating]++);
     
@@ -250,7 +536,7 @@
       marker: { color: ['#EF4444', '#F97316', '#F59E0B', '#84CC16', '#10B981'] }
     }], { ...layout, xaxis: { type: 'category' }}, {displayModeBar: false});
     
-    // 5. Platform Breakdown
+    // Platform Breakdown
     const platforms = {};
     FILTERED_REVIEWS.forEach(r => platforms[r.platform] = (platforms[r.platform] || 0) + 1);
     const platformColors = { google_play: '#3DDC84', app_store: '#007AFF', windows_desktop: '#00BCF2' };
@@ -262,18 +548,17 @@
       marker: { color: Object.keys(platforms).map(p => platformColors[p] || '#94A3B8') }
     }], { ...layout, xaxis: { type: 'category' }}, {displayModeBar: false});
     
-    // 6. Top Themes with Sentiment Breakdown
+    // Top Themes
     const themesBySentiment = {};
     FILTERED_REVIEWS.forEach(r => {
       (r.themes || []).forEach(t => {
         if (!themesBySentiment[t]) {
           themesBySentiment[t] = { positive: 0, neutral: 0, negative: 0 };
         }
-        themesBySentiment[t][r.sentiment.label]++;
+        themesBySentiment[t][r.sentiment?.label || 'neutral']++;
       });
     });
     
-    // Sort by total mentions
     const sortedThemes = Object.entries(themesBySentiment)
       .map(([theme, counts]) => ({ 
         theme, 
@@ -284,36 +569,17 @@
       .slice(0, 8);
     
     Plotly.newPlot('chart-themes', [
-      {
-        x: sortedThemes.map(t => t.theme),
-        y: sortedThemes.map(t => t.positive),
-        name: 'Positive',
-        type: 'bar',
-        marker: { color: '#10B981' }
-      },
-      {
-        x: sortedThemes.map(t => t.theme),
-        y: sortedThemes.map(t => t.neutral),
-        name: 'Neutral',
-        type: 'bar',
-        marker: { color: '#F59E0B' }
-      },
-      {
-        x: sortedThemes.map(t => t.theme),
-        y: sortedThemes.map(t => t.negative),
-        name: 'Negative',
-        type: 'bar',
-        marker: { color: '#EF4444' }
-      }
-    ], { 
-      ...layout, 
-      barmode: 'stack',
-      xaxis: { type: 'category', tickangle: -45 },
-      legend: { orientation: 'h', y: -0.2 },
-      yaxis: { title: 'Review Count' }
-    }, {displayModeBar: false});
-
-    // 8. Individual Theme Analysis Charts
+      { x: sortedThemes.map(t => t.theme), y: sortedThemes.map(t => t.positive),
+        name: 'Positive', type: 'bar', marker: { color: '#10B981' } },
+      { x: sortedThemes.map(t => t.theme), y: sortedThemes.map(t => t.neutral),
+        name: 'Neutral', type: 'bar', marker: { color: '#F59E0B' } },
+      { x: sortedThemes.map(t => t.theme), y: sortedThemes.map(t => t.negative),
+        name: 'Negative', type: 'bar', marker: { color: '#EF4444' } }
+    ], { ...layout, barmode: 'stack', xaxis: { type: 'category', tickangle: -45 },
+         legend: { orientation: 'h', y: -0.2 }, yaxis: { title: 'Review Count' } }, 
+       {displayModeBar: false});
+    
+    // Individual Theme Analysis
     renderThemeAnalysis('Performance', ['Performance', 'Battery', 'Speed'], 'chart-theme-performance');
     renderThemeAnalysis('VPN', ['VPN'], 'chart-theme-vpn');
     renderThemeAnalysis('Security', ['Security Features'], 'chart-theme-security');
@@ -324,7 +590,6 @@
     const el = document.getElementById(containerId);
     if (!el) return;
     
-    // Find reviews matching any of the keywords
     const matchingReviews = FILTERED_REVIEWS.filter(r => {
       return (r.themes || []).some(t => 
         themeKeywords.some(kw => t.toLowerCase().includes(kw.toLowerCase()))
@@ -336,9 +601,8 @@
       return;
     }
     
-    // Calculate sentiment distribution
     const sentiments = { positive: 0, neutral: 0, negative: 0 };
-    matchingReviews.forEach(r => sentiments[r.sentiment.label]++);
+    matchingReviews.forEach(r => sentiments[r.sentiment?.label || 'neutral']++);
     
     const total = matchingReviews.length;
     const avgRating = matchingReviews.reduce((sum, r) => sum + r.rating, 0) / total;
@@ -346,481 +610,188 @@
     Plotly.newPlot(containerId, [{
       values: [sentiments.positive, sentiments.neutral, sentiments.negative],
       labels: ['Positive', 'Neutral', 'Negative'],
-      type: 'pie',
-      hole: 0.4,
-      marker: { colors: ['#10B981', '#F59E0B', '#EF4444'] },
-      textinfo: 'label+percent',
-      textposition: 'outside'
+      type: 'pie', hole: 0.4,
+      marker: { colors: ['#10B981', '#F59E0B', '#EF4444'] }
     }], {
       height: 300,
-      margin: { t: 60, r: 20, b: 20, l: 20 },
+      margin: { t: 40, r: 20, b: 40, l: 20 },
       paper_bgcolor: 'transparent',
       plot_bgcolor: 'transparent',
-      showlegend: false,
-      annotations: [{
-        text: `<b>${total}</b><br>reviews<br>⭐ ${avgRating.toFixed(1)}`,
-        showarrow: false,
-        font: { size: 14 }
-      }]
+      title: { text: `${total} reviews · ${avgRating.toFixed(1)}★ avg`, font: { size: 12 } },
+      showlegend: true,
+      legend: { orientation: 'h', y: -0.1 }
     }, {displayModeBar: false});
   }
   
-  // ========== REVIEWS TAB ==========
-  
-  function initReviewFilters() {
-    // Attach listeners to all filter dropdowns
-    const filterIds = ['filter-platform', 'filter-rating', 'filter-sentiment', 'filter-notable'];
-    
-    filterIds.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) {
-        // Remove existing listeners to prevent duplicates
-        el.removeEventListener('change', handleFilterChange);
-        el.addEventListener('change', handleFilterChange);
-      }
-    });
-    
-    // Search input with debounce
-    const searchEl = document.getElementById('filter-search');
-    if (searchEl) {
-      searchEl.removeEventListener('input', handleSearchInput);
-      searchEl.addEventListener('input', debounce(handleSearchInput, 300));
-    }
-  }
-  
-  function handleFilterChange(e) {
-    const id = e.target.id;
-    const value = e.target.value;
-    
-    // Update activeFilters
-    if (id === 'filter-platform') activeFilters.platform = value;
-    else if (id === 'filter-rating') activeFilters.rating = value;
-    else if (id === 'filter-sentiment') activeFilters.sentiment = value;
-    else if (id === 'filter-notable') activeFilters.notable = value;
-    
-    console.log('Filter changed:', id, value);
-    console.log('Active filters:', activeFilters);
-    
-    // Reset to page 1 and re-render
-    currentPage = 1;
-    renderReviews();
-  }
-  
-  function handleSearchInput(e) {
-    activeFilters.search = e.target.value.toLowerCase();
-    currentPage = 1;
-    renderReviews();
-  }
-  
-  function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-      const later = () => {
-        clearTimeout(timeout);
-        func(...args);
-      };
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-    };
-  }
-  
-  // Generate educational, evidence-based suggested reply
-  function generateSuggestedReply(review) {
-    const rating = review.rating;
-    const content = review.content.toLowerCase();
-    const themes = review.themes || [];
-    const author = review.author || 'there';
-    
-    // Detect specific issues
-    const hasVPNIssue = content.includes('vpn') || themes.includes('VPN');
-    const hasBillingIssue = content.includes('bill') || content.includes('charge') || content.includes('payment') || themes.includes('Pricing');
-    const hasCancellation = content.includes('cancel') || content.includes('uninstall') || content.includes('remove');
-    const hasPopUpIssue = content.includes('popup') || content.includes('pop-up') || content.includes('notification');
-    const hasPerformanceIssue = content.includes('slow') || content.includes('battery') || content.includes('drain');
-    const hasLoginIssue = content.includes('login') || content.includes('password') || content.includes('account');
-    const hasUpdateIssue = content.includes('update') || content.includes('upgrade');
-    
-    // POSITIVE REVIEWS (4-5★) - Thank and encourage
-    if (rating >= 4) {
-      if (hasVPNIssue) {
-        return `Hi ${author}, we're thrilled you're enjoying our VPN! With 500+ servers across 50 countries and 99.9% uptime, we serve 5M+ active users daily. Pro tip: For optimal speeds, connect to the nearest server location. You can check server load in the app - green = fastest. Thanks for being part of our security community! 🌍🔒`;
-      }
-      if (hasPerformanceIssue) {
-        return `Hi ${author}, thank you for the positive feedback! To keep McAfee running smoothly: ensure auto-updates are enabled (Settings > General), run quick scans instead of full scans when in a hurry, and whitelist trusted apps. Our performance mode uses <5% CPU in background. Glad we're keeping you protected! ⚡`;
-      }
-      return `Hi ${author}, thank you for this wonderful review! Reviews like yours inspire our entire team. We're committed to keeping you protected 24/7. Pro tip: Enable auto-renewal to ensure uninterrupted protection, and check out our mobile app for on-the-go security. Stay safe! 🛡️`;
-    }
-    
-    // NEUTRAL REVIEWS (3★) - Educate and prevent
-    if (rating === 3) {
-      if (hasVPNIssue) {
-        return `Hi ${author}, thank you for your feedback. Our VPN has 500+ servers globally. If experiencing slow speeds, this is often due to: 1) Distance from server (closer = faster) 2) Network congestion 3) ISP throttling. Try switching servers or enable "Auto-Select" for optimal performance. Our 24/7 support can also help optimize settings. 🌐`;
-      }
-      if (hasPopUpIssue) {
-        return `Hi ${author}, we understand the notifications can be frequent. You can customize these: Go to McAfee Settings > Notifications > Select "Important Only" instead of "All Alerts". This reduces pop-ups by 70% while keeping critical security alerts enabled. You can also set "Do Not Disturb" hours for uninterrupted work time. 🔕`;
-      }
-      if (hasPerformanceIssue) {
-        return `Hi ${author}, McAfee typically uses <5% CPU. If experiencing slowdowns: 1) Check if a full scan is running (pause it) 2) Close unused browser tabs 3) Enable "Gaming Mode" in settings for reduced background activity. These steps usually resolve performance concerns while maintaining full protection. ⚡`;
-      }
-      if (hasUpdateIssue) {
-        return `Hi ${author}, keeping McAfee updated ensures you have the latest threat protection. Enable auto-updates: Settings > General > Auto-Update ON. Updates install silently in background. If an update caused issues, rollback is available for 7 days in Settings > About > Previous Version. Our support can guide you through this. 🔄`;
-      }
-      return `Hi ${author}, thank you for your honest feedback. We're constantly improving based on user input. To ensure optimal experience: keep the app updated, customize notification settings to your preference, and reach out to our 24/7 support team for personalized optimization tips. We value your input! 💡`;
-    }
-    
-    // NEGATIVE REVIEWS (1-2★) - Educate on prevention and proper usage
-    if (rating <= 2) {
-      if (hasVPNIssue) {
-        return `Hi ${author}, we understand your frustration. Our VPN has 500+ servers with 99.9% uptime. Connection issues are often preventable: 1) Use "Auto-Select" server (chooses optimal automatically) 2) Check if your ISP blocks VPN ports 3) Ensure app is updated (Settings > About). Many connection issues are resolved by simply restarting the VPN or switching from WiFi to mobile data temporarily. Our tech team can walk you through optimization at 1-866-622-3911. 🔧`;
-      }
-      if (hasBillingIssue) {
-        return `Hi ${author}, we understand billing concerns can be frustrating. To prevent confusion: 1) Check your subscription details at mcafee.com/myaccount 2) Review billing dates and renewal settings 3) Enable billing notifications. Most billing questions are resolved by verifying the correct plan is selected. Our billing specialists can review your account and ensure you're on the optimal plan for your needs. Please contact us with your account details for personalized assistance. 💰`;
-      }
-      if (hasCancellation) {
-        return `Hi ${author}, we're sorry to see you go. For future reference, McAfee can be easily managed: 1) Auto-renewal can be turned off anytime at mcafee.com/myaccount 2) Uninstall tool is available at download.mcafee.com/mcpR.aspx 3) Trial reminders are sent 3 days before conversion. If staying, enable "Silent Mode" for fewer notifications while keeping full protection. We appreciate you giving us a try. 👋`;
-      }
-      if (hasPopUpIssue) {
-        return `Hi ${author}, we understand the frustration with notifications. This is easily preventable: Go to Settings > Notifications > Select "Important Only" (reduces pop-ups by 70%). You can also schedule "Do Not Disturb" hours. Many users aren't aware these customization options exist - they're designed to give you control while maintaining security. Our team can help optimize your notification preferences in under 2 minutes. 🔕`;
-      }
-      if (hasPerformanceIssue) {
-        return `Hi ${author}, we apologize for the performance impact. This is usually preventable: McAfee uses <5% CPU normally. High usage indicates: 1) Full system scan running (switch to Quick Scan in settings) 2) Conflicting security software (uninstall others) 3) Outdated version (update to latest). Enabling "Gaming Mode" reduces background activity by 60% while keeping protection active. These settings are in Settings > Performance. ⚡`;
-      }
-      if (hasLoginIssue) {
-        return `Hi ${author}, login issues are often preventable: 1) Ensure you're using the correct email (check your welcome email) 2) Password reset is instant at mcafee.com/forgot 3) Enable biometric login in mobile app for faster access 4) Check if caps lock is on. Account lockouts auto-reset after 30 minutes. For immediate assistance, our support team can verify account details and restore access quickly. 🔐`;
-      }
-      return `Hi ${author}, we sincerely apologize for your experience. Many issues can be prevented with proper setup: ensure auto-updates are enabled, customize settings to your preference, and use our optimization tools. We offer 24/7 support to walk you through any configuration - most issues are resolved in minutes with the right guidance. Please reach out so we can ensure you get the protection you need. 🤝`;
-    }
-    
-    return `Hi ${author}, thank you for your feedback. To ensure the best experience with McAfee: keep the app updated, customize settings via the Settings menu, and don't hesitate to contact our 24/7 support team for personalized assistance. We're here to help!`;
-  }
-  
-  // Check for response quality issues with detailed categorization
-  function checkResponseQuality(review) {
-    if (!review.developer_reply) {
-      return {
-        type: 'no_response',
-        severity: 'high',
-        category: '⚠️ NO RESPONSE',
-        message: 'McAfee has not responded to this review',
-        description: 'No developer reply'
-      };
-    }
-    
-    const reply = review.developer_reply.toLowerCase();
-    const content = review.content.toLowerCase();
-    const rating = review.rating;
-    
-    const hasApology = reply.includes('sorry') || reply.includes('apologize') || reply.includes('unfortunate') || reply.includes('concerned about your experience');
-    const hasEmpathy = hasApology || reply.includes('understand') || reply.includes('frustrat');
-    const isGeneric = (reply.includes('contact our support team') || reply.includes('reach out')) && reply.length < 200;
-    const noSolution = reply.includes('contact') && !reply.includes('you can') && !reply.includes('try') && !reply.includes('disable');
-    
-    // 1. HIGH RATING + APOLOGY (Critical)
-    if (rating >= 4 && hasApology) {
-      return {
-        type: 'mismatch',
-        severity: 'critical',
-        category: '🔴 HIGH RATING + APOLOGY',
-        message: 'Positive review received apology',
-        description: `${rating}★ review with "sorry/apologize" in response`
-      };
-    }
-    
-    // 2. LOW RATING + NO EMPATHY (High)
-    if (rating <= 2 && !hasEmpathy) {
-      return {
-        type: 'mismatch',
-        severity: 'high',
-        category: '🔴 LOW RATING + NO EMPATHY',
-        message: 'Angry customer got no acknowledgment',
-        description: `${rating}★ review lacks apology/understanding`
-      };
-    }
-    
-    // 3. GENERIC TEMPLATE (Medium)
-    if (isGeneric) {
-      return {
-        type: 'quality',
-        severity: 'medium',
-        category: '🟡 GENERIC TEMPLATE',
-        message: 'Copy-paste response with no personalization',
-        description: 'Standard "contact support" with no specifics'
-      };
-    }
-    
-    // 4. NO SOLUTION OFFERED (Medium)
-    if (noSolution) {
-      return {
-        type: 'quality',
-        severity: 'medium',
-        category: '🟡 NO SOLUTION',
-        message: 'Only "contact support" - no troubleshooting',
-        description: 'No actionable steps provided'
-      };
-    }
-    
-    // 5. WRONG ISSUE ADDRESSED (Check if response mentions different issue)
-    const reviewThemes = review.themes || [];
-    const replyMentionsVPN = reply.includes('vpn') || reply.includes('virtual private');
-    const replyMentionsBilling = reply.includes('bill') || reply.includes('charge') || reply.includes('payment');
-    const replyMentionsPopups = reply.includes('popup') || reply.includes('notification');
-    
-    const reviewMentionsVPN = content.includes('vpn');
-    const reviewMentionsBilling = content.includes('bill') || content.includes('charge');
-    const reviewMentionsPopups = content.includes('popup') || content.includes('notification');
-    
-    if ((replyMentionsVPN && !reviewMentionsVPN) ||
-        (replyMentionsBilling && !reviewMentionsBilling) ||
-        (replyMentionsPopups && !reviewMentionsPopups)) {
-      return {
-        type: 'mismatch',
-        severity: 'high',
-        category: '🔴 WRONG ISSUE',
-        message: 'Response addresses different problem',
-        description: 'Reply talks about unrelated issue'
-      };
-    }
-    
-    return null;
-  }
-
-  // Calculate days since review was posted (for NO RESPONSE)
-  function getResponseGap(dateString) {
-    const reviewDate = new Date(dateString);
-    const today = new Date();
-    const diffTime = Math.abs(today - reviewDate);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays;
-  }
-
-  
-  // Render Reviews Table
+  // Reviews Table
   function renderReviews() {
-    const tbody = document.getElementById('reviews-tbody');
-    if (!tbody) return;
+    const container = document.getElementById('reviews-container');
+    const filtered = filterReviews(FILTERED_REVIEWS);
     
-    // Apply all filters
-    let filtered = FILTERED_REVIEWS.filter(r => {
-      // Platform
-      if (activeFilters.platform !== 'all' && r.platform !== activeFilters.platform) return false;
-      
-      // Rating
-      if (activeFilters.rating !== 'all' && r.rating !== parseInt(activeFilters.rating)) return false;
-      
-      // Sentiment
-      if (activeFilters.sentiment !== 'all' && r.sentiment.label !== activeFilters.sentiment) return false;
-      
-      // Search
-      if (activeFilters.search && !r.content.toLowerCase().includes(activeFilters.search)) return false;
-      
-      // Response Quality filters
-      if (activeFilters.notable !== 'all') {
-        const quality = checkResponseQuality(r);
-        let matches = false;
-        
-        switch(activeFilters.notable) {
-          case 'no_response':
-            matches = quality?.type === 'no_response';
-            break;
-          case 'high_rating_apology':
-            matches = quality?.category?.includes('HIGH RATING + APOLOGY');
-            break;
-          case 'low_rating_no_empathy':
-            matches = quality?.category?.includes('LOW RATING + NO EMPATHY');
-            break;
-          case 'generic_template':
-            matches = quality?.category?.includes('GENERIC TEMPLATE');
-            break;
-          case 'no_solution':
-            matches = quality?.category?.includes('NO SOLUTION');
-            break;
-          case 'wrong_issue':
-            matches = quality?.category?.includes('WRONG ISSUE');
-            break;
-          case 'critical':
-            matches = r.rating === 1;
-            break;
-        }
-        
-        if (!matches) return false;
-      }
-      
-      return true;
-    });
-    
-    // Pagination
-    const totalPages = Math.ceil(filtered.length / REVIEWS_PER_PAGE);
-    const start = (currentPage - 1) * REVIEWS_PER_PAGE;
-    const reviews = filtered.slice(start, start + REVIEWS_PER_PAGE);
-    
-    // Render rows
-    tbody.innerHTML = reviews.map(r => {
-      const quality = checkResponseQuality(r);
-      const rowStyle = quality?.severity === 'critical' ? 'border-left: 4px solid #DC2626; background: #FEF2F2;' : 
-                       quality?.severity === 'high' ? 'border-left: 4px solid #F59E0B; background: #FEF3C7;' : 
-                       quality?.severity === 'medium' ? 'border-left: 4px solid #3B82F6; background: #EFF6FF;' : '';
-      
-      const qualityBadge = quality ? 
-        `<div style="background: ${quality.severity === 'critical' ? '#FEE2E2' : quality.severity === 'high' ? '#FEF3C7' : '#DBEAFE'}; 
-                    color: ${quality.severity === 'critical' ? '#991B1B' : quality.severity === 'high' ? '#92400E' : '#1E40AF'}; 
-                    padding: 2px 8px; border-radius: 4px; font-size: 0.65rem; font-weight: 600; margin-bottom: 4px; display: inline-block;"
-        >${quality.category}</div>` : '';
-      
-      const suggestedReply = generateSuggestedReply(r);
-      
-      return `
-      <tr style="${rowStyle}">
-        <td style="white-space:nowrap;font-size:0.75rem;color:#64748b;">
-          <div>${r.date}</div>
-          <div style="font-size:0.65rem;color:#94A3B8;">by ${r.author || 'Anonymous'}</div>
-        </td>
-        <td><span class="badge badge-${r.platform}">${r.platform.replace('_', ' ')}</span></td>
-        <td style="font-size:1.1rem;">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</td>
-        <td><span class="badge badge-${r.sentiment.label}">${r.sentiment.label}</span></td>
-        <td style="max-width: 300px;">
-          <div style="font-size: 0.85rem; line-height: 1.4;">${r.content}</div>
-          ${r.themes?.length ? `<div style="margin-top: 4px;">${r.themes.map(t => `<span style="font-size: 0.7rem; background: #E2E8F0; padding: 2px 6px; border-radius: 4px; margin-right: 4px;">${t}</span>`).join('')}</div>` : ''}
-        </td>
-        <td style="max-width: 250px;">
-          ${qualityBadge}
-          ${r.developer_reply ? 
-            `<div style="font-size: 0.8rem; line-height: 1.4;">${r.developer_reply}</div>` : 
-            '<span style="color:#EF4444; font-size: 0.8rem;">⚠️ No response from McAfee</span>' +
-            (() => {
-              const gap = getResponseGap(r.date);
-              return gap > 1 ? `<div style="font-size: 0.7rem; color: #DC2626; font-weight: 600; margin-top: 4px;">⏰ Waiting ${gap} days</div>` : '';
-            })()}
-        </td>
-        <td style="max-width: 280px;">
-          <div style="font-size: 0.8rem; line-height: 1.4; background: #F0FDF4; padding: 8px; border-radius: 6px; border-left: 3px solid #10B981;">
-            <div style="font-size: 0.7rem; color: #166534; font-weight: 600; margin-bottom: 2px;">💡 Suggested Reply:</div>
-            ${suggestedReply}
-          </div>
-        </td>
-      </tr>
-      `;
-    }).join('');
-    
-    // Update summary
-    const summary = document.getElementById('results-summary');
-    if (summary) {
-      const qualityIssues = filtered.filter(r => checkResponseQuality(r)).length;
-      summary.innerHTML = `Showing <strong>${filtered.length > 0 ? start + 1 : 0}–${Math.min(start + REVIEWS_PER_PAGE, filtered.length)}</strong> of <strong>${filtered.length}</strong> reviews ${qualityIssues > 0 ? `(⚠️ ${qualityIssues} quality issues detected)` : ''}`;
+    // Update results count
+    const countEl = document.getElementById('reviews-count');
+    if (countEl) {
+      countEl.textContent = `Showing ${Math.min(filtered.length, (currentPage-1)*REVIEWS_PER_PAGE + 1)}-${Math.min(filtered.length, currentPage*REVIEWS_PER_PAGE)} of ${filtered.length} reviews`;
     }
     
-    // Render pagination
-    renderPagination(totalPages, filtered.length);
-  }
-  
-  function renderPagination(totalPages, totalItems) {
-    const container = document.getElementById('pagination');
-    if (!container) return;
-    
-    if (totalPages <= 1) {
-      container.innerHTML = '';
+    if (filtered.length === 0) {
+      showEmptyState('reviews-container', 'No reviews match your filters');
+      renderPagination(0);
       return;
     }
     
-    let html = '<div style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 20px;">';
+    const start = (currentPage - 1) * REVIEWS_PER_PAGE;
+    const pageReviews = filtered.slice(start, start + REVIEWS_PER_PAGE);
     
-    // Previous button
-    html += `<button onclick="window.changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled style="opacity: 0.5;"' : ''} style="padding: 8px 16px; border: 1px solid #E2E8F0; background: white; border-radius: 6px; cursor: pointer;">← Prev</button>`;
+    const html = pageReviews.map(r => {
+      const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+      const sentimentClass = 'badge-' + (r.sentiment?.label || 'neutral');
+      const platformClass = r.platform;
+      const themes = (r.themes || []).map(t => `<span class="badge badge-theme">${t}</span>`).join('');
+      const quality = checkResponseQuality(r);
+      
+      const qualityBadge = {
+        'NO RESPONSE': '<span class="badge badge-negative">⏰ NO RESPONSE</span>',
+        'GENERIC TEMPLATE': '<span class="badge badge-neutral">📝 Generic</span>',
+        'HIGH RATING + APOLOGY': '<span class="badge badge-negative">⚠️ Apology on Positive</span>',
+        'LOW RATING + NO EMPATHY': '<span class="badge badge-negative">💔 No Empathy</span>',
+        'NO SOLUTION': '<span class="badge badge-neutral">❓ No Solution</span>',
+        'WRONG ISSUE': '<span class="badge badge-negative">❌ Wrong Issue</span>',
+        'CORRECT': '<span class="badge badge-positive">✓ Good</span>'
+      }[quality] || '';
+      
+      const responseGap = quality === 'NO RESPONSE' ? getResponseGap(r.date) : '';
+      
+      return `
+        <div class="review-card" data-review-id="${r.id}">
+          <div class="review-header">
+            <span class="badge badge-platform ${platformClass}">${r.platform.replace('_', ' ').toUpperCase()}</span>
+            <span class="stars">${stars}</span>
+            <span class="badge ${sentimentClass}">${r.sentiment?.label || 'neutral'}</span>
+            <span class="review-date">${r.date}</span>
+          </div>
+          <div class="review-themes">${themes}</div>
+          <div class="review-text">${r.text}</div>
+          ${r.developer_reply ? `
+            <div class="review-response">
+              <div class="response-label">McAfee Response:</div>
+              <div class="response-text">${r.developer_reply}</div>
+              ${r.developer_reply_date ? `<div class="response-date">Replied: ${r.developer_reply_date}</div>` : ''}
+            </div>
+          ` : ''}
+          <div class="review-footer">
+            ${qualityBadge}
+            ${responseGap ? `<span style="color: var(--danger); font-size: 0.75rem;">${responseGap}</span>` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
     
-    // Page numbers
-    const maxVisible = 5;
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
-    let endPage = Math.min(totalPages, startPage + maxVisible - 1);
-    
-    if (endPage - startPage < maxVisible - 1) {
-      startPage = Math.max(1, endPage - maxVisible + 1);
-    }
-    
-    if (startPage > 1) {
-      html += `<button onclick="window.changePage(1)" style="padding: 8px 12px; border: 1px solid #E2E8F0; background: white; border-radius: 6px; cursor: pointer;">1</button>`;
-      if (startPage > 2) html += '<span style="padding: 8px;">...</span>';
-    }
-    
-    for (let i = startPage; i <= endPage; i++) {
-      const active = i === currentPage ? 'background: #3B82F6; color: white; border-color: #3B82F6;' : 'background: white;';
-      html += `<button onclick="window.changePage(${i})" style="padding: 8px 12px; border: 1px solid #E2E8F0; ${active} border-radius: 6px; cursor: pointer;">${i}</button>`;
-    }
-    
-    if (endPage < totalPages) {
-      if (endPage < totalPages - 1) html += '<span style="padding: 8px;">...</span>';
-      html += `<button onclick="window.changePage(${totalPages})" style="padding: 8px 12px; border: 1px solid #E2E8F0; background: white; border-radius: 6px; cursor: pointer;">${totalPages}</button>`;
-    }
-    
-    // Next button
-    html += `<button onclick="window.changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled style="opacity: 0.5;"' : ''} style="padding: 8px 16px; border: 1px solid #E2E8F0; background: white; border-radius: 6px; cursor: pointer;">Next →</button>`;
-    
-    html += '</div>';
-    container.innerHTML = html;
+    if (container) container.innerHTML = html;
+    renderPagination(filtered.length);
   }
   
-  // Global function for pagination
+  function getResponseGap(reviewDate) {
+    const days = Math.floor((new Date() - new Date(reviewDate)) / (1000 * 60 * 60 * 24));
+    return `⏰ Waiting ${days} day${days !== 1 ? 's' : ''}`;
+  }
+  
+  function renderPagination(total) {
+    const totalPages = Math.ceil(total / REVIEWS_PER_PAGE);
+    const el = document.getElementById('reviews-pagination');
+    
+    if (!el) return;
+    
+    if (totalPages <= 1) {
+      el.innerHTML = '';
+      return;
+    }
+    
+    let html = `
+      <button class="pagination-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1})">←</button>
+    `;
+    
+    for (let i = 1; i <= totalPages; i++) {
+      if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+        html += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+      } else if (i === currentPage - 3 || i === currentPage + 3) {
+        html += `<span class="pagination-ellipsis">...</span>`;
+      }
+    }
+    
+    html += `<button class="pagination-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="changePage(${currentPage + 1})">→</button>`;
+    
+    el.innerHTML = html;
+  }
+  
   window.changePage = function(page) {
     currentPage = page;
     renderReviews();
-    document.getElementById('reviews-tbody').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('reviews-container')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
   
-  // ========== ANALYSIS TAB FUNCTIONS ==========
-  
+  // Analysis Tab Charts
   function renderAnalysisCharts() {
-    // Theme Sentiment Horizontal Bar Chart
-    const themeData = [
-      { theme: 'Security Features', positive: 75.8, negative: 18.9, neutral: 5.3, total: 132 },
-      { theme: 'VPN', positive: 39.0, negative: 51.2, neutral: 9.8, total: 41 },
-      { theme: 'Pricing', positive: 53.8, negative: 43.1, neutral: 3.1, total: 65 },
-      { theme: 'Customer Support', positive: 61.2, negative: 30.5, neutral: 8.3, total: 54 },
-      { theme: 'Performance', positive: 28.6, negative: 71.4, neutral: 0, total: 28 }
-    ];
+    const container = document.getElementById('analysis-theme-chart');
+    if (!container) return;
     
-    const themeChartEl = document.getElementById('analysis-theme-chart');
-    if (themeChartEl) {
-      Plotly.newPlot('analysis-theme-chart', [
-        {
-          y: themeData.map(d => d.theme),
-          x: themeData.map(d => d.positive),
-          name: 'Positive %',
-          type: 'bar',
-          orientation: 'h',
-          marker: { color: '#10B981' },
-          text: themeData.map(d => `${d.positive}%`),
-          textposition: 'inside'
-        },
-        {
-          y: themeData.map(d => d.theme),
-          x: themeData.map(d => d.negative),
-          name: 'Negative %',
-          type: 'bar',
-          orientation: 'h',
-          marker: { color: '#EF4444' },
-          text: themeData.map(d => `${d.negative}%`),
-          textposition: 'inside'
-        }
-      ], {
-        barmode: 'stack',
-        height: 300,
-        margin: { t: 20, r: 20, b: 40, l: 120 },
-        paper_bgcolor: 'transparent',
-        plot_bgcolor: 'transparent',
-        legend: { orientation: 'h', y: -0.15 },
-        xaxis: { title: 'Sentiment %', range: [0, 100] }
-      }, {displayModeBar: false});
-    }
+    // Theme sentiment analysis
+    const themeSentiments = {};
+    DATA.recent_reviews.forEach(r => {
+      (r.themes || []).forEach(t => {
+        if (!themeSentiments[t]) themeSentiments[t] = { positive: 0, negative: 0, neutral: 0, total: 0 };
+        themeSentiments[t][r.sentiment?.label || 'neutral']++;
+        themeSentiments[t].total++;
+      });
+    });
+    
+    const sortedThemes = Object.entries(themeSentiments)
+      .sort((a, b) => b[1].total - a[1].total)
+      .slice(0, 6);
+    
+    Plotly.newPlot('analysis-theme-chart', [
+      { 
+        y: sortedThemes.map(([t]) => t), 
+        x: sortedThemes.map(([,d]) => (d.positive / d.total * 100).toFixed(1)),
+        name: 'Positive %', type: 'bar', orientation: 'h',
+        marker: { color: '#10B981' }
+      },
+      { 
+        y: sortedThemes.map(([t]) => t), 
+        x: sortedThemes.map(([,d]) => (d.negative / d.total * 100).toFixed(1)),
+        name: 'Negative %', type: 'bar', orientation: 'h',
+        marker: { color: '#EF4444' }
+      }
+    ], {
+      barmode: 'stack',
+      height: 300,
+      margin: { t: 20, r: 20, b: 40, l: 120 },
+      paper_bgcolor: 'transparent',
+      plot_bgcolor: 'transparent',
+      legend: { orientation: 'h', y: -0.15 },
+      xaxis: { title: 'Sentiment %', range: [0, 100] }
+    }, {displayModeBar: false});
     
     // Response Quality Pie Chart
     const responseChartEl = document.getElementById('analysis-response-chart');
     if (responseChartEl) {
+      const qualityCounts = { 'Correct': 0, 'No Solution': 0, 'NO RESPONSE': 0, 'Generic': 0, 'High+Apology': 0, 'Low+NoEmpathy': 0, 'Wrong Issue': 0 };
+      DATA.recent_reviews.forEach(r => {
+        const q = checkResponseQuality(r);
+        if (q === 'CORRECT') qualityCounts['Correct']++;
+        else if (q === 'NO SOLUTION') qualityCounts['No Solution']++;
+        else if (q === 'NO RESPONSE') qualityCounts['NO RESPONSE']++;
+        else if (q === 'GENERIC TEMPLATE') qualityCounts['Generic']++;
+        else if (q === 'HIGH RATING + APOLOGY') qualityCounts['High+Apology']++;
+        else if (q === 'LOW RATING + NO EMPATHY') qualityCounts['Low+NoEmpathy']++;
+        else if (q === 'WRONG ISSUE') qualityCounts['Wrong Issue']++;
+      });
+      
       Plotly.newPlot('analysis-response-chart', [{
-        values: [162, 300, 47, 40, 11, 19, 5],
-        labels: ['Correct Response', 'No Solution', 'NO RESPONSE', 'Generic Template', 'High+Apology', 'Low+No Empathy', 'Wrong Issue'],
-        type: 'pie',
-        hole: 0.4,
-        marker: {
-          colors: ['#10B981', '#F59E0B', '#EF4444', '#FBBF24', '#DC2626', '#F97316', '#B91C1C']
-        },
+        values: Object.values(qualityCounts),
+        labels: Object.keys(qualityCounts),
+        type: 'pie', hole: 0.4,
+        marker: { colors: ['#10B981', '#F59E0B', '#EF4444', '#FBBF24', '#DC2626', '#F97316', '#B91C1C'] },
         textinfo: 'label+percent',
         textposition: 'outside'
       }], {
@@ -830,7 +801,7 @@
         plot_bgcolor: 'transparent',
         showlegend: false,
         annotations: [{
-          text: '<b>584</b><br>reviews',
+          text: `<b>${DATA.recent_reviews.length}</b><br>reviews`,
           showarrow: false,
           font: { size: 14 }
         }]
@@ -841,7 +812,6 @@
   // Start
   document.addEventListener('DOMContentLoaded', function() {
     init();
-    // Delay analysis chart render to ensure tab is accessible
     setTimeout(renderAnalysisCharts, 500);
   });
 })();
