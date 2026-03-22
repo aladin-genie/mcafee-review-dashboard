@@ -1,0 +1,3546 @@
+{
+  "metadata": {
+    "generated_at": "2026-03-21T08:00:00Z",
+    "total_reviews": 270,
+    "date_range": {
+      "start": "2026-02-19",
+      "end": "2026-03-21"
+    },
+    "sources": {
+      "google_play": 70,
+      "app_store": 60,
+      "windows_desktop": 75,
+      "mac_desktop": 65
+    },
+    "version": "3.0.0"
+  },
+  "summary": {
+    "average_rating": 3.18,
+    "average_sentiment": 0.13,
+    "total_reviews": 270,
+    "sentiment_distribution": {
+      "positive": 121,
+      "neutral": 61,
+      "negative": 88
+    },
+    "platform_breakdown": {
+      "google_play": {
+        "count": 70,
+        "avg_rating": 3,
+        "avg_sentiment": 0.05
+      },
+      "app_store": {
+        "count": 60,
+        "avg_rating": 3.26,
+        "avg_sentiment": 0.18
+      },
+      "windows_desktop": {
+        "count": 75,
+        "avg_rating": 3.38,
+        "avg_sentiment": 0.22
+      },
+      "mac_desktop": {
+        "count": 65,
+        "avg_rating": 3.05,
+        "avg_sentiment": 0.08
+      }
+    },
+    "rating_distribution": {
+      "1": 40,
+      "2": 49,
+      "3": 61,
+      "4": 65,
+      "5": 56
+    }
+  },
+  "daily_stats": [
+    {
+      "date": "2026-02-19",
+      "total_reviews": 10,
+      "average_rating": 3.14,
+      "average_sentiment": 0.22,
+      "sentiment_distribution": {
+        "positive": 2,
+        "neutral": 3,
+        "negative": 2
+      },
+      "platform_counts": {
+        "google_play": 3,
+        "app_store": 2,
+        "windows_desktop": 3,
+        "mac_desktop": 2
+      },
+      "theme_counts": {
+        "Performance": 4,
+        "Security Features": 3,
+        "Customer Support": 1,
+        "Pricing": 1
+      }
+    },
+    {
+      "date": "2026-02-20",
+      "total_reviews": 9,
+      "average_rating": 3.5,
+      "average_sentiment": 0.35,
+      "sentiment_distribution": {
+        "positive": 3,
+        "neutral": 3,
+        "negative": 2
+      },
+      "platform_counts": {
+        "google_play": 2,
+        "app_store": 2,
+        "windows_desktop": 3,
+        "mac_desktop": 2
+      },
+      "theme_counts": {
+        "VPN": 3,
+        "Security Features": 2,
+        "Installation": 2,
+        "UI/UX": 1,
+        "Performance": 1
+      }
+    },
+    {
+      "date": "2026-02-21",
+      "total_reviews": 7,
+      "average_rating": 2.83,
+      "average_sentiment": 0.1,
+      "sentiment_distribution": {
+        "positive": 1,
+        "neutral": 3,
+        "negative": 2
+      },
+      "platform_counts": {
+        "google_play": 2,
+        "app_store": 1,
+        "windows_desktop": 2,
+        "mac_desktop": 2
+      },
+      "theme_counts": {
+        "Battery Drain": 3,
+        "Performance": 2,
+        "Security Features": 2
+      }
+    },
+    {
+      "date": "2026-02-22",
+      "total_reviews": 10,
+      "average_rating": 3.71,
+      "average_sentiment": 0.42,
+      "sentiment_distribution": {
+        "positive": 4,
+        "neutral": 2,
+        "negative": 1
+      },
+      "platform_counts": {
+        "google_play": 2,
+        "app_store": 3,
+        "windows_desktop": 2,
+        "mac_desktop": 3
+      },
+      "theme_counts": {
+        "Security Features": 4,
+        "VPN": 2,
+        "Customer Support": 1,
+        "Pricing": 1,
+        "Performance": 1
+      }
+    },
+    {
+      "date": "2026-02-23",
+      "total_reviews": 9,
+      "average_rating": 3.25,
+      "average_sentiment": 0.28,
+      "sentiment_distribution": {
+        "positive": 3,
+        "neutral": 2,
+        "negative": 3
+      },
+      "platform_counts": {
+        "google_play": 3,
+        "app_store": 2,
+        "windows_desktop": 2,
+        "mac_desktop": 2
+      },
+      "theme_counts": {
+        "Performance": 4,
+        "UI/UX": 2,
+        "Installation": 2,
+        "Battery Drain": 1
+      }
+    },
+    {
+      "date": "2026-02-24",
+      "total_reviews": 7,
+      "average_rating": 3.83,
+      "average_sentiment": 0.48,
+      "sentiment_distribution": {
+        "positive": 4,
+        "neutral": 1,
+        "negative": 1
+      },
+      "platform_counts": {
+        "google_play": 2,
+        "app_store": 1,
+        "windows_desktop": 2,
+        "mac_desktop": 2
+      },
+      "theme_counts": {
+        "Security Features": 3,
+        "VPN": 2,
+        "Customer Support": 1,
+        "Pricing": 1
+      }
+    },
+    {
+      "date": "2026-02-25",
+      "total_reviews": 9,
+      "average_rating": 2.71,
+      "average_sentiment": 0.05,
+      "sentiment_distribution": {
+        "positive": 1,
+        "neutral": 3,
+        "negative": 3
+      },
+      "platform_counts": {
+        "google_play": 2,
+        "app_store": 2,
+        "windows_desktop": 3,
+        "mac_desktop": 2
+      },
+      "theme_counts": {
+        "Battery Drain": 3,
+        "Performance": 3,
+        "Pricing": 1,
+        "Installation": 1,
+        "Security Features": 1
+      }
+    },
+    {
+      "date": "2026-02-26",
+      "total_reviews": 10,
+      "average_rating": 3.62,
+      "average_sentiment": 0.4,
+      "sentiment_distribution": {
+        "positive": 4,
+        "neutral": 2,
+        "negative": 2
+      },
+      "platform_counts": {
+        "google_play": 3,
+        "app_store": 2,
+        "windows_desktop": 3,
+        "mac_desktop": 2
+      },
+      "theme_counts": {
+        "Security Features": 3,
+        "VPN": 2,
+        "UI/UX": 2,
+        "Customer Support": 1,
+        "Performance": 1
+      }
+    },
+    {
+      "date": "2026-02-27",
+      "total_reviews": 8,
+      "average_rating": 3.28,
+      "average_sentiment": 0.3,
+      "sentiment_distribution": {
+        "positive": 3,
+        "neutral": 2,
+        "negative": 2
+      },
+      "platform_counts": {
+        "google_play": 2,
+        "app_store": 2,
+        "windows_desktop": 1,
+        "mac_desktop": 3
+      },
+      "theme_counts": {
+        "Performance": 3,
+        "Security Features": 3,
+        "Installation": 1,
+        "Pricing": 1
+      }
+    },
+    {
+      "date": "2026-02-28",
+      "total_reviews": 10,
+      "average_rating": 3.5,
+      "average_sentiment": 0.35,
+      "sentiment_distribution": {
+        "positive": 3,
+        "neutral": 3,
+        "negative": 2
+      },
+      "platform_counts": {
+        "google_play": 2,
+        "app_store": 2,
+        "windows_desktop": 3,
+        "mac_desktop": 3
+      },
+      "theme_counts": {
+        "VPN": 3,
+        "Security Features": 3,
+        "Battery Drain": 1,
+        "UI/UX": 2,
+        "Performance": 1
+      }
+    },
+    {
+      "date": "2026-03-01",
+      "total_reviews": 11,
+      "average_rating": 3.66,
+      "average_sentiment": 0.42,
+      "sentiment_distribution": {
+        "positive": 4,
+        "neutral": 3,
+        "negative": 2
+      },
+      "platform_counts": {
+        "google_play": 3,
+        "app_store": 3,
+        "windows_desktop": 3,
+        "mac_desktop": 2
+      },
+      "theme_counts": {
+        "Security Features": 3,
+        "Performance": 3,
+        "VPN": 2,
+        "Customer Support": 2
+      }
+    },
+    {
+      "date": "2026-03-02",
+      "total_reviews": 8,
+      "average_rating": 2.85,
+      "average_sentiment": 0.12,
+      "sentiment_distribution": {
+        "positive": 2,
+        "neutral": 2,
+        "negative": 3
+      },
+      "platform_counts": {
+        "google_play": 2,
+        "app_store": 1,
+        "windows_desktop": 2,
+        "mac_desktop": 3
+      },
+      "theme_counts": {
+        "Battery Drain": 3,
+        "Installation": 2,
+        "Performance": 1,
+        "Pricing": 1,
+        "Security Features": 1
+      }
+    },
+    {
+      "date": "2026-03-03",
+      "total_reviews": 10,
+      "average_rating": 3.37,
+      "average_sentiment": 0.32,
+      "sentiment_distribution": {
+        "positive": 3,
+        "neutral": 3,
+        "negative": 2
+      },
+      "platform_counts": {
+        "google_play": 2,
+        "app_store": 2,
+        "windows_desktop": 3,
+        "mac_desktop": 3
+      },
+      "theme_counts": {
+        "Security Features": 4,
+        "UI/UX": 2,
+        "VPN": 2,
+        "Customer Support": 1,
+        "Performance": 1
+      }
+    },
+    {
+      "date": "2026-03-04",
+      "total_reviews": 8,
+      "average_rating": 3.57,
+      "average_sentiment": 0.38,
+      "sentiment_distribution": {
+        "positive": 3,
+        "neutral": 2,
+        "negative": 2
+      },
+      "platform_counts": {
+        "google_play": 2,
+        "app_store": 2,
+        "windows_desktop": 3,
+        "mac_desktop": 1
+      },
+      "theme_counts": {
+        "VPN": 3,
+        "Performance": 3,
+        "Security Features": 1,
+        "Installation": 1
+      }
+    },
+    {
+      "date": "2026-03-05",
+      "total_reviews": 10,
+      "average_rating": 3.75,
+      "average_sentiment": 0.45,
+      "sentiment_distribution": {
+        "positive": 4,
+        "neutral": 2,
+        "negative": 2
+      },
+      "platform_counts": {
+        "google_play": 3,
+        "app_store": 2,
+        "windows_desktop": 2,
+        "mac_desktop": 3
+      },
+      "theme_counts": {
+        "Security Features": 4,
+        "Customer Support": 2,
+        "Pricing": 2,
+        "UI/UX": 1
+      }
+    },
+    {
+      "date": "2026-03-06",
+      "total_reviews": 9,
+      "average_rating": 3,
+      "average_sentiment": 0.18,
+      "sentiment_distribution": {
+        "positive": 2,
+        "neutral": 3,
+        "negative": 2
+      },
+      "platform_counts": {
+        "google_play": 2,
+        "app_store": 2,
+        "windows_desktop": 2,
+        "mac_desktop": 3
+      },
+      "theme_counts": {
+        "Performance": 4,
+        "Battery Drain": 2,
+        "Installation": 1,
+        "VPN": 1,
+        "Security Features": 1
+      }
+    },
+    {
+      "date": "2026-03-07",
+      "total_reviews": 9,
+      "average_rating": 3.62,
+      "average_sentiment": 0.4,
+      "sentiment_distribution": {
+        "positive": 4,
+        "neutral": 2,
+        "negative": 2
+      },
+      "platform_counts": {
+        "google_play": 2,
+        "app_store": 2,
+        "windows_desktop": 3,
+        "mac_desktop": 2
+      },
+      "theme_counts": {
+        "Security Features": 3,
+        "VPN": 2,
+        "UI/UX": 2,
+        "Customer Support": 1,
+        "Performance": 1
+      }
+    },
+    {
+      "date": "2026-03-08",
+      "total_reviews": 9,
+      "average_rating": 3.42,
+      "average_sentiment": 0.33,
+      "sentiment_distribution": {
+        "positive": 3,
+        "neutral": 2,
+        "negative": 2
+      },
+      "platform_counts": {
+        "google_play": 2,
+        "app_store": 2,
+        "windows_desktop": 2,
+        "mac_desktop": 3
+      },
+      "theme_counts": {
+        "Performance": 2,
+        "Security Features": 3,
+        "Pricing": 2,
+        "Battery Drain": 1
+      }
+    },
+    {
+      "date": "2026-03-09",
+      "total_reviews": 8,
+      "average_rating": 3.33,
+      "average_sentiment": 0.3,
+      "sentiment_distribution": {
+        "positive": 2,
+        "neutral": 2,
+        "negative": 2
+      },
+      "platform_counts": {
+        "google_play": 2,
+        "app_store": 1,
+        "windows_desktop": 3,
+        "mac_desktop": 2
+      },
+      "theme_counts": {
+        "VPN": 2,
+        "Installation": 2,
+        "Security Features": 2,
+        "Customer Support": 1,
+        "Performance": 1
+      }
+    },
+    {
+      "date": "2026-03-10",
+      "total_reviews": 9,
+      "average_rating": 3.5,
+      "average_sentiment": 0.36,
+      "sentiment_distribution": {
+        "positive": 3,
+        "neutral": 3,
+        "negative": 2
+      },
+      "platform_counts": {
+        "google_play": 2,
+        "app_store": 2,
+        "windows_desktop": 3,
+        "mac_desktop": 2
+      },
+      "theme_counts": {
+        "Security Features": 3,
+        "Performance": 3,
+        "UI/UX": 2,
+        "Battery Drain": 1
+      }
+    },
+    {
+      "date": "2026-03-11",
+      "total_reviews": 8,
+      "average_rating": 3.14,
+      "average_sentiment": 0.22,
+      "sentiment_distribution": {
+        "positive": 2,
+        "neutral": 3,
+        "negative": 2
+      },
+      "platform_counts": {
+        "google_play": 2,
+        "app_store": 2,
+        "windows_desktop": 1,
+        "mac_desktop": 3
+      },
+      "theme_counts": {
+        "Performance": 3,
+        "Pricing": 2,
+        "VPN": 1,
+        "Installation": 1,
+        "Security Features": 1
+      }
+    },
+    {
+      "date": "2026-03-12",
+      "total_reviews": 11,
+      "average_rating": 3.62,
+      "average_sentiment": 0.4,
+      "sentiment_distribution": {
+        "positive": 4,
+        "neutral": 2,
+        "negative": 2
+      },
+      "platform_counts": {
+        "google_play": 3,
+        "app_store": 2,
+        "windows_desktop": 3,
+        "mac_desktop": 3
+      },
+      "theme_counts": {
+        "Security Features": 4,
+        "Customer Support": 2,
+        "VPN": 2,
+        "UI/UX": 1,
+        "Performance": 1
+      }
+    },
+    {
+      "date": "2026-03-13",
+      "total_reviews": 8,
+      "average_rating": 3.28,
+      "average_sentiment": 0.26,
+      "sentiment_distribution": {
+        "positive": 2,
+        "neutral": 3,
+        "negative": 2
+      },
+      "platform_counts": {
+        "google_play": 2,
+        "app_store": 2,
+        "windows_desktop": 3,
+        "mac_desktop": 1
+      },
+      "theme_counts": {
+        "Performance": 4,
+        "Battery Drain": 2,
+        "Security Features": 1,
+        "Pricing": 1
+      }
+    },
+    {
+      "date": "2026-03-14",
+      "total_reviews": 9,
+      "average_rating": 3.75,
+      "average_sentiment": 0.46,
+      "sentiment_distribution": {
+        "positive": 4,
+        "neutral": 3,
+        "negative": 1
+      },
+      "platform_counts": {
+        "google_play": 2,
+        "app_store": 2,
+        "windows_desktop": 2,
+        "mac_desktop": 3
+      },
+      "theme_counts": {
+        "Security Features": 4,
+        "VPN": 2,
+        "Customer Support": 2,
+        "UI/UX": 1
+      }
+    },
+    {
+      "date": "2026-03-15",
+      "total_reviews": 10,
+      "average_rating": 3,
+      "average_sentiment": 0.15,
+      "sentiment_distribution": {
+        "positive": 2,
+        "neutral": 2,
+        "negative": 3
+      },
+      "platform_counts": {
+        "google_play": 2,
+        "app_store": 2,
+        "windows_desktop": 3,
+        "mac_desktop": 3
+      },
+      "theme_counts": {
+        "Installation": 3,
+        "Performance": 3,
+        "Battery Drain": 1,
+        "Pricing": 1,
+        "Security Features": 1
+      }
+    },
+    {
+      "date": "2026-03-16",
+      "total_reviews": 9,
+      "average_rating": 3.5,
+      "average_sentiment": 0.35,
+      "sentiment_distribution": {
+        "positive": 3,
+        "neutral": 3,
+        "negative": 2
+      },
+      "platform_counts": {
+        "google_play": 2,
+        "app_store": 2,
+        "windows_desktop": 3,
+        "mac_desktop": 2
+      },
+      "theme_counts": {
+        "Security Features": 3,
+        "VPN": 2,
+        "Performance": 3,
+        "Customer Support": 1
+      }
+    },
+    {
+      "date": "2026-03-17",
+      "total_reviews": 8,
+      "average_rating": 3.57,
+      "average_sentiment": 0.38,
+      "sentiment_distribution": {
+        "positive": 3,
+        "neutral": 2,
+        "negative": 2
+      },
+      "platform_counts": {
+        "google_play": 2,
+        "app_store": 2,
+        "windows_desktop": 1,
+        "mac_desktop": 3
+      },
+      "theme_counts": {
+        "UI/UX": 3,
+        "Security Features": 3,
+        "VPN": 1,
+        "Pricing": 1
+      }
+    },
+    {
+      "date": "2026-03-18",
+      "total_reviews": 10,
+      "average_rating": 3.37,
+      "average_sentiment": 0.3,
+      "sentiment_distribution": {
+        "positive": 3,
+        "neutral": 3,
+        "negative": 2
+      },
+      "platform_counts": {
+        "google_play": 3,
+        "app_store": 2,
+        "windows_desktop": 3,
+        "mac_desktop": 2
+      },
+      "theme_counts": {
+        "Performance": 4,
+        "Security Features": 3,
+        "Battery Drain": 2,
+        "Installation": 1
+      }
+    },
+    {
+      "date": "2026-03-19",
+      "total_reviews": 9,
+      "average_rating": 3.71,
+      "average_sentiment": 0.44,
+      "sentiment_distribution": {
+        "positive": 4,
+        "neutral": 1,
+        "negative": 2
+      },
+      "platform_counts": {
+        "google_play": 3,
+        "app_store": 2,
+        "windows_desktop": 3,
+        "mac_desktop": 1
+      },
+      "theme_counts": {
+        "Security Features": 3,
+        "VPN": 2,
+        "Customer Support": 1,
+        "UI/UX": 1,
+        "Performance": 1
+      }
+    },
+    {
+      "date": "2026-03-20",
+      "total_reviews": 9,
+      "average_rating": 3.5,
+      "average_sentiment": 0.36,
+      "sentiment_distribution": {
+        "positive": 3,
+        "neutral": 3,
+        "negative": 2
+      },
+      "platform_counts": {
+        "google_play": 2,
+        "app_store": 2,
+        "windows_desktop": 2,
+        "mac_desktop": 3
+      },
+      "theme_counts": {
+        "Performance": 3,
+        "Security Features": 3,
+        "VPN": 2,
+        "Pricing": 1
+      }
+    },
+    {
+      "date": "2026-03-21",
+      "total_reviews": 8,
+      "average_rating": 3.66,
+      "average_sentiment": 0.42,
+      "sentiment_distribution": {
+        "positive": 3,
+        "neutral": 2,
+        "negative": 1
+      },
+      "platform_counts": {
+        "google_play": 2,
+        "app_store": 1,
+        "windows_desktop": 3,
+        "mac_desktop": 2
+      },
+      "theme_counts": {
+        "Security Features": 3,
+        "Customer Support": 2,
+        "VPN": 1,
+        "UI/UX": 1,
+        "Performance": 1
+      }
+    }
+  ],
+  "top_themes": [
+    {
+      "theme": "Security Features",
+      "count": 68,
+      "sentiment_avg": 0.52
+    },
+    {
+      "theme": "Performance",
+      "count": 55,
+      "sentiment_avg": -0.15
+    },
+    {
+      "theme": "VPN",
+      "count": 48,
+      "sentiment_avg": 0.35
+    },
+    {
+      "theme": "Customer Support",
+      "count": 32,
+      "sentiment_avg": 0.1
+    },
+    {
+      "theme": "Battery Drain",
+      "count": 28,
+      "sentiment_avg": -0.45
+    },
+    {
+      "theme": "UI/UX",
+      "count": 27,
+      "sentiment_avg": 0.3
+    },
+    {
+      "theme": "Installation",
+      "count": 25,
+      "sentiment_avg": -0.22
+    },
+    {
+      "theme": "Pricing",
+      "count": 22,
+      "sentiment_avg": -0.1
+    }
+  ],
+  "recent_reviews": [
+    {
+      "id": "r001",
+      "date": "2026-03-21",
+      "platform": "google_play",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.88
+      },
+      "content": "McAfee has been protecting my phone for over a year now. The real-time scanning catches threats instantly, and the Wi-Fi security feature warned me about an unsecured network at the airport. Outstanding protection!",
+      "themes": [
+        "Security Features",
+        "VPN"
+      ],
+      "author": "MobileSecPro",
+      "version": "6.12.1",
+      "helpful_count": 42
+    },
+    {
+      "id": "r002",
+      "date": "2026-03-21",
+      "platform": "app_store",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.65
+      },
+      "content": "Good antivirus app with solid malware detection. The identity monitoring feature is a nice bonus. Took off one star because the VPN can be a bit slow when connecting to overseas servers.",
+      "themes": [
+        "Security Features",
+        "VPN"
+      ],
+      "author": "iPhoneUser2026",
+      "version": "5.8.0",
+      "helpful_count": 18
+    },
+    {
+      "id": "r003",
+      "date": "2026-03-21",
+      "platform": "windows_desktop",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.92
+      },
+      "content": "Switched from Norton to McAfee Total Protection and couldn't be happier. The firewall is rock solid, real-time scanning doesn't slow my PC down like Norton did, and the password manager works seamlessly across all my devices.",
+      "themes": [
+        "Security Features",
+        "Performance"
+      ],
+      "author": "PCGamer_Alex",
+      "version": "16.8.2",
+      "helpful_count": 67
+    },
+    {
+      "id": "r004",
+      "date": "2026-03-21",
+      "platform": "mac_desktop",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.58
+      },
+      "content": "McAfee on Mac is disappointing. It hogs system resources — my MacBook Air fan spins constantly when it's running background scans. Had to schedule scans for nighttime only. For the premium price, I expected better optimization.",
+      "themes": [
+        "Performance",
+        "Pricing"
+      ],
+      "author": "MacBookUser_Sarah",
+      "version": "4.12.0",
+      "helpful_count": 33
+    },
+    {
+      "id": "r005",
+      "date": "2026-03-20",
+      "platform": "google_play",
+      "rating": 1,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.85
+      },
+      "content": "Terrible experience! App crashed three times during setup, then started showing ads for McAfee premium even though I already paid for it. Uninstalled and went back to Bitdefender. Complete waste of money.",
+      "themes": [
+        "Installation",
+        "Pricing"
+      ],
+      "author": "FrustratedAndroid",
+      "version": "6.12.1",
+      "helpful_count": 89
+    },
+    {
+      "id": "r006",
+      "date": "2026-03-20",
+      "platform": "app_store",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.12
+      },
+      "content": "McAfee does its job as an antivirus. Nothing spectacular but nothing terrible either. The interface is clean and easy to navigate. I just wish the scan results gave more detail about what was found.",
+      "themes": [
+        "UI/UX",
+        "Security Features"
+      ],
+      "author": "CasualUser_Mike",
+      "version": "5.8.0",
+      "helpful_count": 7
+    },
+    {
+      "id": "r007",
+      "date": "2026-03-20",
+      "platform": "windows_desktop",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.72
+      },
+      "content": "Solid desktop protection. The new dashboard design is much cleaner than the old version. Quick scan finishes in under 5 minutes. Only concern is that it flagged a legitimate developer tool as malware — false positive was annoying.",
+      "themes": [
+        "Security Features",
+        "UI/UX"
+      ],
+      "author": "DevOps_Danny",
+      "version": "16.8.2",
+      "helpful_count": 25
+    },
+    {
+      "id": "r008",
+      "date": "2026-03-20",
+      "platform": "mac_desktop",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.9
+      },
+      "content": "Finally a Mac antivirus that actually works well! Love the real-time protection and the fact it barely impacts my M3 MacBook Pro's performance. The dark mode support and native macOS integration are excellent.",
+      "themes": [
+        "Security Features",
+        "Performance",
+        "UI/UX"
+      ],
+      "author": "MacPowerUser_Jay",
+      "version": "4.12.0",
+      "helpful_count": 45
+    },
+    {
+      "id": "r009",
+      "date": "2026-03-20",
+      "platform": "google_play",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.62
+      },
+      "content": "Drains my battery like crazy. Since installing McAfee, my phone barely lasts until 3pm when it used to last all day. The constant background scanning is killing my Samsung Galaxy S24's battery life.",
+      "themes": [
+        "Battery Drain",
+        "Performance"
+      ],
+      "author": "BatteryDead_User",
+      "version": "6.12.0",
+      "helpful_count": 56
+    },
+    {
+      "id": "r010",
+      "date": "2026-03-20",
+      "platform": "windows_desktop",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.08
+      },
+      "content": "McAfee came pre-installed on my Dell laptop. It works fine for basic protection but the renewal price is steep. Considering switching to Windows Defender which is free and built-in.",
+      "themes": [
+        "Pricing",
+        "Security Features"
+      ],
+      "author": "BudgetPC_Lisa",
+      "version": "16.8.1",
+      "helpful_count": 12
+    },
+    {
+      "id": "r011",
+      "date": "2026-03-19",
+      "platform": "app_store",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.85
+      },
+      "content": "McAfee's VPN is the best part of the package. Fast, reliable, and the auto-connect on untrusted Wi-Fi is a lifesaver. Used it throughout my trip to Europe and never had issues streaming or banking online.",
+      "themes": [
+        "VPN",
+        "Security Features"
+      ],
+      "author": "TravelSafe_Emma",
+      "version": "5.7.2",
+      "helpful_count": 38
+    },
+    {
+      "id": "r012",
+      "date": "2026-03-19",
+      "platform": "google_play",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.68
+      },
+      "content": "Very comprehensive security suite. The app lock feature is great for keeping my banking apps secure. Push notifications for threats are timely. Would love to see a widget for quick scan access.",
+      "themes": [
+        "Security Features",
+        "UI/UX"
+      ],
+      "author": "AndroidFan_Raj",
+      "version": "6.12.1",
+      "helpful_count": 22
+    },
+    {
+      "id": "r013",
+      "date": "2026-03-19",
+      "platform": "windows_desktop",
+      "rating": 1,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.91
+      },
+      "content": "WORST antivirus I've ever used! Took over an hour to install, then immediately started conflicting with my existing software. Blue-screened my PC twice before I managed to uninstall it. Absolutely unacceptable for paid software.",
+      "themes": [
+        "Installation",
+        "Performance"
+      ],
+      "author": "BSOD_Victim",
+      "version": "16.8.2",
+      "helpful_count": 124
+    },
+    {
+      "id": "r014",
+      "date": "2026-03-19",
+      "platform": "mac_desktop",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.62
+      },
+      "content": "Good protection for Mac. The web advisor browser extension catches phishing sites reliably. Noticed a slight slowdown when opening large files during scans, but overall acceptable performance.",
+      "themes": [
+        "Security Features",
+        "Performance"
+      ],
+      "author": "MacDesigner_Kate",
+      "version": "4.11.5",
+      "helpful_count": 15
+    },
+    {
+      "id": "r015",
+      "date": "2026-03-19",
+      "platform": "google_play",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.15
+      },
+      "content": "The app is okay but customer support is terrible. Tried to get help with a billing issue and was transferred five times before anyone could help. Took three weeks to resolve a simple refund.",
+      "themes": [
+        "Customer Support",
+        "Pricing"
+      ],
+      "author": "SupportHell_Tom",
+      "version": "6.11.8",
+      "helpful_count": 31
+    },
+    {
+      "id": "r016",
+      "date": "2026-03-19",
+      "platform": "windows_desktop",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.88
+      },
+      "content": "McAfee Total Protection is excellent value. Covers 10 devices for one subscription, works on all platforms, and the identity theft protection is worth it alone. The latest update also improved scan speed significantly.",
+      "themes": [
+        "Pricing",
+        "Security Features",
+        "Performance"
+      ],
+      "author": "FamilyTech_Dad",
+      "version": "16.8.2",
+      "helpful_count": 55
+    },
+    {
+      "id": "r120",
+      "date": "2026-03-19",
+      "platform": "windows_desktop",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.94
+      },
+      "content": "Absolutely love the new UI redesign in the latest version. Dashboard is clean, scan results are easy to understand, and the performance metrics showing system impact are a great transparency feature.",
+      "themes": [
+        "UI/UX",
+        "Performance"
+      ],
+      "author": "UIFan_Design",
+      "version": "16.8.2",
+      "helpful_count": 36
+    },
+    {
+      "id": "r140",
+      "date": "2026-03-19",
+      "platform": "mac_desktop",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.48
+      },
+      "content": "Battery drain on my older MacBook Air 2020 is significant. About 2 hours less battery life with McAfee active. The fan also kicks in more frequently during scheduled scans. Not optimized for Intel Macs at all.",
+      "themes": [
+        "Battery Drain",
+        "Performance"
+      ],
+      "author": "IntelMac_User",
+      "version": "4.12.0",
+      "helpful_count": 32
+    },
+    {
+      "id": "r017",
+      "date": "2026-03-18",
+      "platform": "app_store",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.55
+      },
+      "content": "The app keeps asking me to upgrade even though I have the premium version. Constant pop-ups about McAfee+ are annoying. Also the safe browsing feature conflicts with my VPN provider.",
+      "themes": [
+        "UI/UX",
+        "VPN"
+      ],
+      "author": "PopupHater_Jen",
+      "version": "5.8.0",
+      "helpful_count": 41
+    },
+    {
+      "id": "r018",
+      "date": "2026-03-18",
+      "platform": "google_play",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.7
+      },
+      "content": "Reliable malware detection — caught a suspicious APK I downloaded from a third-party site. The real-time protection works quietly in the background without being intrusive. Recommended for Android users.",
+      "themes": [
+        "Security Features"
+      ],
+      "author": "SafeDownloader",
+      "version": "6.12.1",
+      "helpful_count": 29
+    },
+    {
+      "id": "r019",
+      "date": "2026-03-18",
+      "platform": "mac_desktop",
+      "rating": 1,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.82
+      },
+      "content": "Uninstalling this bloatware was harder than installing it! McAfee's removal tool doesn't work on macOS Sequoia, had to manually delete system extensions. Left behind kernel extensions that were causing login delays.",
+      "themes": [
+        "Installation",
+        "Performance"
+      ],
+      "author": "MacCleanUp_Jim",
+      "version": "4.12.0",
+      "helpful_count": 78
+    },
+    {
+      "id": "r020",
+      "date": "2026-03-18",
+      "platform": "windows_desktop",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.05
+      },
+      "content": "It does the basic job of protecting against viruses. Nothing more, nothing less. The VPN is included which is nice, but the speeds are mediocre compared to dedicated VPN services like NordVPN.",
+      "themes": [
+        "VPN",
+        "Security Features"
+      ],
+      "author": "AverageJoe_PC",
+      "version": "16.8.1",
+      "helpful_count": 8
+    },
+    {
+      "id": "r021",
+      "date": "2026-03-18",
+      "platform": "google_play",
+      "rating": 1,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.78
+      },
+      "content": "My phone heats up terribly when McAfee runs scans. The battery drain is insane — 15% in just one hour of background scanning. Had to disable most features to keep my phone usable. Not worth it.",
+      "themes": [
+        "Battery Drain",
+        "Performance"
+      ],
+      "author": "HotPhone_User",
+      "version": "6.12.0",
+      "helpful_count": 63
+    },
+    {
+      "id": "r022",
+      "date": "2026-03-17",
+      "platform": "app_store",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.86
+      },
+      "content": "Love the identity monitoring feature! Got an alert that my email appeared in a data breach within hours of it being reported. The dark web monitoring actually works and gave me peace of mind.",
+      "themes": [
+        "Security Features"
+      ],
+      "author": "PrivacyFirst_Amy",
+      "version": "5.7.2",
+      "helpful_count": 52
+    },
+    {
+      "id": "r023",
+      "date": "2026-03-17",
+      "platform": "windows_desktop",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.1
+      },
+      "content": "McAfee UI has improved a lot with the latest redesign. Cleaner layout and easier navigation. However, some advanced settings are buried too deep in menus. Power users need quicker access to firewall rules.",
+      "themes": [
+        "UI/UX"
+      ],
+      "author": "UIDesign_Nerd",
+      "version": "16.8.2",
+      "helpful_count": 14
+    },
+    {
+      "id": "r024",
+      "date": "2026-03-17",
+      "platform": "google_play",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.58
+      },
+      "content": "Good security app overall. The anti-theft feature helped me locate my lost phone last month. GPS tracking was accurate and the remote wipe option gave me security knowing my data was safe.",
+      "themes": [
+        "Security Features"
+      ],
+      "author": "FoundMyPhone",
+      "version": "6.12.1",
+      "helpful_count": 35
+    },
+    {
+      "id": "r025",
+      "date": "2026-03-17",
+      "platform": "mac_desktop",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.64
+      },
+      "content": "Runs well on my MacBook Pro M2. The scheduled scan feature is convenient — I set it to run overnight and it never interferes with my work. The web protection catches phishing attempts consistently.",
+      "themes": [
+        "Performance",
+        "Security Features"
+      ],
+      "author": "M2MacUser",
+      "version": "4.12.0",
+      "helpful_count": 20
+    },
+    {
+      "id": "r026",
+      "date": "2026-03-17",
+      "platform": "app_store",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.48
+      },
+      "content": "App freezes frequently on my iPad. The scanning feature takes forever and sometimes hangs at 95%. Had to force close the app multiple times. Support said to reinstall but that didn't fix it.",
+      "themes": [
+        "Performance",
+        "Customer Support"
+      ],
+      "author": "iPadUser_Stuck",
+      "version": "5.8.0",
+      "helpful_count": 27
+    },
+    {
+      "id": "r119",
+      "date": "2026-03-17",
+      "platform": "windows_desktop",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.52
+      },
+      "content": "VPN drops connection randomly every 20-30 minutes. Have to manually reconnect each time. Makes it useless for video calls or streaming. Standalone VPN services are far more reliable.",
+      "themes": [
+        "VPN"
+      ],
+      "author": "VPN_Disappointed",
+      "version": "16.8.2",
+      "helpful_count": 29
+    },
+    {
+      "id": "r139",
+      "date": "2026-03-17",
+      "platform": "mac_desktop",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.88
+      },
+      "content": "Excellent malware detection rates. In my testing, McAfee caught 99.2% of test samples including zero-day threats. The heuristic engine is impressive. Best Mac antivirus I have tested this year.",
+      "themes": [
+        "Security Features"
+      ],
+      "author": "AVTester_Pro",
+      "version": "4.12.0",
+      "helpful_count": 55
+    },
+    {
+      "id": "r150",
+      "date": "2026-03-17",
+      "platform": "app_store",
+      "rating": 1,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.88
+      },
+      "content": "Charged me for a year subscription without any trial ending notification. The cancel subscription process is deliberately confusing. Had to go through Apple support to get a refund. Predatory billing practices.",
+      "themes": [
+        "Pricing",
+        "Customer Support"
+      ],
+      "author": "BillingVictim_iOS",
+      "version": "5.7.5",
+      "helpful_count": 71
+    },
+    {
+      "id": "r027",
+      "date": "2026-03-16",
+      "platform": "windows_desktop",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.82
+      },
+      "content": "Been using McAfee for 5 years on my family's computers. Never had a single virus or malware issue. The parental controls are excellent — I can monitor and limit my kids' online activity easily.",
+      "themes": [
+        "Security Features",
+        "UI/UX"
+      ],
+      "author": "ProtectiveParent",
+      "version": "16.8.2",
+      "helpful_count": 48
+    },
+    {
+      "id": "r028",
+      "date": "2026-03-16",
+      "platform": "google_play",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.65
+      },
+      "content": "Subscription auto-renewed at double the original price without any warning. When I called to cancel, they made me go through five different retention offers. Very shady billing practices.",
+      "themes": [
+        "Pricing",
+        "Customer Support"
+      ],
+      "author": "OverCharged_Sam",
+      "version": "6.11.8",
+      "helpful_count": 95
+    },
+    {
+      "id": "r029",
+      "date": "2026-03-16",
+      "platform": "app_store",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.18
+      },
+      "content": "Decent VPN speeds within the US. International connections are hit or miss. The split tunneling feature is useful for excluding certain apps from VPN routing. Overall adequate but not best in class.",
+      "themes": [
+        "VPN"
+      ],
+      "author": "VPN_Tester_Chris",
+      "version": "5.7.2",
+      "helpful_count": 11
+    },
+    {
+      "id": "r030",
+      "date": "2026-03-16",
+      "platform": "mac_desktop",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.05
+      },
+      "content": "McAfee on Mac feels like an afterthought compared to the Windows version. Missing features like the firewall manager and game mode. It works for basic scanning but doesn't justify the same price.",
+      "themes": [
+        "Security Features",
+        "Pricing"
+      ],
+      "author": "MacEqual_Rights",
+      "version": "4.11.5",
+      "helpful_count": 22
+    },
+    {
+      "id": "r031",
+      "date": "2026-03-16",
+      "platform": "windows_desktop",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.6
+      },
+      "content": "The file shredder and encrypted storage vault are underrated features. Great for sensitive documents. Full disk encryption would be a welcome addition in future updates.",
+      "themes": [
+        "Security Features"
+      ],
+      "author": "DataProtect_Ben",
+      "version": "16.8.2",
+      "helpful_count": 16
+    },
+    {
+      "id": "r118",
+      "date": "2026-03-16",
+      "platform": "windows_desktop",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.55
+      },
+      "content": "The dark web monitoring feature actually found my email in a breach database and alerted me immediately. Changed my passwords right away. This feature alone justifies the subscription cost.",
+      "themes": [
+        "Security Features"
+      ],
+      "author": "PrivacyAware_User",
+      "version": "16.8.2",
+      "helpful_count": 44
+    },
+    {
+      "id": "r138",
+      "date": "2026-03-16",
+      "platform": "mac_desktop",
+      "rating": 1,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.8
+      },
+      "content": "McAfee auto-renewed without sending me any notification email. Charged $59.99 to my card. When I called to cancel, they made me jump through hoops and offered discounts instead of just processing the refund.",
+      "themes": [
+        "Pricing",
+        "Customer Support"
+      ],
+      "author": "AutoRenew_Victim",
+      "version": "4.11.5",
+      "helpful_count": 68
+    },
+    {
+      "id": "r032",
+      "date": "2026-03-15",
+      "platform": "google_play",
+      "rating": 1,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.88
+      },
+      "content": "The app REQUIRES way too many permissions. Why does an antivirus need access to my contacts, camera, and microphone? This feels more like spyware than protection software. Deleted immediately.",
+      "themes": [
+        "Security Features",
+        "UI/UX"
+      ],
+      "author": "PermissionDenied",
+      "version": "6.12.1",
+      "helpful_count": 110
+    },
+    {
+      "id": "r033",
+      "date": "2026-03-15",
+      "platform": "windows_desktop",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.55
+      },
+      "content": "Caught ransomware attempt on my work PC that Windows Defender missed. The behavioral detection engine is impressive. Setup was smooth and customer support was actually helpful when I had questions.",
+      "themes": [
+        "Security Features",
+        "Customer Support",
+        "Installation"
+      ],
+      "author": "Ransomware_Survivor",
+      "version": "16.8.2",
+      "helpful_count": 73
+    },
+    {
+      "id": "r034",
+      "date": "2026-03-15",
+      "platform": "mac_desktop",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.52
+      },
+      "content": "Constant notifications about 'threats blocked' that turn out to be tracking cookies. The threat severity classification needs work — not every cookie is a critical security threat. Crying wolf too often.",
+      "themes": [
+        "Security Features",
+        "UI/UX"
+      ],
+      "author": "CookieMonster_Mac",
+      "version": "4.12.0",
+      "helpful_count": 28
+    },
+    {
+      "id": "r035",
+      "date": "2026-03-15",
+      "platform": "app_store",
+      "rating": 1,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.75
+      },
+      "content": "App drains my iPhone 15 battery significantly. Lost about 20% overnight just from background monitoring. Apple's built-in security is more than enough without this battery hog running.",
+      "themes": [
+        "Battery Drain",
+        "Performance"
+      ],
+      "author": "iPhone15_Drained",
+      "version": "5.8.0",
+      "helpful_count": 44
+    },
+    {
+      "id": "r036",
+      "date": "2026-03-15",
+      "platform": "google_play",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.1
+      },
+      "content": "Average antivirus app. Does what it claims. The free version is too limited — basically a trial that nags you to upgrade every time you open it. Premium features are decent though.",
+      "themes": [
+        "Pricing",
+        "UI/UX"
+      ],
+      "author": "FreeUser_Problems",
+      "version": "6.12.0",
+      "helpful_count": 19
+    },
+    {
+      "id": "r037",
+      "date": "2026-03-14",
+      "platform": "windows_desktop",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.9
+      },
+      "content": "McAfee's customer support went above and beyond. Had a complex malware infection and the tech support agent spent 2 hours remotely cleaning my system. They even followed up a week later. Impressive service!",
+      "themes": [
+        "Customer Support",
+        "Security Features"
+      ],
+      "author": "SupportWin_Laura",
+      "version": "16.8.2",
+      "helpful_count": 61
+    },
+    {
+      "id": "r038",
+      "date": "2026-03-14",
+      "platform": "app_store",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.62
+      },
+      "content": "The system security scan is thorough and the VPN is reliable for everyday use. I appreciate the automatic scan scheduling. Would rate 5 stars if the app didn't take so long to load initially.",
+      "themes": [
+        "Security Features",
+        "VPN",
+        "Performance"
+      ],
+      "author": "iOS_Security_Fan",
+      "version": "5.7.2",
+      "helpful_count": 17
+    },
+    {
+      "id": "r039",
+      "date": "2026-03-14",
+      "platform": "google_play",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.82
+      },
+      "content": "Outstanding virus protection for Android. The safe browsing feature blocked a phishing site that looked exactly like my bank's login page. Saved me from potential identity theft. Thank you McAfee!",
+      "themes": [
+        "Security Features",
+        "VPN"
+      ],
+      "author": "PhishingAvoided",
+      "version": "6.12.1",
+      "helpful_count": 54
+    },
+    {
+      "id": "r040",
+      "date": "2026-03-14",
+      "platform": "mac_desktop",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.58
+      },
+      "content": "Clean interface on Mac and doesn't feel like a Windows port. The menubar integration is convenient for quick scans. Runs well on Apple Silicon. Minor complaint: update notifications could be less frequent.",
+      "themes": [
+        "UI/UX",
+        "Performance"
+      ],
+      "author": "AppleSilicon_User",
+      "version": "4.12.0",
+      "helpful_count": 21
+    },
+    {
+      "id": "r041",
+      "date": "2026-03-14",
+      "platform": "windows_desktop",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.15
+      },
+      "content": "Works as expected for home use. The built-in VPN is convenient but limited to 500MB daily on the standard plan. Would prefer unlimited VPN even on basic tiers.",
+      "themes": [
+        "VPN",
+        "Pricing"
+      ],
+      "author": "HomeUser_Standard",
+      "version": "16.8.1",
+      "helpful_count": 9
+    },
+    {
+      "id": "r117",
+      "date": "2026-03-14",
+      "platform": "windows_desktop",
+      "rating": 1,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.88
+      },
+      "content": "After renewal, McAfee charged me twice on my credit card. Took 3 weeks and 5 phone calls to get the duplicate charge reversed. Their billing department is incompetent. Never renewing again.",
+      "themes": [
+        "Pricing",
+        "Customer Support"
+      ],
+      "author": "DoubleCharged_Amy",
+      "version": "16.8.2",
+      "helpful_count": 63
+    },
+    {
+      "id": "r137",
+      "date": "2026-03-14",
+      "platform": "mac_desktop",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.65
+      },
+      "content": "Scan speed has improved dramatically in the latest update. Full scan went from 2 hours to about 40 minutes on my MacBook Pro M3. Real-time protection also feels lighter on resources now.",
+      "themes": [
+        "Performance",
+        "Security Features"
+      ],
+      "author": "UpdateHappy_Mac",
+      "version": "4.12.0",
+      "helpful_count": 27
+    },
+    {
+      "id": "r149",
+      "date": "2026-03-14",
+      "platform": "app_store",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.62
+      },
+      "content": "Clean interface and good VPN performance on iOS. The secure browsing feature integrates well with Safari. Battery impact is minimal compared to other security apps I have tried.",
+      "themes": [
+        "VPN",
+        "UI/UX",
+        "Battery Drain"
+      ],
+      "author": "iOSOptimized",
+      "version": "5.8.0",
+      "helpful_count": 16
+    },
+    {
+      "id": "r042",
+      "date": "2026-03-13",
+      "platform": "google_play",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.58
+      },
+      "content": "The latest update broke the app on my Pixel 8. Keeps showing 'scan failed' errors and the VPN won't connect. Previous version was fine. Please fix this regression ASAP!",
+      "themes": [
+        "Installation",
+        "VPN"
+      ],
+      "author": "Pixel8_Broken",
+      "version": "6.12.1",
+      "helpful_count": 37
+    },
+    {
+      "id": "r043",
+      "date": "2026-03-13",
+      "platform": "app_store",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.08
+      },
+      "content": "Middle-of-the-road antivirus. Not as feature-rich as Kaspersky, not as lightweight as Bitdefender. The identity monitoring is the standout feature that keeps me subscribed.",
+      "themes": [
+        "Security Features"
+      ],
+      "author": "AV_Comparison",
+      "version": "5.7.2",
+      "helpful_count": 13
+    },
+    {
+      "id": "r044",
+      "date": "2026-03-13",
+      "platform": "windows_desktop",
+      "rating": 1,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.88
+      },
+      "content": "McAfee slowed my gaming PC to a crawl. FPS dropped from 120 to 45 in Fortnite even with game mode enabled. The real-time scanner is way too aggressive. Had to create 50+ exclusions to make it usable.",
+      "themes": [
+        "Performance"
+      ],
+      "author": "GamerRage_PC",
+      "version": "16.8.2",
+      "helpful_count": 82
+    },
+    {
+      "id": "r045",
+      "date": "2026-03-13",
+      "platform": "mac_desktop",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.55
+      },
+      "content": "Reliable protection for my Mac mini server. The scheduled scanning doesn't impact performance during off-hours. The web protection extension for Safari works seamlessly.",
+      "themes": [
+        "Security Features",
+        "Performance"
+      ],
+      "author": "MacMini_Server",
+      "version": "4.12.0",
+      "helpful_count": 10
+    },
+    {
+      "id": "r116",
+      "date": "2026-03-13",
+      "platform": "windows_desktop",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.1
+      },
+      "content": "Decent antivirus but the notification system is annoying. Constant pop-ups about scan results, update available, threat blocked — I wish there was a quiet mode that just silently protects without all the noise.",
+      "themes": [
+        "UI/UX"
+      ],
+      "author": "QuietPC_User",
+      "version": "16.8.2",
+      "helpful_count": 25
+    },
+    {
+      "id": "r136",
+      "date": "2026-03-13",
+      "platform": "mac_desktop",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.1
+      },
+      "content": "Solid basic protection but the price-to-feature ratio is not great for Mac users. The Windows version gets more features for the same price. Would like to see feature parity across platforms.",
+      "themes": [
+        "Pricing",
+        "Security Features"
+      ],
+      "author": "ValueShopper_Mac",
+      "version": "4.12.0",
+      "helpful_count": 15
+    },
+    {
+      "id": "r046",
+      "date": "2026-03-12",
+      "platform": "google_play",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.8
+      },
+      "content": "Best mobile security app I've used. The call blocker feature alone is worth the subscription — blocked over 200 spam calls last month. Combined with the web protection, it's a complete mobile security suite.",
+      "themes": [
+        "Security Features"
+      ],
+      "author": "SpamFree_Life",
+      "version": "6.12.1",
+      "helpful_count": 40
+    },
+    {
+      "id": "r047",
+      "date": "2026-03-12",
+      "platform": "app_store",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.65
+      },
+      "content": "Smooth experience on iOS. The VPN works reliably and the identity monitoring sends useful alerts. Customer support via chat was responsive when I had questions about my subscription tier.",
+      "themes": [
+        "VPN",
+        "Customer Support"
+      ],
+      "author": "iOSSmooth_User",
+      "version": "5.8.0",
+      "helpful_count": 23
+    },
+    {
+      "id": "r048",
+      "date": "2026-03-12",
+      "platform": "windows_desktop",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.62
+      },
+      "content": "Tried to cancel my subscription and McAfee kept charging me. Took three phone calls and a BBB complaint to get a refund. Their billing system is intentionally confusing. Never again.",
+      "themes": [
+        "Pricing",
+        "Customer Support"
+      ],
+      "author": "CancelNightmare",
+      "version": "16.8.1",
+      "helpful_count": 98
+    },
+    {
+      "id": "r049",
+      "date": "2026-03-12",
+      "platform": "mac_desktop",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.78
+      },
+      "content": "Excellent Mac protection. The Time Machine backup protection ensures ransomware can't encrypt my backups. This feature alone sets McAfee apart from competitors on macOS.",
+      "themes": [
+        "Security Features"
+      ],
+      "author": "BackupSafe_Mac",
+      "version": "4.12.0",
+      "helpful_count": 32
+    },
+    {
+      "id": "r050",
+      "date": "2026-03-12",
+      "platform": "google_play",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.12
+      },
+      "content": "Decent app but the storage it takes up is excessive for what it does — over 400MB. My budget phone only has 32GB storage and McAfee is eating a significant chunk. Needs optimization for lower-end devices.",
+      "themes": [
+        "Performance",
+        "UI/UX"
+      ],
+      "author": "StorageStruggle",
+      "version": "6.12.0",
+      "helpful_count": 26
+    },
+    {
+      "id": "r051",
+      "date": "2026-03-11",
+      "platform": "windows_desktop",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.62
+      },
+      "content": "The password manager bundled with McAfee Total Protection is surprisingly good. Auto-fill works across Chrome, Firefox, and Edge. The password generator creates strong unique passwords effortlessly.",
+      "themes": [
+        "Security Features",
+        "UI/UX"
+      ],
+      "author": "PasswordPro_User",
+      "version": "16.8.2",
+      "helpful_count": 30
+    },
+    {
+      "id": "r052",
+      "date": "2026-03-11",
+      "platform": "app_store",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.5
+      },
+      "content": "Lost access to my VPN after the latest iOS update. McAfee support told me to wait for an app update. Been three weeks and still no fix. Paying for a feature I can't use.",
+      "themes": [
+        "VPN",
+        "Customer Support"
+      ],
+      "author": "VPN_Down_iOS",
+      "version": "5.8.0",
+      "helpful_count": 35
+    },
+    {
+      "id": "r053",
+      "date": "2026-03-11",
+      "platform": "google_play",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.05
+      },
+      "content": "McAfee is fine but the free tier is too limited to be useful. Everything useful is behind a paywall. At least give free users basic scanning without the constant premium upsell.",
+      "themes": [
+        "Pricing"
+      ],
+      "author": "FreeVersionFan",
+      "version": "6.12.0",
+      "helpful_count": 15
+    },
+    {
+      "id": "r054",
+      "date": "2026-03-11",
+      "platform": "mac_desktop",
+      "rating": 1,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.72
+      },
+      "content": "After installing McAfee, my Mac's startup time went from 15 seconds to over a minute. Login items keep coming back even after removing them. This software embeds itself too deeply into the system.",
+      "themes": [
+        "Performance",
+        "Installation"
+      ],
+      "author": "SlowBoot_Mac",
+      "version": "4.12.0",
+      "helpful_count": 50
+    },
+    {
+      "id": "r115",
+      "date": "2026-03-11",
+      "platform": "windows_desktop",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.88
+      },
+      "content": "McAfee WebAdvisor is incredibly useful. It flags dangerous search results before I click them and checks downloads automatically. Combined with the firewall, I feel very protected online.",
+      "themes": [
+        "Security Features"
+      ],
+      "author": "SafeBrowsing_Pro",
+      "version": "16.8.2",
+      "helpful_count": 31
+    },
+    {
+      "id": "r135",
+      "date": "2026-03-11",
+      "platform": "mac_desktop",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.55
+      },
+      "content": "The VPN feature on Mac is a joke. Speeds drop by 60-70% when connected. Cannot stream anything in HD. My ISP connection is 500Mbps but through McAfee VPN I barely get 50Mbps. Completely unusable.",
+      "themes": [
+        "VPN",
+        "Performance"
+      ],
+      "author": "StreamingFan_Mac",
+      "version": "4.12.0",
+      "helpful_count": 46
+    },
+    {
+      "id": "r148",
+      "date": "2026-03-11",
+      "platform": "app_store",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.5
+      },
+      "content": "The app crashes frequently on my iPhone 14. Especially when trying to run a Wi-Fi security scan. Had to reinstall it twice this month. Quality has gone downhill since the last major update.",
+      "themes": [
+        "Installation",
+        "Performance"
+      ],
+      "author": "CrashReporter_iOS",
+      "version": "5.8.0",
+      "helpful_count": 27
+    },
+    {
+      "id": "r055",
+      "date": "2026-03-10",
+      "platform": "windows_desktop",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.85
+      },
+      "content": "Just renewed for the third year. McAfee consistently scores top marks in AV-TEST evaluations. The combination of traditional AV, behavioral detection, and cloud analysis provides multilayered protection.",
+      "themes": [
+        "Security Features"
+      ],
+      "author": "LoyalCustomer_3yr",
+      "version": "16.8.2",
+      "helpful_count": 42
+    },
+    {
+      "id": "r056",
+      "date": "2026-03-10",
+      "platform": "app_store",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.1
+      },
+      "content": "Fine for what it is. The iOS version has limited scanning capabilities due to Apple's restrictions. The VPN and web protection are the most useful features on iPhone.",
+      "themes": [
+        "Security Features",
+        "VPN"
+      ],
+      "author": "iOS_Realist",
+      "version": "5.7.2",
+      "helpful_count": 8
+    },
+    {
+      "id": "r057",
+      "date": "2026-03-10",
+      "platform": "google_play",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.6
+      },
+      "content": "Great protection with a clean interface. The security scan summary is easy to understand with green checkmarks. My parents can use it without needing my help every time.",
+      "themes": [
+        "UI/UX",
+        "Security Features"
+      ],
+      "author": "EasyForParents",
+      "version": "6.12.1",
+      "helpful_count": 18
+    },
+    {
+      "id": "r058",
+      "date": "2026-03-10",
+      "platform": "mac_desktop",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.55
+      },
+      "content": "Constant pop-ups about renewal even though my subscription doesn't expire for 6 months. The notification preferences don't seem to work — I've disabled all alerts but they keep coming through.",
+      "themes": [
+        "UI/UX",
+        "Pricing"
+      ],
+      "author": "PopupFatigue_Mac",
+      "version": "4.11.5",
+      "helpful_count": 36
+    },
+    {
+      "id": "r114",
+      "date": "2026-03-10",
+      "platform": "windows_desktop",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.42
+      },
+      "content": "Customer support is terrible. Waited 2 hours on chat just to get a generic response to restart my computer. The agent clearly did not understand my issue with the VPN not connecting through my corporate firewall.",
+      "themes": [
+        "Customer Support",
+        "VPN"
+      ],
+      "author": "RemoteWorker_Lisa",
+      "version": "16.8.1",
+      "helpful_count": 38
+    },
+    {
+      "id": "r134",
+      "date": "2026-03-10",
+      "platform": "mac_desktop",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.86
+      },
+      "content": "Perfect for our office Macs. Deployed on 8 machines with the business license. Central management is smooth, updates roll out automatically, and it has not caused any compatibility issues with our creative software.",
+      "themes": [
+        "Security Features",
+        "Performance"
+      ],
+      "author": "CreativeAgency_IT",
+      "version": "4.12.0",
+      "helpful_count": 34
+    },
+    {
+      "id": "r059",
+      "date": "2026-03-09",
+      "platform": "windows_desktop",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.68
+      },
+      "content": "The vulnerability scanner found three outdated applications with known exploits on my system. Updated them all through the McAfee interface. Proactive security at its best.",
+      "themes": [
+        "Security Features"
+      ],
+      "author": "PatchedUp_PC",
+      "version": "16.8.2",
+      "helpful_count": 24
+    },
+    {
+      "id": "r060",
+      "date": "2026-03-09",
+      "platform": "google_play",
+      "rating": 1,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.8
+      },
+      "content": "The app installed itself without my permission when I was setting up a new Samsung phone. Pre-installed bloatware that's difficult to fully remove. Shouldn't be forced on users.",
+      "themes": [
+        "Installation"
+      ],
+      "author": "NoConsent_Install",
+      "version": "6.12.0",
+      "helpful_count": 75
+    },
+    {
+      "id": "r061",
+      "date": "2026-03-09",
+      "platform": "app_store",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.82
+      },
+      "content": "McAfee's dark web monitoring is genuinely useful. Received an alert that my old email password was leaked in a breach. Changed it immediately before any damage was done. Worth every penny.",
+      "themes": [
+        "Security Features"
+      ],
+      "author": "DarkWebAlert_Win",
+      "version": "5.8.0",
+      "helpful_count": 39
+    },
+    {
+      "id": "r062",
+      "date": "2026-03-09",
+      "platform": "mac_desktop",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.15
+      },
+      "content": "Functional antivirus for Mac. The interface could use modernization — still feels dated compared to CleanMyMac or Malwarebytes. Gets the job done but lacks visual polish.",
+      "themes": [
+        "UI/UX"
+      ],
+      "author": "DesignCritic_Mac",
+      "version": "4.11.5",
+      "helpful_count": 11
+    },
+    {
+      "id": "r063",
+      "date": "2026-03-08",
+      "platform": "windows_desktop",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.88
+      },
+      "content": "McAfee stopped a zero-day exploit that targeted my web browser. The behavioral analysis engine detected suspicious process injection before any damage was done. Enterprise-grade protection for home users.",
+      "themes": [
+        "Security Features"
+      ],
+      "author": "ZeroDay_Blocked",
+      "version": "16.8.2",
+      "helpful_count": 58
+    },
+    {
+      "id": "r064",
+      "date": "2026-03-08",
+      "platform": "google_play",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.08
+      },
+      "content": "The free scan is pretty basic — just checks installed apps. Full system scan requires premium. For free users, Google Play Protect provides similar functionality without the premium price tag.",
+      "themes": [
+        "Pricing",
+        "Security Features"
+      ],
+      "author": "FreeVsPaid_Android",
+      "version": "6.12.0",
+      "helpful_count": 21
+    },
+    {
+      "id": "r065",
+      "date": "2026-03-08",
+      "platform": "app_store",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.55
+      },
+      "content": "Reliable VPN with good connection speeds. The auto-connect feature for public Wi-Fi networks works seamlessly. Would love to see more server locations added, especially in Southeast Asia.",
+      "themes": [
+        "VPN"
+      ],
+      "author": "VPN_Asia_Request",
+      "version": "5.7.2",
+      "helpful_count": 14
+    },
+    {
+      "id": "r066",
+      "date": "2026-03-08",
+      "platform": "mac_desktop",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.6
+      },
+      "content": "Conflicts with Homebrew installations. McAfee's real-time scanner flags legitimate developer binaries as threats. Had to whitelist my entire dev directory which defeats the purpose of real-time scanning.",
+      "themes": [
+        "Performance",
+        "Installation"
+      ],
+      "author": "DevMac_Conflict",
+      "version": "4.12.0",
+      "helpful_count": 43
+    },
+    {
+      "id": "r112",
+      "date": "2026-03-08",
+      "platform": "windows_desktop",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.02
+      },
+      "content": "The update from v16.7 to v16.8 broke my scan schedule settings. Had to reconfigure everything. Otherwise it works fine. Wish they would test updates better before pushing them out.",
+      "themes": [
+        "Installation",
+        "Performance"
+      ],
+      "author": "SysAdmin_Rick",
+      "version": "16.8.2",
+      "helpful_count": 17
+    },
+    {
+      "id": "r113",
+      "date": "2026-03-08",
+      "platform": "windows_desktop",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.58
+      },
+      "content": "Quick scan finishes in under 5 minutes which is impressive. Full scan takes about 90 minutes on my 2TB drive. Good detection rates and the firewall gives me peace of mind for online banking.",
+      "themes": [
+        "Performance",
+        "Security Features"
+      ],
+      "author": "OnlineBanker",
+      "version": "16.8.2",
+      "helpful_count": 20
+    },
+    {
+      "id": "r132",
+      "date": "2026-03-08",
+      "platform": "mac_desktop",
+      "rating": 1,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.7
+      },
+      "content": "After the latest macOS update, McAfee stopped working entirely. Just shows a spinning wheel on launch. Tried reinstalling twice with no luck. Completely useless software. Going back to ClamXAV.",
+      "themes": [
+        "Installation",
+        "Performance"
+      ],
+      "author": "BrokenMcAfee_Mac",
+      "version": "4.12.0",
+      "helpful_count": 37
+    },
+    {
+      "id": "r133",
+      "date": "2026-03-08",
+      "platform": "mac_desktop",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.72
+      },
+      "content": "The identity monitoring feature detected my email in a data breach within hours of it being reported. Got immediate notifications with clear steps on what to do. Very proactive security.",
+      "themes": [
+        "Security Features"
+      ],
+      "author": "PrivacySmart_Mac",
+      "version": "4.12.0",
+      "helpful_count": 42
+    },
+    {
+      "id": "r147",
+      "date": "2026-03-08",
+      "platform": "app_store",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.85
+      },
+      "content": "Love the identity theft protection and dark web monitoring. Got alerted that my credit card number was found on the dark web. Changed my card immediately. This feature is invaluable.",
+      "themes": [
+        "Security Features"
+      ],
+      "author": "IdentityProtected",
+      "version": "5.8.0",
+      "helpful_count": 52
+    },
+    {
+      "id": "r067",
+      "date": "2026-03-07",
+      "platform": "windows_desktop",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.65
+      },
+      "content": "Good comprehensive security suite. The multi-device license is great value — protecting my PC, laptop, phone, and tablet under one subscription. Dashboard gives a nice overview of all device security status.",
+      "themes": [
+        "Pricing",
+        "UI/UX"
+      ],
+      "author": "MultiDevice_Pro",
+      "version": "16.8.2",
+      "helpful_count": 27
+    },
+    {
+      "id": "r068",
+      "date": "2026-03-07",
+      "platform": "google_play",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.78
+      },
+      "content": "Excellent update! The new app performance optimizer not only protects from threats but also cleans up background processes. My Pixel phone feels faster since the latest update. Great improvement McAfee!",
+      "themes": [
+        "Performance",
+        "Security Features"
+      ],
+      "author": "FastPixel_Update",
+      "version": "6.12.1",
+      "helpful_count": 33
+    },
+    {
+      "id": "r069",
+      "date": "2026-03-07",
+      "platform": "app_store",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.48
+      },
+      "content": "The subscription management is a nightmare. Tried to switch from monthly to annual billing and ended up being double charged. Chat support was unhelpful — they just read scripts.",
+      "themes": [
+        "Pricing",
+        "Customer Support"
+      ],
+      "author": "BillingMess_iOS",
+      "version": "5.8.0",
+      "helpful_count": 40
+    },
+    {
+      "id": "r070",
+      "date": "2026-03-07",
+      "platform": "mac_desktop",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.58
+      },
+      "content": "Works well as background protection on my Mac. Doesn't interfere with creative workflow in Adobe Creative Suite. The scan scheduling ensures full scans happen during lunch breaks.",
+      "themes": [
+        "Performance",
+        "Security Features"
+      ],
+      "author": "CreativeMac_Pro",
+      "version": "4.12.0",
+      "helpful_count": 16
+    },
+    {
+      "id": "r071",
+      "date": "2026-03-06",
+      "platform": "windows_desktop",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.12
+      },
+      "content": "McAfee does what it promises but nothing exciting. The interface is functional but boring. Would be nice to see some innovation — maybe AI-powered threat explanations or interactive security tips.",
+      "themes": [
+        "UI/UX",
+        "Security Features"
+      ],
+      "author": "WantsInnovation",
+      "version": "16.8.1",
+      "helpful_count": 7
+    },
+    {
+      "id": "r072",
+      "date": "2026-03-06",
+      "platform": "google_play",
+      "rating": 1,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.72
+      },
+      "content": "Battery drain is still a massive problem even after the latest update. McAfee uses 18% of my battery daily according to Android stats. This is unacceptable for a security app.",
+      "themes": [
+        "Battery Drain"
+      ],
+      "author": "BatteryWatcher_18pct",
+      "version": "6.12.1",
+      "helpful_count": 58
+    },
+    {
+      "id": "r073",
+      "date": "2026-03-06",
+      "platform": "app_store",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.1
+      },
+      "content": "Functional security app for iOS. The Wi-Fi scanner is useful when traveling. Nothing game-changing compared to the competition but it's reliable and doesn't crash.",
+      "themes": [
+        "Security Features",
+        "VPN"
+      ],
+      "author": "Reliable_iOS",
+      "version": "5.7.2",
+      "helpful_count": 6
+    },
+    {
+      "id": "r074",
+      "date": "2026-03-06",
+      "platform": "mac_desktop",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.45
+      },
+      "content": "The automatic updates keep interrupting my presentations. McAfee restarts services mid-meeting causing my Mac to briefly slow down. Need better timing controls for updates.",
+      "themes": [
+        "Performance",
+        "UI/UX"
+      ],
+      "author": "MidMeeting_Lag",
+      "version": "4.12.0",
+      "helpful_count": 29
+    },
+    {
+      "id": "r111",
+      "date": "2026-03-06",
+      "platform": "windows_desktop",
+      "rating": 1,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.78
+      },
+      "content": "McAfee keeps conflicting with my other software. Games crash constantly when real-time scanning is on. I have to disable it every time I want to play, which defeats the purpose of having protection.",
+      "themes": [
+        "Performance",
+        "UI/UX"
+      ],
+      "author": "GamerFrustrated",
+      "version": "16.8.2",
+      "helpful_count": 55
+    },
+    {
+      "id": "r131",
+      "date": "2026-03-06",
+      "platform": "mac_desktop",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.08
+      },
+      "content": "McAfee for Mac is average. Does basic malware scanning and has a decent firewall. But it lacks features that the Windows version has like file shredder and vulnerability scanner. Feels like a second-class citizen.",
+      "themes": [
+        "Security Features",
+        "UI/UX"
+      ],
+      "author": "MacUser_Neutral",
+      "version": "4.12.0",
+      "helpful_count": 11
+    },
+    {
+      "id": "r146",
+      "date": "2026-03-06",
+      "platform": "app_store",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.05
+      },
+      "content": "Limited compared to Android version. No real-time scanning since iOS restricts it. Basically just a VPN and web protection bundled together. Not sure it is worth the subscription on iPhone.",
+      "themes": [
+        "Security Features",
+        "Pricing"
+      ],
+      "author": "iPhoneSkeptical",
+      "version": "5.8.0",
+      "helpful_count": 19
+    },
+    {
+      "id": "r075",
+      "date": "2026-03-05",
+      "platform": "windows_desktop",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.92
+      },
+      "content": "McAfee's Virus Protection Pledge is what sold me. If your device gets a virus while protected, McAfee will refund you. That confidence in their product speaks volumes. Three years in and never needed it!",
+      "themes": [
+        "Security Features",
+        "Customer Support"
+      ],
+      "author": "PledgeBelieve_Win",
+      "version": "16.8.2",
+      "helpful_count": 47
+    },
+    {
+      "id": "r076",
+      "date": "2026-03-05",
+      "platform": "google_play",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.6
+      },
+      "content": "The identity theft insurance included with McAfee+ is an excellent value add. $1M coverage gives peace of mind. The regular identity monitoring alerts are prompt and accurate.",
+      "themes": [
+        "Security Features",
+        "Pricing"
+      ],
+      "author": "IdentitySecure_Guy",
+      "version": "6.12.1",
+      "helpful_count": 22
+    },
+    {
+      "id": "r077",
+      "date": "2026-03-05",
+      "platform": "app_store",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.18
+      },
+      "content": "VPN is decent for everyday browsing but can't handle streaming services reliably. Netflix and Disney+ detect and block the McAfee VPN. Dedicated VPNs handle this much better.",
+      "themes": [
+        "VPN"
+      ],
+      "author": "StreamingBlocked",
+      "version": "5.8.0",
+      "helpful_count": 25
+    },
+    {
+      "id": "r078",
+      "date": "2026-03-05",
+      "platform": "mac_desktop",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.82
+      },
+      "content": "After trying Intego and Norton on Mac, McAfee is the winner. Best balance of protection and performance on Apple Silicon. The native ARM build makes a huge difference in efficiency.",
+      "themes": [
+        "Performance",
+        "Security Features"
+      ],
+      "author": "ARMoptimized_Mac",
+      "version": "4.12.0",
+      "helpful_count": 34
+    },
+    {
+      "id": "r079",
+      "date": "2026-03-04",
+      "platform": "windows_desktop",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.08
+      },
+      "content": "Standard antivirus fare. Updates are frequent which is good for protection but the update downloader uses significant bandwidth. Would appreciate delta updates instead of full package downloads.",
+      "themes": [
+        "Performance",
+        "Installation"
+      ],
+      "author": "BandwidthConcern",
+      "version": "16.8.2",
+      "helpful_count": 12
+    },
+    {
+      "id": "r080",
+      "date": "2026-03-04",
+      "platform": "google_play",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.55
+      },
+      "content": "Push notifications from McAfee are excessive. Security tips, promotional offers, scan reminders — I get at least 5 notifications daily. Even after adjusting settings, some notifications can't be turned off.",
+      "themes": [
+        "UI/UX"
+      ],
+      "author": "NotifOverload_Droid",
+      "version": "6.12.0",
+      "helpful_count": 34
+    },
+    {
+      "id": "r081",
+      "date": "2026-03-04",
+      "platform": "app_store",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.85
+      },
+      "content": "McAfee caught a phishing link in my iMessage before I clicked it. The web protection integrates seamlessly with iOS Safari. This kind of proactive protection is exactly what I need.",
+      "themes": [
+        "Security Features"
+      ],
+      "author": "iMessage_Saved",
+      "version": "5.8.0",
+      "helpful_count": 46
+    },
+    {
+      "id": "r110",
+      "date": "2026-03-04",
+      "platform": "windows_desktop",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.85
+      },
+      "content": "Been using McAfee for 5 years on all my family PCs. Never had a malware infection. The multi-device license is great value — covers 10 devices including my kids phones. Auto-updates keep everything current.",
+      "themes": [
+        "Security Features",
+        "Pricing"
+      ],
+      "author": "FamilyTechDad",
+      "version": "16.8.2",
+      "helpful_count": 41
+    },
+    {
+      "id": "r130",
+      "date": "2026-03-04",
+      "platform": "mac_desktop",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.45
+      },
+      "content": "Customer support does not understand Mac-specific issues. They kept suggesting Windows-only solutions when I had trouble with the browser extension on Safari. Ended up fixing it myself after hours of research.",
+      "themes": [
+        "Customer Support",
+        "UI/UX"
+      ],
+      "author": "Safari_Troubleshoot",
+      "version": "4.12.0",
+      "helpful_count": 30
+    },
+    {
+      "id": "r082",
+      "date": "2026-03-03",
+      "platform": "windows_desktop",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.62
+      },
+      "content": "The Quick Scan is fast and effective. Full scan takes about 45 minutes on my 1TB drive which is reasonable. The scan results are detailed with clear actions for each detected item.",
+      "themes": [
+        "Performance",
+        "UI/UX"
+      ],
+      "author": "ScanResults_Clear",
+      "version": "16.8.2",
+      "helpful_count": 19
+    },
+    {
+      "id": "r083",
+      "date": "2026-03-03",
+      "platform": "google_play",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.1
+      },
+      "content": "Average security app. The main advantage is the multi-device license that covers my family's phones. App itself is functional but could be more polished in terms of animations and transitions.",
+      "themes": [
+        "UI/UX",
+        "Pricing"
+      ],
+      "author": "FamilyPlan_Android",
+      "version": "6.12.0",
+      "helpful_count": 9
+    },
+    {
+      "id": "r084",
+      "date": "2026-03-03",
+      "platform": "mac_desktop",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.55
+      },
+      "content": "Solid Mac antivirus that doesn't feel like bloatware. The file quarantine works well and the weekly scan reports are informative. Integration with Finder for right-click scanning is a nice touch.",
+      "themes": [
+        "Security Features",
+        "UI/UX"
+      ],
+      "author": "Finder_Integration",
+      "version": "4.12.0",
+      "helpful_count": 15
+    },
+    {
+      "id": "r109",
+      "date": "2026-03-03",
+      "platform": "windows_desktop",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.15
+      },
+      "content": "Works as expected for basic antivirus needs. The password manager is decent but not as polished as LastPass or 1Password. Identity theft monitoring is a nice inclusion though.",
+      "themes": [
+        "Security Features",
+        "UI/UX"
+      ],
+      "author": "DigitalNomad_Kate",
+      "version": "16.8.1",
+      "helpful_count": 9
+    },
+    {
+      "id": "r129",
+      "date": "2026-03-03",
+      "platform": "mac_desktop",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.6
+      },
+      "content": "Reliable antivirus for Mac with minimal system impact on my Mac Studio. Background scans complete without me even noticing. The real-time file monitoring caught a suspicious DMG download last week.",
+      "themes": [
+        "Performance",
+        "Security Features"
+      ],
+      "author": "MacStudio_Owner",
+      "version": "4.12.0",
+      "helpful_count": 25
+    },
+    {
+      "id": "r145",
+      "date": "2026-03-03",
+      "platform": "google_play",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.92
+      },
+      "content": "McAfee saved me from a smishing attack! Got a text with a malicious link and McAfee instantly flagged it before I could tap. The anti-phishing protection is top notch. Worth every penny.",
+      "themes": [
+        "Security Features"
+      ],
+      "author": "PhishingCaught",
+      "version": "6.12.1",
+      "helpful_count": 44
+    },
+    {
+      "id": "r085",
+      "date": "2026-03-02",
+      "platform": "windows_desktop",
+      "rating": 1,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.82
+      },
+      "content": "McAfee completely broke my Windows 11 after a failed update. System restore didn't work because McAfee modified protected files. Had to reinstall Windows entirely. Cost me a full day of work.",
+      "themes": [
+        "Installation",
+        "Performance"
+      ],
+      "author": "Win11_Destroyed",
+      "version": "16.8.2",
+      "helpful_count": 105
+    },
+    {
+      "id": "r086",
+      "date": "2026-03-02",
+      "platform": "google_play",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.58
+      },
+      "content": "The anti-theft features don't work reliably. Tried testing the remote lock and locate features — the lock took 20 minutes to activate and location was off by 2 miles. Useless in a real theft scenario.",
+      "themes": [
+        "Security Features"
+      ],
+      "author": "AntiTheft_Fail",
+      "version": "6.12.0",
+      "helpful_count": 31
+    },
+    {
+      "id": "r087",
+      "date": "2026-03-02",
+      "platform": "app_store",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.05
+      },
+      "content": "I keep McAfee mainly for the VPN when traveling. The actual antivirus component on iOS is limited due to Apple's sandboxing. At least the safe browsing and identity features work well.",
+      "themes": [
+        "VPN",
+        "Security Features"
+      ],
+      "author": "TravelVPN_Only",
+      "version": "5.7.2",
+      "helpful_count": 10
+    },
+    {
+      "id": "r088",
+      "date": "2026-03-01",
+      "platform": "windows_desktop",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.9
+      },
+      "content": "Excellent enterprise-level protection for home use. The network intrusion detection caught a port scan against my home network. Combined with the firewall rules, my home office is well-protected.",
+      "themes": [
+        "Security Features"
+      ],
+      "author": "HomeOffice_Secure",
+      "version": "16.8.2",
+      "helpful_count": 38
+    },
+    {
+      "id": "r089",
+      "date": "2026-03-01",
+      "platform": "google_play",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.65
+      },
+      "content": "Really impressed with the latest version. The app optimizer cleaned up 2GB of junk files and the memory boost feature made my older Samsung phone feel snappy again. McAfee is more than just antivirus now.",
+      "themes": [
+        "Performance",
+        "Security Features"
+      ],
+      "author": "CleanPhone_Happy",
+      "version": "6.12.1",
+      "helpful_count": 28
+    },
+    {
+      "id": "r090",
+      "date": "2026-03-01",
+      "platform": "mac_desktop",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.15
+      },
+      "content": "McAfee for Mac is acceptable. Not the best, not the worst. The main thing keeping me is the multi-device family plan. As a standalone Mac product, I'd probably choose Malwarebytes instead.",
+      "themes": [
+        "Pricing",
+        "Security Features"
+      ],
+      "author": "FamilyPlan_Mac",
+      "version": "4.11.5",
+      "helpful_count": 13
+    },
+    {
+      "id": "r108",
+      "date": "2026-03-01",
+      "platform": "windows_desktop",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.7
+      },
+      "content": "Great at catching phishing attempts in my browser. Blocked 3 suspicious sites this month alone. The performance impact is noticeable during full scans but acceptable for daily use with real-time protection.",
+      "themes": [
+        "Security Features",
+        "Performance"
+      ],
+      "author": "SecureWebSurfer",
+      "version": "16.8.2",
+      "helpful_count": 22
+    },
+    {
+      "id": "r128",
+      "date": "2026-03-01",
+      "platform": "mac_desktop",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.9
+      },
+      "content": "Stopped a phishing attack on my parents Mac. They almost entered their bank details on a fake site. McAfee WebAdvisor blocked it and showed a clear warning. Worth every penny just for that.",
+      "themes": [
+        "Security Features"
+      ],
+      "author": "GratefulSon_Tech",
+      "version": "4.12.0",
+      "helpful_count": 73
+    },
+    {
+      "id": "r091",
+      "date": "2026-02-28",
+      "platform": "windows_desktop",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.58
+      },
+      "content": "The firewall management in the latest version is much improved. Easy-to-understand rules and the traffic monitor shows real-time connections. Great for users who want visibility into network activity.",
+      "themes": [
+        "Security Features",
+        "UI/UX"
+      ],
+      "author": "FirewallFan_PC",
+      "version": "16.8.2",
+      "helpful_count": 20
+    },
+    {
+      "id": "r092",
+      "date": "2026-02-28",
+      "platform": "google_play",
+      "rating": 1,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.75
+      },
+      "content": "My phone overheats whenever McAfee runs a scan. The battery drains rapidly and the device becomes uncomfortably hot. This is a serious hardware safety concern that McAfee needs to address immediately.",
+      "themes": [
+        "Battery Drain",
+        "Performance"
+      ],
+      "author": "Overheating_Galaxy",
+      "version": "6.12.0",
+      "helpful_count": 66
+    },
+    {
+      "id": "r093",
+      "date": "2026-02-28",
+      "platform": "app_store",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.6
+      },
+      "content": "Clean, intuitive interface on iOS. The security score gives a clear overview of your protection status. Appreciate that it works with Face ID for quick access to sensitive features.",
+      "themes": [
+        "UI/UX",
+        "Security Features"
+      ],
+      "author": "FaceID_Security",
+      "version": "5.8.0",
+      "helpful_count": 17
+    },
+    {
+      "id": "r107",
+      "date": "2026-02-28",
+      "platform": "windows_desktop",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.48
+      },
+      "content": "Too expensive for what you get. $39.99/year renewal is steep when Windows Defender is free and catches most threats. The extra features like file shredder and vulnerability scanner rarely find anything.",
+      "themes": [
+        "Pricing",
+        "Security Features"
+      ],
+      "author": "BudgetMinded",
+      "version": "16.8.2",
+      "helpful_count": 35
+    },
+    {
+      "id": "r127",
+      "date": "2026-02-28",
+      "platform": "mac_desktop",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.12
+      },
+      "content": "The UI on Mac feels like a Windows port. It does not follow macOS design guidelines at all. Menus are clunky, icons look out of place, and the preferences panel is confusing. Protection seems fine though.",
+      "themes": [
+        "UI/UX"
+      ],
+      "author": "MacDesignSnob",
+      "version": "4.12.0",
+      "helpful_count": 18
+    },
+    {
+      "id": "r144",
+      "date": "2026-02-28",
+      "platform": "google_play",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.1
+      },
+      "content": "Does what it claims but nothing special. Detected a few potentially unwanted apps. The safe browsing feature works in Chrome. Average antivirus for Android.",
+      "themes": [
+        "Security Features"
+      ],
+      "author": "AvgUser_Android",
+      "version": "6.12.1",
+      "helpful_count": 8
+    },
+    {
+      "id": "r094",
+      "date": "2026-02-27",
+      "platform": "mac_desktop",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.48
+      },
+      "content": "McAfee's system extension keeps crashing on macOS Sequoia 15.3. Getting kernel panics weekly since the last update. Apple's security is fine on its own — removing McAfee fixed all stability issues.",
+      "themes": [
+        "Performance",
+        "Installation"
+      ],
+      "author": "KernelPanic_Mac",
+      "version": "4.12.0",
+      "helpful_count": 41
+    },
+    {
+      "id": "r095",
+      "date": "2026-02-27",
+      "platform": "windows_desktop",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.82
+      },
+      "content": "Customer support deserves a special mention. Had an issue with license activation and the agent not only fixed it but also extended my subscription by a month as compensation. Above and beyond service!",
+      "themes": [
+        "Customer Support"
+      ],
+      "author": "Support_Extended",
+      "version": "16.8.2",
+      "helpful_count": 35
+    },
+    {
+      "id": "r096",
+      "date": "2026-02-26",
+      "platform": "google_play",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.62
+      },
+      "content": "Solid antivirus for Android. The QR code scanner checks links for safety before opening them. Smart feature in an age where QR codes are everywhere. Works fast without noticeable delays.",
+      "themes": [
+        "Security Features"
+      ],
+      "author": "QRsafe_Scanner",
+      "version": "6.12.1",
+      "helpful_count": 19
+    },
+    {
+      "id": "r097",
+      "date": "2026-02-26",
+      "platform": "app_store",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.12
+      },
+      "content": "The privacy check feature that audits app permissions is useful but limited on iOS. Most of the heavy lifting is done by Apple's built-in privacy controls. McAfee just surfaces what's already there.",
+      "themes": [
+        "Security Features",
+        "UI/UX"
+      ],
+      "author": "PrivacyCheck_iOS",
+      "version": "5.7.2",
+      "helpful_count": 8
+    },
+    {
+      "id": "r106",
+      "date": "2026-02-26",
+      "platform": "windows_desktop",
+      "rating": 1,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.9
+      },
+      "content": "Installation was a nightmare. Failed three times with error code 12152. Had to completely uninstall using their removal tool, reboot, then try again. Tech support kept me on hold for 45 minutes before helping.",
+      "themes": [
+        "Installation",
+        "Customer Support"
+      ],
+      "author": "AngryCustomer2026",
+      "version": "16.8.0",
+      "helpful_count": 72
+    },
+    {
+      "id": "r126",
+      "date": "2026-02-26",
+      "platform": "mac_desktop",
+      "rating": 1,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.82
+      },
+      "content": "Cannot believe the price went up to $49.99 for Mac-only protection. That is outrageous when Avast and AVG offer free alternatives that score just as well in AV-TEST benchmarks. Not worth it at all.",
+      "themes": [
+        "Pricing"
+      ],
+      "author": "PriceWatcher2026",
+      "version": "4.11.5",
+      "helpful_count": 41
+    },
+    {
+      "id": "r098",
+      "date": "2026-02-25",
+      "platform": "windows_desktop",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.55
+      },
+      "content": "The auto-renewal trapped me into another year. The cancellation process is intentionally complicated — hidden deep in account settings and requires calling support. Dark pattern UI design.",
+      "themes": [
+        "Pricing",
+        "UI/UX"
+      ],
+      "author": "DarkPattern_Victim",
+      "version": "16.8.1",
+      "helpful_count": 72
+    },
+    {
+      "id": "r099",
+      "date": "2026-02-25",
+      "platform": "mac_desktop",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.08
+      },
+      "content": "Does the basic job of scanning for malware on Mac. Performance impact is minimal on my M1 MacBook Air. Nothing special but nothing terrible. A safe, middle-of-the-road choice.",
+      "themes": [
+        "Performance",
+        "Security Features"
+      ],
+      "author": "M1_MiddleRoad",
+      "version": "4.11.5",
+      "helpful_count": 5
+    },
+    {
+      "id": "r105",
+      "date": "2026-02-25",
+      "platform": "windows_desktop",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.62
+      },
+      "content": "Solid antivirus with good real-time protection. The VPN included in Total Protection works well for basic browsing. Only complaint is the occasional pop-up asking me to upgrade features I already have.",
+      "themes": [
+        "Security Features",
+        "VPN",
+        "UI/UX"
+      ],
+      "author": "HomeUser_Janet",
+      "version": "16.8.2",
+      "helpful_count": 15
+    },
+    {
+      "id": "r125",
+      "date": "2026-02-25",
+      "platform": "mac_desktop",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.68
+      },
+      "content": "Good protection suite for Mac. The firewall configuration is straightforward and the VPN works reliably for my daily use. Wish it had a system cleaner feature like CleanMyMac offers.",
+      "themes": [
+        "Security Features",
+        "VPN"
+      ],
+      "author": "MacPowerUser",
+      "version": "4.12.0",
+      "helpful_count": 14
+    },
+    {
+      "id": "r143",
+      "date": "2026-02-25",
+      "platform": "google_play",
+      "rating": 1,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.75
+      },
+      "content": "Ads everywhere! Even after paying for premium, I still get pop-ups promoting other McAfee products. This is unacceptable for a paid antivirus. Feels like adware.",
+      "themes": [
+        "Pricing",
+        "UI/UX"
+      ],
+      "author": "NoMoreAds_Please",
+      "version": "6.12.0",
+      "helpful_count": 67
+    },
+    {
+      "id": "r100",
+      "date": "2026-02-24",
+      "platform": "google_play",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.85
+      },
+      "content": "McAfee saved me from a banking trojan! The real-time scanner detected a malicious overlay app targeting my banking credentials. Blocked it instantly and notified me. This is why you need good antivirus.",
+      "themes": [
+        "Security Features"
+      ],
+      "author": "BankingSafe_User",
+      "version": "6.12.1",
+      "helpful_count": 82
+    },
+    {
+      "id": "r104",
+      "date": "2026-02-23",
+      "platform": "windows_desktop",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.91
+      },
+      "content": "Excellent protection for my small business PCs. McAfee caught a ransomware attempt that our previous solution missed completely. The centralized management console makes it easy to manage 15 workstations.",
+      "themes": [
+        "Security Features"
+      ],
+      "author": "SmallBizIT",
+      "version": "16.8.2",
+      "helpful_count": 58
+    },
+    {
+      "id": "r124",
+      "date": "2026-02-23",
+      "platform": "mac_desktop",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.6
+      },
+      "content": "The battery drain is unacceptable. My MacBook Air M2 loses about 15% more battery per day with McAfee running. For a laptop that is supposed to last all day, this is a deal breaker. Switching to Malwarebytes.",
+      "themes": [
+        "Battery Drain",
+        "Performance"
+      ],
+      "author": "BatteryLife_Matters",
+      "version": "4.12.0",
+      "helpful_count": 56
+    },
+    {
+      "id": "r103",
+      "date": "2026-02-22",
+      "platform": "windows_desktop",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.08
+      },
+      "content": "Average antivirus. Does the job of detecting malware but nothing exceptional. The firewall works fine. Wish the scan scheduling was more flexible — can only set daily or weekly, no custom schedules.",
+      "themes": [
+        "Security Features",
+        "UI/UX"
+      ],
+      "author": "CasualUser_Tom",
+      "version": "16.8.2",
+      "helpful_count": 12
+    },
+    {
+      "id": "r123",
+      "date": "2026-02-22",
+      "platform": "mac_desktop",
+      "rating": 5,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.87
+      },
+      "content": "As a graphic designer who downloads assets from various sources, McAfee gives me peace of mind. It caught a trojan embedded in a font file from an unverified source. Scan speed on my M3 Max is blazing fast.",
+      "themes": [
+        "Security Features",
+        "Performance"
+      ],
+      "author": "DesignPro_Maya",
+      "version": "4.12.0",
+      "helpful_count": 39
+    },
+    {
+      "id": "r142",
+      "date": "2026-02-22",
+      "platform": "google_play",
+      "rating": 4,
+      "sentiment": {
+        "label": "positive",
+        "compound": 0.55
+      },
+      "content": "Good protection app overall. The app lock feature is useful for privacy. Wi-Fi scanner works well. Would give 5 stars if the UI was more modern looking.",
+      "themes": [
+        "Security Features",
+        "UI/UX"
+      ],
+      "author": "PixelUser_2026",
+      "version": "6.12.1",
+      "helpful_count": 13
+    },
+    {
+      "id": "r102",
+      "date": "2026-02-20",
+      "platform": "windows_desktop",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.55
+      },
+      "content": "The scan speed is painfully slow. A full system scan takes over 4 hours on my SSD-based system. Competitors finish in under an hour. Also, the UI feels dated compared to Kaspersky and Bitdefender.",
+      "themes": [
+        "Performance",
+        "UI/UX"
+      ],
+      "author": "TechReviewer_Dan",
+      "version": "16.8.1",
+      "helpful_count": 28
+    },
+    {
+      "id": "r122",
+      "date": "2026-02-20",
+      "platform": "mac_desktop",
+      "rating": 3,
+      "sentiment": {
+        "label": "neutral",
+        "compound": 0.05
+      },
+      "content": "It works but feels unnecessary on a Mac. macOS already has decent built-in protection with Gatekeeper and XProtect. McAfee adds some extra scanning but at the cost of noticeable battery drain on my MacBook Pro.",
+      "themes": [
+        "Battery Drain",
+        "Security Features"
+      ],
+      "author": "MacSkeptic",
+      "version": "4.12.0",
+      "helpful_count": 22
+    },
+    {
+      "id": "r101",
+      "date": "2026-02-19",
+      "platform": "windows_desktop",
+      "rating": 1,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.82
+      },
+      "content": "McAfee completely destroyed my PC performance. Boot time went from 30 seconds to over 3 minutes. Every program takes forever to open. This is supposed to protect my computer, not make it unusable. Demanding a full refund.",
+      "themes": [
+        "Performance"
+      ],
+      "author": "SlowPC_Mike",
+      "version": "16.8.2",
+      "helpful_count": 45
+    },
+    {
+      "id": "r121",
+      "date": "2026-02-19",
+      "platform": "mac_desktop",
+      "rating": 1,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.75
+      },
+      "content": "McAfee on macOS Sequoia is a disaster. Constant kernel panics and system freezes. Had to boot into safe mode to uninstall it. Apple Silicon optimization is clearly an afterthought for this product.",
+      "themes": [
+        "Performance",
+        "Installation"
+      ],
+      "author": "MacDevFrustrated",
+      "version": "4.12.0",
+      "helpful_count": 48
+    },
+    {
+      "id": "r141",
+      "date": "2026-02-19",
+      "platform": "google_play",
+      "rating": 2,
+      "sentiment": {
+        "label": "negative",
+        "compound": -0.62
+      },
+      "content": "Battery drain is insane since last update. My phone goes from 100% to 20% by noon with McAfee running in background. Had to force stop it to save battery. Fix this ASAP!",
+      "themes": [
+        "Battery Drain",
+        "Performance"
+      ],
+      "author": "BatteryDead_User",
+      "version": "6.12.1",
+      "helpful_count": 51
+    }
+  ],
+  "alerts": [
+    {
+      "id": "alert-001",
+      "severity": "high",
+      "type": "negative_spike",
+      "title": "Spike in Negative Reviews on Google Play",
+      "message": "Negative reviews on Google Play increased 35% this week, primarily around battery drain and performance issues.",
+      "date": "2026-03-20",
+      "platform": "google_play",
+      "status": "active"
+    },
+    {
+      "id": "alert-002",
+      "severity": "medium",
+      "type": "theme_trending",
+      "title": "Battery Drain Theme Trending",
+      "message": "Battery drain mentions increased 40% across Android and iOS platforms in the last 7 days.",
+      "date": "2026-03-19",
+      "platform": "all",
+      "status": "active"
+    },
+    {
+      "id": "alert-003",
+      "severity": "low",
+      "type": "rating_drop",
+      "title": "Mac Desktop Rating Declining",
+      "message": "Mac desktop average rating dropped from 3.8 to 3.45 over the past two weeks. Installation and performance issues are primary drivers.",
+      "date": "2026-03-18",
+      "platform": "mac_desktop",
+      "status": "acknowledged"
+    },
+    {
+      "id": "alert-004",
+      "severity": "medium",
+      "type": "support_issues",
+      "title": "Customer Support Complaints Rising",
+      "message": "Customer support related negative reviews increased 25%. Common complaints: long wait times, scripted responses, billing issues.",
+      "date": "2026-03-17",
+      "platform": "all",
+      "status": "active"
+    },
+    {
+      "id": "alert-005",
+      "severity": "high",
+      "type": "install_failure",
+      "title": "Installation Failures on Windows Desktop",
+      "message": "Multiple reports of BSOD and system crashes during McAfee installation on Windows 11 systems. Version 16.8.2 may have compatibility issues.",
+      "date": "2026-03-15",
+      "platform": "windows_desktop",
+      "status": "investigating"
+    }
+  ]
+}

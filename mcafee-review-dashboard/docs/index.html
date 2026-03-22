@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>McAfee Review Intelligence Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+</head>
+<body>
+
+  <!-- ============ Header ============ -->
+  <header class="header">
+    <div class="header-brand">
+      <div class="header-logo">M</div>
+      <div>
+        <div class="header-title">Review Intelligence Dashboard</div>
+        <div class="header-subtitle">McAfee Security Products</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <div class="header-meta-item">
+        <span class="live-dot"></span>
+        <span>Live</span>
+      </div>
+      <div class="header-meta-item" id="last-updated"></div>
+      <div class="header-meta-item" id="total-reviews-meta"></div>
+    </div>
+  </header>
+
+  <!-- ============ Navigation ============ -->
+  <nav class="nav-tabs" id="nav-tabs">
+    <div class="nav-tab active" data-tab="overview">
+      <span class="tab-icon">&#9632;</span> Overview
+    </div>
+    <div class="nav-tab" data-tab="reviews">
+      <span class="tab-icon">&#9679;</span> Reviews
+    </div>
+  </nav>
+
+  <!-- ============ Date Range Filter ============ -->
+  <div class="date-filter-bar" id="date-filter-bar">
+    <div class="date-filter-presets">
+      <button class="date-preset-btn" data-range="7">Last 1 Week</button>
+      <button class="date-preset-btn" data-range="15">Last 15 Days</button>
+      <button class="date-preset-btn active" data-range="30">Last 1 Month</button>
+      <button class="date-preset-btn" data-range="90">Last 3 Months</button>
+      <button class="date-preset-btn" data-range="365">Last 1 Year</button>
+      <button class="date-preset-btn" data-range="all">All Time</button>
+    </div>
+    <div class="date-filter-custom">
+      <label class="date-filter-label">From</label>
+      <input type="date" class="date-filter-input" id="date-start">
+      <label class="date-filter-label">To</label>
+      <input type="date" class="date-filter-input" id="date-end">
+      <button class="date-filter-apply" id="date-apply">Apply</button>
+      <button class="date-filter-clear" id="date-clear">Clear</button>
+    </div>
+    <div class="date-filter-info" id="date-filter-info"></div>
+  </div>
+
+  <!-- ============ Main Content ============ -->
+  <main class="main-content">
+
+    <!-- ======== Overview Tab - All Unique Charts ======== -->
+    <section class="tab-panel active" id="tab-overview">
+      <!-- KPIs -->
+      <div class="kpi-grid" id="kpi-grid"></div>
+
+      <!-- Row 1: Trend Charts -->
+      <div class="chart-grid">
+        <div class="chart-card">
+          <div class="chart-title">Sentiment Trend</div>
+          <div class="chart-container" id="chart-sentiment-trend"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Rating Trend</div>
+          <div class="chart-container" id="chart-rating-trend"></div>
+        </div>
+      </div>
+
+      <!-- Row 2: Distribution Charts -->
+      <div class="chart-grid">
+        <div class="chart-card">
+          <div class="chart-title">Sentiment Distribution</div>
+          <div class="chart-container" id="chart-sentiment-dist"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Rating Distribution</div>
+          <div class="chart-container" id="chart-rating-dist"></div>
+        </div>
+      </div>
+
+      <!-- Row 3: Platform & Volume -->
+      <div class="chart-grid">
+        <div class="chart-card">
+          <div class="chart-title">Platform Breakdown</div>
+          <div class="chart-container" id="chart-platform-breakdown"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Daily Volume by Platform</div>
+          <div class="chart-container" id="chart-daily-volume"></div>
+        </div>
+      </div>
+
+      <!-- Row 4: Theme Analysis (Single) -->
+      <div class="chart-grid">
+        <div class="chart-card full-width">
+          <div class="chart-title">Top Themes</div>
+          <div class="chart-container" id="chart-themes"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======== Reviews Tab ======== -->
+    <section class="tab-panel" id="tab-reviews">
+      <!-- Filters -->
+      <div class="filters-bar" id="filters-bar">
+        <div class="filter-group">
+          <label class="filter-label">Platform</label>
+          <select class="filter-select" id="filter-platform">
+            <option value="all">All Platforms</option>
+            <option value="google_play">Google Play</option>
+            <option value="app_store">App Store</option>
+            <option value="windows_desktop">Windows</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Rating</label>
+          <select class="filter-select" id="filter-rating">
+            <option value="all">All Ratings</option>
+            <option value="5">5 Stars</option>
+            <option value="4">4 Stars</option>
+            <option value="3">3 Stars</option>
+            <option value="2">2 Stars</option>
+            <option value="1">1 Star</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Sentiment</label>
+          <select class="filter-select" id="filter-sentiment">
+            <option value="all">All</option>
+            <option value="positive">Positive</option>
+            <option value="neutral">Neutral</option>
+            <option value="negative">Negative</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Notable</label>
+          <select class="filter-select" id="filter-notable">
+            <option value="all">All Reviews</option>
+            <option value="response_mismatch">⚠️ Response Mismatch</option>
+            <option value="no_response">⚠️ No Response</option>
+            <option value="billing_issue">💰 Billing Issue</option>
+            <option value="cancellation">🚫 Cancellation</option>
+            <option value="critical">🔴 Critical (1★)</option>
+          </select>
+        </div>
+        <div class="filter-group search-group">
+          <input type="text" class="filter-search" id="filter-search" placeholder="Search reviews...">
+        </div>
+      </div>
+
+      <!-- Results Summary -->
+      <div class="results-summary" id="results-summary"></div>
+
+      <!-- Reviews Table -->
+      <div class="reviews-table-wrap">
+        <table class="reviews-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Platform</th>
+              <th>Rating</th>
+              <th>Sentiment</th>
+              <th>Review</th>
+              <th>McAfee's Response</th>
+              <th>Suggested Better Reply</th>
+            </tr>
+          </thead>
+          <tbody id="reviews-tbody"></tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination" id="pagination"></div>
+    </section>
+
+  </main>
+
+  <!-- ============ Scripts ============ -->
+  <script src="assets/dashboard.js"></script>
+</body>
+</html>

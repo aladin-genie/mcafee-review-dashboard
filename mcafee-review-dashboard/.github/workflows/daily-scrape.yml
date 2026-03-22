@@ -1,0 +1,54 @@
+name: Daily Review Data Update
+
+on:
+  schedule:
+    # Run daily at 6 AM UTC (1 AM CST)
+    - cron: '0 6 * * *'
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  scrape-reviews:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        pip install google-play-scraper requests
+        
+    - name: Scrape reviews
+      run: |
+        python3 scripts/scrape_reviews.py
+        
+    - name: Check for changes
+      id: verify-changed-files
+      run: |
+        if [ -n "$(git status --porcelain docs/data/dashboard_data.json)" ]; then
+          echo "changed=true" >> $GITHUB_OUTPUT
+        else
+          echo "changed=false" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: Commit and push if changed
+      if: steps.verify-changed-files.outputs.changed == 'true'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add docs/data/dashboard_data.json
+        git commit -m "Update review data - $(date +%Y-%m-%d) [skip ci]"
+        git push
+        
+    - name: Create deployment summary
+      if: steps.verify-changed-files.outputs.changed == 'true'
+      run: |
+        echo "## Review Data Updated ✅" >> $GITHUB_STEP_SUMMARY
+        echo "- Date: $(date +%Y-%m-%d)" >> $GITHUB_STEP_SUMMARY
+        echo "- New reviews scraped from Google Play and App Store" >> $GITHUB_STEP_SUMMARY
+        echo "- Dashboard will reflect updated data on next load" >> $GITHUB_STEP_SUMMARY
