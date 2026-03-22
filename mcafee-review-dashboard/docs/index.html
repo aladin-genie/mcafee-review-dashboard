@@ -70,15 +70,22 @@
       <!-- KPIs -->
       <div class="kpi-grid" id="kpi-grid"></div>
 
-      <!-- Row 1: Trend Charts -->
+      <!-- Row 1: Combined Sentiment + Volume + Rating Trend -->
       <div class="chart-grid">
-        <div class="chart-card">
-          <div class="chart-title">Sentiment Trend</div>
-          <div class="chart-container" id="chart-sentiment-trend"></div>
+        <div class="chart-card full-width">
+          <div class="chart-title">Sentiment Trend + Daily Volume by Platform (Combined)</div>
+          <div class="chart-container" id="chart-combined-sentiment-volume"></div>
         </div>
+      </div>
+      
+      <div class="chart-grid">
         <div class="chart-card">
           <div class="chart-title">Rating Trend</div>
           <div class="chart-container" id="chart-rating-trend"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Platform Breakdown</div>
+          <div class="chart-container" id="chart-platform-breakdown"></div>
         </div>
       </div>
 
@@ -91,18 +98,6 @@
         <div class="chart-card">
           <div class="chart-title">Rating Distribution</div>
           <div class="chart-container" id="chart-rating-dist"></div>
-        </div>
-      </div>
-
-      <!-- Row 3: Platform & Volume -->
-      <div class="chart-grid">
-        <div class="chart-card">
-          <div class="chart-title">Platform Breakdown</div>
-          <div class="chart-container" id="chart-platform-breakdown"></div>
-        </div>
-        <div class="chart-card">
-          <div class="chart-title">Daily Volume by Platform</div>
-          <div class="chart-container" id="chart-daily-volume"></div>
         </div>
       </div>
 

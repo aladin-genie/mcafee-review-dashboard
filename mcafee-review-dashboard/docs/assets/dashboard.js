@@ -152,19 +152,66 @@
     
     // Purge existing charts
     ['chart-sentiment-trend', 'chart-rating-trend', 'chart-sentiment-dist', 
-     'chart-rating-dist', 'chart-platform-breakdown', 'chart-daily-volume', 'chart-themes']
+     'chart-rating-dist', 'chart-platform-breakdown', 'chart-daily-volume', 'chart-themes',
+     'chart-combined-sentiment-volume']
       .forEach(id => {
         const el = document.getElementById(id);
         if (el && typeof Plotly !== 'undefined') Plotly.purge(el);
       });
     
-    // 1. Sentiment Trend
-    Plotly.newPlot('chart-sentiment-trend', [
+    // 1. COMBINED: Sentiment Trend + Daily Volume by Platform
+    const platformVolume = {};
+    FILTERED_REVIEWS.forEach(r => {
+      if (!platformVolume[r.date]) platformVolume[r.date] = {};
+      platformVolume[r.date][r.platform] = (platformVolume[r.date][r.platform] || 0) + 1;
+    });
+    
+    const platformColors = { google_play: '#3DDC84', app_store: '#007AFF', windows_desktop: '#00BCF2' };
+    const platforms = ['google_play', 'app_store', 'windows_desktop'];
+    
+    const volumeTraces = platforms.map(p => ({
+      x: dates,
+      y: dates.map(d => platformVolume[d]?.[p] || 0),
+      name: p.replace('_', ' ').toUpperCase(),
+      type: 'bar',
+      marker: { color: platformColors[p] || '#94A3B8' },
+      yaxis: 'y2',
+      opacity: 0.7
+    }));
+    
+    const combinedLayout = {
+      height: 350,
+      margin: { t: 40, r: 60, b: 40, l: 50 },
+      paper_bgcolor: 'transparent',
+      plot_bgcolor: 'transparent',
+      title: { text: 'Sentiment Trend + Daily Volume by Platform', font: { size: 14 } },
+      xaxis: { domain: [0, 1], tickangle: -45 },
+      yaxis: { 
+        title: 'Sentiment Count',
+        titlefont: { color: '#64748B' },
+        tickfont: { color: '#64748B' },
+        side: 'left'
+      },
+      yaxis2: {
+        title: 'Daily Review Volume',
+        titlefont: { color: '#94A3B8' },
+        tickfont: { color: '#94A3B8' },
+        overlaying: 'y',
+        side: 'right'
+      },
+      legend: { orientation: 'h', y: 1.15, x: 0.5, xanchor: 'center' },
+      barmode: 'stack'
+    };
+    
+    Plotly.newPlot('chart-combined-sentiment-volume', [
       { x: dates, y: stats.map(d => d.sentiment_distribution.positive), 
-        name: 'Positive', type: 'scatter', mode: 'lines', line: { color: '#10B981' }},
+        name: 'Positive Sentiment', type: 'scatter', mode: 'lines', 
+        line: { color: '#10B981', width: 2 }, yaxis: 'y' },
       { x: dates, y: stats.map(d => d.sentiment_distribution.negative), 
-        name: 'Negative', type: 'scatter', mode: 'lines', line: { color: '#EF4444' }}
-    ], layout, {displayModeBar: false});
+        name: 'Negative Sentiment', type: 'scatter', mode: 'lines', 
+        line: { color: '#EF4444', width: 2 }, yaxis: 'y' },
+      ...volumeTraces
+    ], combinedLayout, {displayModeBar: false});
     
     // 2. Rating Trend
     Plotly.newPlot('chart-rating-trend', [{
