@@ -480,32 +480,33 @@
       // Response Quality filters
       if (activeFilters.notable !== 'all') {
         const quality = checkResponseQuality(r);
+        let matches = false;
         
         switch(activeFilters.notable) {
           case 'no_response':
-            return quality?.type === 'no_response';
-            
+            matches = quality?.type === 'no_response';
+            break;
           case 'high_rating_apology':
-            return quality?.category?.includes('HIGH RATING + APOLOGY');
-            
+            matches = quality?.category?.includes('HIGH RATING + APOLOGY');
+            break;
           case 'low_rating_no_empathy':
-            return quality?.category?.includes('LOW RATING + NO EMPATHY');
-            
+            matches = quality?.category?.includes('LOW RATING + NO EMPATHY');
+            break;
           case 'generic_template':
-            return quality?.category?.includes('GENERIC TEMPLATE');
-            
+            matches = quality?.category?.includes('GENERIC TEMPLATE');
+            break;
           case 'no_solution':
-            return quality?.category?.includes('NO SOLUTION');
-            
+            matches = quality?.category?.includes('NO SOLUTION');
+            break;
           case 'wrong_issue':
-            return quality?.category?.includes('WRONG ISSUE');
-            
+            matches = quality?.category?.includes('WRONG ISSUE');
+            break;
           case 'critical':
-            return r.rating === 1;
-            
-          default:
-            return true;
+            matches = r.rating === 1;
+            break;
         }
+        
+        if (!matches) return false;
       }
       
       return true;
