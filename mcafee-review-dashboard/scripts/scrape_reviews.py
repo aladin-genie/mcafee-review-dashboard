@@ -237,16 +237,16 @@ def analyze_themes(content):
     theme_keywords = {
         'Performance': ['slow', 'fast', 'speed', 'performance', 'lag', 'battery', 'drain', 'memory', 'cpu', 'freeze'],
         'VPN': ['vpn', 'virtual private network', 'connection', 'ip address'],
-        'Security Features': ['security', 'protection', 'virus', 'malware', 'scan', 'safe', 'protect', 'threat', 'detection'],
-        'UI/UX': ['interface', 'design', 'easy', 'difficult', 'simple', 'confusing', 'ui', 'user interface'],
+        'Security Features': ['antivirus', 'protection', 'virus', 'malware', 'safe', 'protect', 'threat', 'detection', 'hacked', 'hack', 'safety'],
+        'UI/UX': ['interface', 'design', 'confusing', 'ui', 'user interface', 'layout', 'navigation', 'menu', 'menus', 'cluttered', 'hard to use', 'difficult to use', 'usability', 'annoying'],
         'Customer Support': ['support', 'service', 'help', 'contact', 'response', 'customer'],
-        'Pricing': ['price', 'cost', 'expensive', 'cheap', 'money', 'subscription', 'billing', 'payment', 'refund', 'charge'],
+        'Pricing': ['price', 'cost', 'expensive', 'cheap', 'money', 'subscription', 'charge', 'charged', 'billing', 'payment', 'fee', 'renew', 'renewal', 'refund'],
         'Dark Web': ['dark web', 'leaked', 'breach', 'monitoring', 'identity theft', 'personal info'],
         'Scam/Phishing': ['scam', 'phishing', 'text', 'email', 'fraud', 'fake'],
-        'Pop-ups/Ads': ['popup', 'pop-up', 'ads', 'advertisement', 'annoying', 'keep showing up'],
-        'Installation': ['install', 'download', 'setup', 'uninstall', 'remove', 'bloatware'],
+        'Pop-ups/Ads': ['popup', 'pop-up', 'pop-ups', 'ads', 'advertisement', 'notification', 'banner', 'interstitial', 'promo', 'promotion'],
+        'Installation': ['install', 'download', 'setup', 'installs', 'installer', 'uninstall', 'remove', 'bloatware'],
         'False Positives': ['false positive', 'blocked', 'legitimate', 'wrong detection'],
-        'App Issues': ['crash', 'bug', 'freeze', 'error', 'not working', 'broken'],
+        'App Issues': ['crash', 'bug', 'freeze', 'error', 'not working', 'broken', 'glitch', 'hang', 'unresponsive', 'frozen', 'not responding', 'stuck', 'force close', 'failed', 'failure'],
         'Auto-Renewal': ['auto-renew', 'auto renew', 'renewal', 'charged', 'bank', 'card', 'payment']
     }
     
