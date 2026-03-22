@@ -188,29 +188,116 @@ def scrape_app_store(since_date: datetime | None = None) -> list:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# ANALYSIS HELPERS (same as original scraper)
+# ANALYSIS HELPERS - IMPROVED (Exp 008-012)
 # ══════════════════════════════════════════════════════════════════════════════
 
-_THEME_KEYWORDS = {
-    "Performance":       ["slow", "fast", "speed", "performance", "lag", "battery", "drain", "memory", "cpu", "freeze"],
-    "VPN":               ["vpn", "virtual private network", "connection", "ip address"],
-    "Security Features": ["security", "protection", "virus", "malware", "scan", "safe", "protect", "threat", "detection"],
-    "UI/UX":             ["interface", "design", "easy", "difficult", "simple", "confusing", "ui", "user interface"],
-    "Customer Support":  ["support", "service", "help", "contact", "response", "customer"],
-    "Pricing":           ["price", "cost", "expensive", "cheap", "money", "subscription", "billing", "payment", "refund", "charge"],
-    "Dark Web":          ["dark web", "leaked", "breach", "monitoring", "identity theft", "personal info"],
-    "Scam/Phishing":     ["scam", "phishing", "text", "email", "fraud", "fake"],
-    "Pop-ups/Ads":       ["popup", "pop-up", "ads", "advertisement", "annoying", "keep showing up"],
-    "Installation":      ["install", "download", "setup", "uninstall", "remove", "bloatware"],
-    "False Positives":   ["false positive", "blocked", "legitimate", "wrong detection"],
-    "App Issues":        ["crash", "bug", "freeze", "error", "not working", "broken"],
-    "Auto-Renewal":      ["auto-renew", "auto renew", "renewal", "charged", "bank", "card", "payment"],
-}
-
-
 def analyze_themes(content: str) -> list:
-    cl = content.lower()
-    return [t for t, kws in _THEME_KEYWORDS.items() if any(k in cl for k in kws)][:3]
+    """Extract themes from review content - IMPROVED VERSION"""
+    content_lower = content.lower()
+    themes = []
+    
+    # PERFORMANCE (Exp 008) - Context-aware
+    def has_performance_issue(text):
+        strong = ['slow', 'lag', 'lags', 'freeze', 'freezes', 'frozen', 
+                  'sluggish', 'unresponsive', 'hangs', 'hanging', 'stuck']
+        if any(kw in text for kw in strong):
+            return True
+        
+        contextual = ['battery', 'drain', 'memory', 'cpu', 'ram']
+        negative = ['drain', 'drains', 'draining', 'eats', 'consumes', 'kills',
+                    'wastes', 'hog', 'hogs', 'slow', 'slows', 'slower', 'freeze',
+                    'freezes', 'worse', 'terrible', 'bad', 'problem', 'issues']
+        
+        for kw in contextual:
+            if kw in text:
+                idx = text.find(kw)
+                window = text[max(0, idx-50):min(len(text), idx+50)]
+                if any(neg in window for neg in negative):
+                    return True
+        
+        neutral = ['speed', 'performance']
+        for kw in neutral:
+            if kw in text:
+                idx = text.find(kw)
+                window = text[max(0, idx-50):min(len(text), idx+50)]
+                if any(neg in window for neg in negative):
+                    return True
+        return False
+    
+    if has_performance_issue(content_lower):
+        themes.append("Performance")
+    
+    # VPN (Exp 009) - Expanded
+    vpn_keywords = {
+        'direct': ['vpn', 'virtual private network', 'virtual private'],
+        'ip_related': ['ip hiding', 'hide my ip', 'hide ip', 'mask ip', 'ip mask'],
+        'location': ['change location', 'location masking', 'fake location', 'geo location'],
+        'connection': ['secure connection', 'private connection', 'encrypted connection'],
+        'browsing': ['private browsing', 'anonymous browsing', 'hide browsing'],
+    }
+    exclude = ['no vpn', 'without vpn', 'disconnected from vpn', 'never use']
+    if not any(e in content_lower for e in exclude):
+        for keywords in vpn_keywords.values():
+            if any(kw in content_lower for kw in keywords):
+                themes.append("VPN")
+                break
+    
+    # POP-UPS/ADS (Exp 010) - Check before UI/UX
+    popup_keywords = ['popup', 'pop-up', 'pop-ups', 'pop up', 'notification', 'banner', 
+                      'interstitial', 'alert', 'ads', 'advertisement', 'promo', 'upsell']
+    if any(kw in content_lower for kw in popup_keywords):
+        themes.append("Pop-ups/Ads")
+    
+    # UI/UX (Exp 010)
+    if "Pop-ups/Ads" not in themes:
+        ui_keywords = ['interface', 'design', 'ui', 'user interface', 'layout', 'navigation',
+                       'menu', 'menus', 'button', 'screen', 'confusing', 'cluttered', 
+                       'hard to use', 'difficult to use']
+        if any(kw in content_lower for kw in ui_keywords):
+            themes.append("UI/UX")
+    
+    # CUSTOMER SUPPORT (Exp 011)
+    support_keywords = ['customer support', 'tech support', 'support team', 'support agent',
+                        'customer service', 'contacted support', 'called support', 
+                        'support ticket', 'rude', 'unhelpful', 'unresponsive']
+    if any(kw in content_lower for kw in support_keywords):
+        themes.append("Customer Support")
+    elif 'help' in content_lower:
+        positive_help = ['helps me', 'very helpful', 'really helpful', 'helpful app', 'helped me']
+        if not any(pos in content_lower for pos in positive_help):
+            support_ctx = ['support', 'representative', 'agent', 'ticket', 'case', 'response']
+            if any(ctx in content_lower for ctx in support_ctx):
+                themes.append("Customer Support")
+    
+    # AUTO-RENEWAL (Exp 012)
+    auto_renewal = ['auto-renew', 'auto renew', 'automatic renewal', 'charged without notice',
+                    'didnt know', 'never agreed', 'hard to cancel', 'impossible to cancel', 'refund']
+    if any(kw in content_lower for kw in auto_renewal):
+        themes.append("Auto-Renewal")
+    
+    # PRICING (Exp 012)
+    pricing = ['price', 'cost', 'expensive', 'cheap', 'money', 'subscription', 
+               'fee', 'payment', 'billing', 'pricing']
+    if any(kw in content_lower for kw in pricing):
+        themes.append("Pricing")
+    
+    # OTHER THEMES
+    other = {
+        "Security Features": ['antivirus', 'protection', 'virus', 'malware', 'safe', 'protect', 'threat'],
+        "Dark Web": ['dark web', 'leaked', 'breach', 'monitoring', 'identity theft'],
+        "Scam/Phishing": ['scam', 'phishing', 'fraud', 'fake'],
+        "Installation": ['install', 'setup', 'uninstall', 'remove', 'bloatware'],
+        "App Issues": ['crash', 'bug', 'error', 'not working', 'broken', 'glitch', 'frozen'],
+    }
+    for theme, keywords in other.items():
+        if any(kw in content_lower for kw in keywords):
+            themes.append(theme)
+    
+    return themes[:3]
+
+
+# Legacy compatibility
+_THEME_KEYWORDS = {}
 
 
 def analyze_sentiment(rating: int) -> dict:
