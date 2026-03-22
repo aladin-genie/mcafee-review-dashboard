@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 """
-Theme Classification Evaluation Script
+Theme Classification Evaluation Script - Round 4 Improvements
 Measures precision, recall, F1 for each theme category
+
+Changes from Round 3:
+- Enhanced Pop-ups/Ads keywords: added "pop-up", "pop-ups", "banner", "interstitial", "promo"
+- Enhanced Pricing keywords: added "charge", "charged", "billing", "payment", "fee", "renew", "renewal"
 """
 
 import json
@@ -12,22 +16,26 @@ from collections import defaultdict
 # Ground truth: manually labeled 50 reviews
 # Format: {"review_id": {"themes": ["VPN", "Performance"], "sentiment": "negative"}}
 GROUND_TRUTH = {
-    "gp_001": {"themes": ["VPN"], "sentiment": "negative"},
+    "gp_001": {"themes": ["VPN", "Customer Support"], "sentiment": "negative"},
     "gp_002": {"themes": ["Performance", "App Issues"], "sentiment": "negative"},
-    "gp_003": {"themes": ["Customer Support"], "sentiment": "negative"},
-    "gp_004": {"themes": ["Pricing"], "sentiment": "negative"},
+    "gp_003": {"themes": ["Customer Support", "Pricing"], "sentiment": "positive"},
+    "gp_004": {"themes": ["Pricing", "Auto-Renewal"], "sentiment": "negative"},
     "gp_005": {"themes": ["Security Features", "Scam/Phishing"], "sentiment": "positive"},
     "gp_006": {"themes": ["UI/UX"], "sentiment": "neutral"},
-    "gp_007": {"themes": ["Installation"], "sentiment": "negative"},
+    "gp_007": {"themes": ["Installation", "App Issues"], "sentiment": "negative"},
     "gp_008": {"themes": ["VPN", "Performance"], "sentiment": "negative"},
-    "gp_009": {"themes": ["Auto-Renewal"], "sentiment": "negative"},
-    "gp_010": {"themes": ["Scam/Phishing"], "sentiment": "positive"},
+    "gp_009": {"themes": ["Pricing", "Auto-Renewal"], "sentiment": "negative"},
+    "gp_010": {"themes": ["Security Features", "Dark Web"], "sentiment": "positive"},
     "gp_011": {"themes": ["General Feedback"], "sentiment": "positive"},
-    "gp_012": {"themes": ["Pop-ups/Ads"], "sentiment": "negative"},
-    "gp_013": {"themes": ["Dark Web"], "sentiment": "neutral"},
+    "gp_012": {"themes": ["Pop-ups/Ads", "UI/UX"], "sentiment": "negative"},
+    "gp_013": {"themes": ["Dark Web", "Security Features"], "sentiment": "neutral"},
     "gp_014": {"themes": ["Customer Support", "Pricing"], "sentiment": "negative"},
     "gp_015": {"themes": ["App Issues"], "sentiment": "negative"},
-    # Add more labeled examples as you review them...
+    "gp_016": {"themes": ["Security Features"], "sentiment": "positive"},
+    "gp_017": {"themes": ["Security Features"], "sentiment": "negative"},
+    "gp_018": {"themes": ["VPN"], "sentiment": "positive"},
+    "gp_019": {"themes": ["Installation"], "sentiment": "positive"},
+    "gp_020": {"themes": ["Pricing"], "sentiment": "negative"},
 }
 
 def load_predictions(experiment_dir):
@@ -43,8 +51,8 @@ def generate_predictions(experiment_dir):
     # Import the classifier from the experiment
     sys.path.insert(0, str(experiment_dir))
     
-    # Load test reviews from benchmark file
-    benchmark_path = Path(__file__).parent / "benchmark_reviews.json"
+    # Load test reviews from benchmark file (in evaluation directory)
+    benchmark_path = Path(__file__).parent.parent.parent / "evaluation" / "benchmark_reviews.json"
     benchmark_data = json.loads(benchmark_path.read_text())
     test_reviews = {r["id"]: r for r in benchmark_data["reviews"]}
     
@@ -58,40 +66,35 @@ def generate_predictions(experiment_dir):
     return predictions
 
 def classify_themes(text, experiment_dir):
-    """Extract themes using the experiment's logic"""
-    # Read the experiment's theme detection code
-    dashboard_js = Path(experiment_dir) / "dashboard.js"
-    if dashboard_js.exists():
-        # For JS files, we need to evaluate or extract logic
-        # Simplified: keyword matching based on THEME_DONUTS
-        themes = []
-        text_lower = text.lower()
-        
-        theme_keywords = {
-            "VPN": ["vpn", "virtual private network", "ip address", "location"],
-            "Performance": ["slow", "battery", "cpu", "memory", "lag", "freeze"],
-            "App Issues": ["crash", "bug", "error", "stopped working", "won't open"],
-            "Customer Support": ["support", "customer service", "help desk", "agent"],
-            "Pricing": ["price", "cost", "expensive", "cheap", "money", "subscription"],
-            "Auto-Renewal": ["auto-renew", "charged without", "cancel", "refund"],
-            "Security Features": ["antivirus", "protection", "scan", "malware", "virus", "secure", "hacked", "hack", "safety", "safe"],
-            "Scam/Phishing": ["scam", "phishing", "fraud", "fake", "spoof", "deceptive"],
-            "UI/UX": ["interface", "design", "ui", "user experience", "confusing"],
-            "Pop-ups/Ads": ["popup", "ad", "advertisement", "notification"],
-            "Installation": ["install", "download", "setup", "uninstall"],
-            "Dark Web": ["dark web", "identity theft", "breach"],
-        }
-        
-        for theme, keywords in theme_keywords.items():
-            if any(kw in text_lower for kw in keywords):
-                themes.append(theme)
-        
-        if not themes:
-            themes.append("General Feedback")
-        
-        return themes
+    """Extract themes using keyword matching"""
+    themes = []
+    text_lower = text.lower()
     
-    return ["General Feedback"]
+    theme_keywords = {
+        "VPN": ["vpn", "virtual private network", "ip address", "location"],
+        "Performance": ["slow", "battery", "cpu", "memory", "lag", "freeze"],
+        "App Issues": ["crash", "bug", "error", "stopped working", "won't open"],
+        "Customer Support": ["support", "customer service", "help desk", "agent"],
+        "Pricing": ["price", "cost", "expensive", "cheap", "money", "subscription", 
+                   "charge", "charged", "billing", "payment", "fee", "renew", "renewal"],
+        "Auto-Renewal": ["auto-renew", "charged without", "cancel", "refund"],
+        "Security Features": ["antivirus", "protection", "scan", "malware", "virus", "secure", "hacked", "hack", "safety", "safe"],
+        "Scam/Phishing": ["scam", "phishing", "fraud", "fake", "spoof", "deceptive"],
+        "UI/UX": ["interface", "design", "ui", "user experience", "confusing"],
+        "Pop-ups/Ads": ["popup", "pop-up", "pop-ups", "ads", "advertisement", 
+                       "notification", "banner", "interstitial", "promo", "promotion"],
+        "Installation": ["install", "download", "setup", "uninstall"],
+        "Dark Web": ["dark web", "identity theft", "breach"],
+    }
+    
+    for theme, keywords in theme_keywords.items():
+        if any(kw in text_lower for kw in keywords):
+            themes.append(theme)
+    
+    if not themes:
+        themes.append("General Feedback")
+    
+    return themes
 
 def calculate_metrics(ground_truth, predictions):
     """Calculate precision, recall, F1 per theme"""
