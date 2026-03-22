@@ -54,18 +54,28 @@
     }
   }
   
-  // Show loading state
+  // Show loading overlay instead of replacing content
   function showLoadingState() {
     const main = document.querySelector('.main-content');
-    if (main) {
-      main.innerHTML = `
-        <div style="padding: 3rem; text-align: center; color: var(--gray-600);">
-          <div style="font-size: 3rem; margin-bottom: 1rem; animation: spin 1s linear infinite;">⏳</div>
+    if (main && !document.getElementById('loading-overlay')) {
+      const overlay = document.createElement('div');
+      overlay.id = 'loading-overlay';
+      overlay.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(248,250,252,0.9); z-index: 1000; display: flex; align-items: center; justify-content: center;';
+      overlay.innerHTML = `
+        <div style="text-align: center; color: var(--gray-600);">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">⏳</div>
           <h2>Loading Dashboard...</h2>
-          <p>Fetching review data and initializing charts</p>
+          <p>Fetching review data</p>
         </div>
       `;
+      document.body.appendChild(overlay);
     }
+  }
+  
+  // Hide loading overlay
+  function hideLoadingState() {
+    const overlay = document.getElementById('loading-overlay');
+    if (overlay) overlay.remove();
   }
   
   // Show empty state for reviews
@@ -126,10 +136,12 @@
       renderKPIs();
       renderOverviewCharts();
       renderReviews();
+      hideLoadingState();
       
       console.log('Dashboard ready - showing Last 30 days');
     } catch(e) {
       console.error('Error:', e);
+      hideLoadingState();
       showErrorState('Failed to load dashboard data', e.message);
     }
   }
@@ -427,6 +439,17 @@
   
   // Overview Charts
   function renderOverviewCharts() {
+    // Check if required elements exist
+    const requiredElements = ['chart-combined-sentiment-volume', 'chart-rating-trend', 'chart-sentiment-dist', 
+                              'chart-rating-dist', 'chart-platform-breakdown', 'chart-themes'];
+    const missingElements = requiredElements.filter(id => !document.getElementById(id));
+    
+    if (missingElements.length > 0) {
+      console.warn('Missing chart containers:', missingElements);
+      // Don't throw error, just return - elements may not exist in current tab
+      return;
+    }
+    
     if (!FILTERED_STATS?.length) {
       showEmptyState('chart-combined-sentiment-volume', 'No data available for selected date range');
       return;
@@ -465,6 +488,144 @@
       y: dates.map(d => platformVolumeData[d]?.[p] || 0),
       name: p.replace('_', ' ').toUpperCase(),
       type: 'bar',
+      marker: { color: platformColorMap[p] || '#94A3B8' },
+      yaxis: 'y2',
+      opacity: 0.7
+    }));
+    
+    const combinedLayout = {
+      height: 350,
+      margin: { t: 40, r: 60, b: 40, l: 50 },
+      paper_bgcolor: 'transparent',
+      plot_bgcolor: 'transparent',
+      title: { text: 'Sentiment Trend + Daily Volume by Platform', font: { size: 14 } },
+      xaxis: { domain: [0, 1], tickangle: -45 },
+      yaxis: { 
+        title: 'Sentiment Count',
+        titlefont: { color: '#64748B' },
+        tickfont: { color: '#64748B' },
+        side: 'left'
+      },
+      yaxis2: {
+        title: 'Daily Review Volume',
+        titlefont: { color: '#94A3B8' },
+        tickfont: { color: '#94A3B8' },
+        overlaying: 'y',
+        side: 'right'
+      },
+      legend: { orientation: 'h', y: 1.15, x: 0.5, xanchor: 'center' },
+      barmode: 'stack'
+    };
+    
+    const combinedEl = document.getElementById('chart-combined-sentiment-volume');
+    if (combinedEl && typeof Plotly !== 'undefined') {
+      Plotly.newPlot('chart-combined-sentiment-volume', [
+        { x: dates, y: stats.map(d => d.sentiment_distribution?.positive || 0), 
+          name: 'Positive Sentiment', type: 'scatter', mode: 'lines', 
+          line: { color: '#10B981', width: 2 }, yaxis: 'y' },
+        { x: dates, y: stats.map(d => d.sentiment_distribution?.negative || 0), 
+          name: 'Negative Sentiment', type: 'scatter', mode: 'lines', 
+          line: { color: '#EF4444', width: 2 }, yaxis: 'y' },
+        ...volumeTraces
+      ], combinedLayout, {displayModeBar: false});
+    }
+    
+    // Rating Trend
+    const ratingTrendEl = document.getElementById('chart-rating-trend');
+    if (ratingTrendEl && typeof Plotly !== 'undefined') {
+      Plotly.newPlot('chart-rating-trend', [{
+        x: dates, y: stats.map(d => d.avg_rating),
+        type: 'scatter', mode: 'lines+markers', line: { color: '#F59E0B' }
+      }], { ...layout, yaxis: { range: [0, 5] }}, {displayModeBar: false});
+    }
+    
+    // Sentiment Distribution
+    const sentimentDistEl = document.getElementById('chart-sentiment-dist');
+    if (sentimentDistEl && typeof Plotly !== 'undefined') {
+      const totalSent = stats.reduce((acc, d) => {
+        acc.positive += d.sentiment_distribution?.positive || 0;
+        acc.negative += d.sentiment_distribution?.negative || 0;
+        acc.neutral += d.sentiment_distribution?.neutral || 0;
+        return acc;
+      }, {positive: 0, negative: 0, neutral: 0});
+      
+      Plotly.newPlot('chart-sentiment-dist', [{
+        values: [totalSent.positive, totalSent.neutral, totalSent.negative],
+        labels: ['Positive', 'Neutral', 'Negative'],
+        type: 'pie', hole: 0.4,
+        marker: { colors: ['#10B981', '#F59E0B', '#EF4444'] }
+      }], layout, {displayModeBar: false});
+    }
+    
+    // Rating Distribution
+    const ratingDistEl = document.getElementById('chart-rating-dist');
+    if (ratingDistEl && typeof Plotly !== 'undefined') {
+      const ratings = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+      FILTERED_REVIEWS.forEach(r => ratings[r.rating]++);
+      
+      Plotly.newPlot('chart-rating-dist', [{
+        x: ['1★', '2★', '3★', '4★', '5★'],
+        y: [ratings[1], ratings[2], ratings[3], ratings[4], ratings[5]],
+        type: 'bar',
+        marker: { color: ['#EF4444', '#F97316', '#F59E0B', '#84CC16', '#10B981'] }
+      }], { ...layout, xaxis: { type: 'category' }}, {displayModeBar: false});
+    }
+    
+    // Platform Breakdown
+    const platformBreakdownEl = document.getElementById('chart-platform-breakdown');
+    if (platformBreakdownEl && typeof Plotly !== 'undefined') {
+      const platforms = {};
+      FILTERED_REVIEWS.forEach(r => platforms[r.platform] = (platforms[r.platform] || 0) + 1);
+      const platformColors = { google_play: '#3DDC84', app_store: '#007AFF', windows_desktop: '#00BCF2' };
+      
+      Plotly.newPlot('chart-platform-breakdown', [{
+        x: Object.keys(platforms).map(p => p.replace('_', ' ').toUpperCase()),
+        y: Object.values(platforms),
+        type: 'bar',
+        marker: { color: Object.keys(platforms).map(p => platformColors[p] || '#94A3B8') }
+      }], { ...layout, xaxis: { type: 'category' }}, {displayModeBar: false});
+    }
+    
+    // Top Themes
+    const themesEl = document.getElementById('chart-themes');
+    if (themesEl && typeof Plotly !== 'undefined') {
+      const themesBySentiment = {};
+      FILTERED_REVIEWS.forEach(r => {
+        (r.themes || []).forEach(t => {
+          if (!themesBySentiment[t]) {
+            themesBySentiment[t] = { positive: 0, neutral: 0, negative: 0 };
+          }
+          themesBySentiment[t][r.sentiment?.label || 'neutral']++;
+        });
+      });
+      
+      const sortedThemes = Object.entries(themesBySentiment)
+        .map(([theme, counts]) => ({ 
+          theme, 
+          ...counts, 
+          total: counts.positive + counts.neutral + counts.negative 
+        }))
+        .sort((a, b) => b.total - a.total)
+        .slice(0, 8);
+      
+      Plotly.newPlot('chart-themes', [
+        { x: sortedThemes.map(t => t.theme), y: sortedThemes.map(t => t.positive),
+          name: 'Positive', type: 'bar', marker: { color: '#10B981' } },
+        { x: sortedThemes.map(t => t.theme), y: sortedThemes.map(t => t.neutral),
+          name: 'Neutral', type: 'bar', marker: { color: '#F59E0B' } },
+        { x: sortedThemes.map(t => t.theme), y: sortedThemes.map(t => t.negative),
+          name: 'Negative', type: 'bar', marker: { color: '#EF4444' } }
+      ], { ...layout, barmode: 'stack', xaxis: { type: 'category', tickangle: -45 },
+           legend: { orientation: 'h', y: -0.2 }, yaxis: { title: 'Review Count' } }, 
+         {displayModeBar: false});
+    }
+    
+    // Individual Theme Analysis
+    renderThemeAnalysis('Performance', ['Performance', 'Battery', 'Speed'], 'chart-theme-performance');
+    renderThemeAnalysis('VPN', ['VPN'], 'chart-theme-vpn');
+    renderThemeAnalysis('Security', ['Security Features'], 'chart-theme-security');
+    renderThemeAnalysis('Pricing', ['Pricing', 'Customer Support'], 'chart-theme-pricing');
+  }
       marker: { color: platformColorMap[p] || '#94A3B8' },
       yaxis: 'y2',
       opacity: 0.7
