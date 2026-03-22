@@ -1495,9 +1495,10 @@ body {
 .badge-quality.no-response    { background: #FEF2F2; color: #B91C1C; border: 1px solid #FECACA; }
 .badge-quality.generic        { background: #FFFBEB; color: #92400E; border: 1px solid #FDE68A; }
 .badge-quality.no-solution    { background: #FFFBEB; color: #92400E; border: 1px solid #FDE68A; }
-.badge-quality.apology        { background: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; }
-.badge-quality.no-empathy     { background: #FEF2F2; color: #B91C1C; border: 1px solid #FECACA; }
-.badge-quality.wrong-issue    { background: #FEF2F2; color: #991B1B; border: 1px solid #FECACA; }
+.badge-quality.apology             { background: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; }
+.badge-quality.no-empathy          { background: #FEF2F2; color: #B91C1C; border: 1px solid #FECACA; }
+.badge-quality.wrong-issue         { background: #FEF2F2; color: #991B1B; border: 1px solid #FECACA; }
+.badge-quality.unwarranted-apology { background: #FFF7ED; color: #C2410C; border: 1px solid #FDBA74; }
 
 /* ---- Pagination (new class names) ---- */
 .pagination-btn {

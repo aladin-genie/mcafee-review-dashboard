@@ -195,9 +195,16 @@ const ReviewDashboard = (function () {
 
   /* ─────────────────────────────────────────
      RESPONSE QUALITY (cached)
-     Multi-signal classifier — checks 7 distinct failure modes
-     before falling back to CORRECT.
+     Uses LLM-evaluated quality_tag stored in JSON when available.
+     Falls back to heuristic classifier for any reviews without a stored tag.
   ───────────────────────────────────────── */
+
+  // Set of all valid LLM-evaluated quality tags (for fast lookup)
+  const VALID_QUALITY_TAGS = new Set([
+    'NO RESPONSE', 'CORRECT', 'GENERIC TEMPLATE', 'NO SOLUTION',
+    'WRONG ISSUE', 'LOW RATING + NO EMPATHY', 'HIGH RATING + APOLOGY',
+    'UNWARRANTED APOLOGY'
+  ]);
 
   // Keyword map: for each theme, words that represent it in a developer reply
   const THEME_REPLY_KEYWORDS = {
@@ -215,6 +222,66 @@ const ReviewDashboard = (function () {
     'scam/phishing':    ['scam', 'phish', 'fraud', 'email', 'spam', 'detect'],
   };
 
+  // NEW: Complaint indicators for intent classification (Exp 007)
+  const COMPLAINT_INDICATORS = {
+    strong: ['terrible', 'awful', 'horrible', 'worst', 'hate', 'garbage', 'trash', 
+             'scam', 'fraud', 'rip off', 'rip-off', 'useless', 'worthless', 'crap',
+             'disgusting', 'unacceptable', 'ridiculous', 'pathetic'],
+    moderate: ['problem', 'issue', 'bug', 'error', 'crash', 'broken', 'not working',
+               'doesn\'t work', 'won\'t work', 'can\'t', 'unable', 'failed', 'failure',
+               'disappointing', 'disappointed', 'frustrating', 'frustrated', 'annoying',
+               'confusing', 'confused', 'difficult', 'hard to', 'slow', 'lag', 'freeze',
+               'stuck', 'frozen', 'keeps', 'constantly', 'always', 'never'],
+    falsePositiveTriggers: ['just started', 'recently started', 'new to', 'first time',
+                            'giving it a try', 'trying out', 'checking out', 'seeing how',
+                            'so far', 'for now', 'at the moment']
+  };
+
+  // NEW: Classify review intent (Exp 007)
+  function classifyReviewIntent(review) {
+    const text = (review.text || review.content || '').toLowerCase();
+    const rating = review.rating || 3;
+    
+    const hasNeutralContext = COMPLAINT_INDICATORS.falsePositiveTriggers.some(
+      trigger => text.includes(trigger)
+    );
+    
+    const strongComplaints = COMPLAINT_INDICATORS.strong.filter(w => text.includes(w));
+    const moderateComplaints = COMPLAINT_INDICATORS.moderate.filter(w => text.includes(w));
+    const hasQuestions = /\?/.test(text);
+    const noIssuesPattern = /\b(no issues?|no problems?|working fine|works fine|so far so good|no complaints?)\b/;
+    const explicitlyNoIssues = noIssuesPattern.test(text);
+    
+    const complaintScore = strongComplaints.length * 3 + moderateComplaints.length;
+    
+    if (rating <= 2 && strongComplaints.length > 0)
+      return { type: 'COMPLAINT', confidence: 'high', score: complaintScore };
+    if (rating <= 2 && complaintScore > 0)
+      return { type: 'COMPLAINT', confidence: 'high', score: complaintScore };
+    if (rating <= 2)
+      return { type: 'COMPLAINT', confidence: 'medium', score: 1 };
+    
+    if (rating === 3 && strongComplaints.length > 0)
+      return { type: 'COMPLAINT', confidence: 'high', score: complaintScore };
+    if (rating === 3 && hasNeutralContext && complaintScore === 0)
+      return { type: 'NEUTRAL_STATEMENT', confidence: 'high', score: 0 };
+    if (rating === 3 && explicitlyNoIssues)
+      return { type: 'NEUTRAL_STATEMENT', confidence: 'high', score: 0 };
+    if (rating === 3 && hasQuestions && complaintScore === 0)
+      return { type: 'FEEDBACK', confidence: 'medium', score: 0 };
+    if (rating === 3 && complaintScore > 0)
+      return { type: 'FEEDBACK', confidence: 'medium', score: complaintScore };
+    if (rating === 3)
+      return { type: 'FEEDBACK', confidence: 'medium', score: complaintScore };
+    
+    if (rating >= 4 && strongComplaints.length > 0)
+      return { type: 'FEEDBACK', confidence: 'high', score: complaintScore };
+    if (rating >= 4 && complaintScore > 2)
+      return { type: 'FEEDBACK', confidence: 'medium', score: complaintScore };
+    
+    return { type: 'PRAISE', confidence: 'high', score: 0 };
+  }
+
   function _themesCoveredInReply(themes, rl) {
     if (!themes || themes.length === 0) return true;
     return themes.some(function(theme) {
@@ -229,6 +296,11 @@ const ReviewDashboard = (function () {
     if (key && state.qualityCache.has(key)) return state.qualityCache.get(key);
 
     function cache(val) { if (key) state.qualityCache.set(key, val); return val; }
+
+    // ── Use LLM-evaluated stored tag when available (highest accuracy) ────────
+    if (review.quality_tag && VALID_QUALITY_TAGS.has(review.quality_tag)) {
+      return cache(review.quality_tag);
+    }
 
     const hasReply = review.developer_reply && review.developer_reply.trim().length > 0;
     if (!hasReply) return cache('NO RESPONSE');
@@ -301,6 +373,11 @@ const ReviewDashboard = (function () {
 
     // ── Classification — priority order ──────────────────────────────────────
 
+    // NEW: Check for unwarranted apology using intent classification (Exp 007)
+    const intent = classifyReviewIntent(review);
+    if (apologizes && (intent.type === 'NEUTRAL_STATEMENT' || intent.type === 'PRAISE'))
+      return cache('UNWARRANTED APOLOGY');
+
     // 1. Apologising when review is PURELY positive — no complaints at all.
     //    (If customer described ANY issue, the apology is actually appropriate.)
     if (rating >= 4 && apologizes && !reviewHasComplaint)
@@ -338,6 +415,8 @@ const ReviewDashboard = (function () {
 
   function getQualityExplanation(review, quality) {
     switch (quality) {
+      case 'UNWARRANTED APOLOGY':
+        return 'The user made a neutral statement or left positive feedback — no complaint was expressed. An apology is unnecessary.';
       case 'HIGH RATING + APOLOGY':
         return 'Customer left a purely positive review — apologising is confusing and unnecessary here.';
       case 'LOW RATING + NO EMPATHY':
@@ -386,6 +465,11 @@ const ReviewDashboard = (function () {
 
   function buildPersonalizedReply(review, quality) {
     if (quality === 'CORRECT') return null;
+
+    // Prefer LLM-generated suggested reply stored in the JSON data
+    if (review.suggested_reply && review.suggested_reply.trim().length > 20) {
+      return review.suggested_reply.trim();
+    }
 
     var name   = _getFirstName(review.author);
     var hi     = name ? ('Hi ' + name + ', ') : '';
@@ -494,6 +578,30 @@ const ReviewDashboard = (function () {
         + ' Our specialists will stay with you until it is completely sorted out.';
     }
 
+    if (quality === 'UNWARRANTED APOLOGY') {
+      const intent = classifyReviewIntent(review);
+      if (intent.type === 'NEUTRAL_STATEMENT') {
+        // Check if family/multi-device context
+        const isFamilyContext = /daughter|son|child|kid|family|wife|husband/i.test(tl);
+        if (isFamilyContext) {
+          return hi + 'Thanks for choosing McAfee to protect your family! 🛡️ '
+            + 'Since you\'re just getting started, here are features worth exploring: '
+            + 'VPN for private browsing on any network, Dark Web Monitoring to alert you if your info appears in breaches, '
+            + 'and Safe Family for parental controls. What would make your experience even better? We\'re here to help!';
+        }
+        return hi + 'Thanks for giving McAfee a try! We\'d love to help you get the most from your protection. '
+          + 'Have you explored features like our VPN, Dark Web Monitoring, or Identity Theft Protection? '
+          + 'If there\'s anything we can do to make your experience better, just let us know — we\'re here!';
+      }
+      // PRAISE intent — keep positive, skip the apology
+      var ref7 = themes.length > 0
+        ? 'feedback on ' + themes[0].replace(/\b\w/g, function(c){ return c.toUpperCase(); })
+        : 'your loyalty and trust';
+      return hi + 'Thank you for the ' + rating + '-star review — this made our day! '
+        + 'We really appreciate ' + ref7 + '. '
+        + 'You are in great hands, and we are here whenever you need us. 👍';
+    }
+
     return review.suggested_reply || null;
   }
 
@@ -513,6 +621,7 @@ const ReviewDashboard = (function () {
           no_response: 'NO RESPONSE', high_rating_apology: 'HIGH RATING + APOLOGY',
           low_rating_no_empathy: 'LOW RATING + NO EMPATHY', generic_template: 'GENERIC TEMPLATE',
           no_solution: 'NO SOLUTION', wrong_issue: 'WRONG ISSUE',
+          unwarranted_apology: 'UNWARRANTED APOLOGY',
         };
         if (notable === 'critical' && r.rating !== 1) return false;
         else if (notable !== 'critical' && map[notable] && quality !== map[notable]) return false;
@@ -995,6 +1104,7 @@ const ReviewDashboard = (function () {
     'HIGH RATING + APOLOGY': '<span class="badge badge-quality apology">🔵 Unnecessary Apology</span>',
     'LOW RATING + NO EMPATHY': '<span class="badge badge-quality no-empathy">🔴 No Empathy</span>',
     'WRONG ISSUE':           '<span class="badge badge-quality wrong-issue">🔴 Wrong Issue</span>',
+    'UNWARRANTED APOLOGY':   '<span class="badge badge-quality unwarranted-apology">🟠 Unwarranted Apology</span>',
   };
 
   function showThemeReviews(themeName, sentiment, reviews, themeTotal, grandTotal) {
@@ -1254,7 +1364,8 @@ const ReviewDashboard = (function () {
     const perfNegPct = pct(perfNeg.length, perfRevs.length);
 
     const qualBreakdown = { CORRECT: 0, 'NO RESPONSE': 0, 'GENERIC TEMPLATE': 0,
-      'NO SOLUTION': 0, 'HIGH RATING + APOLOGY': 0, 'LOW RATING + NO EMPATHY': 0, 'WRONG ISSUE': 0 };
+      'NO SOLUTION': 0, 'HIGH RATING + APOLOGY': 0, 'LOW RATING + NO EMPATHY': 0, 'WRONG ISSUE': 0,
+      'UNWARRANTED APOLOGY': 0 };
     reviews.forEach(r => { const q = checkResponseQuality(r); if (q in qualBreakdown) qualBreakdown[q]++; });
     const correctPct = pct(qualBreakdown.CORRECT, total);
 
@@ -1386,6 +1497,7 @@ const ReviewDashboard = (function () {
           ['🔴 Wrong Issue Addressed',    qb['WRONG ISSUE'],               '#DC2626'],
           ['🔵 Apology on High Rating',   qb['HIGH RATING + APOLOGY'],     '#3B82F6'],
           ['🔴 Low Rating + No Empathy',  qb['LOW RATING + NO EMPATHY'],   '#DC2626'],
+          ['🟠 Unwarranted Apology',      qb['UNWARRANTED APOLOGY'],       '#F97316'],
         ].map(([label, count, color]) => {
           const p = pct(count, s.total);
           return `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #F1F5F9;">
@@ -1507,24 +1619,25 @@ const ReviewDashboard = (function () {
       });
 
       safeRender('analysis-response-chart', () => {
-        const ql=['Correct','No Response','Generic','No Solution','No Empathy','Wrong Issue','Apology/Hi★'];
-        const qc=[0,0,0,0,0,0,0];
-        const qm={'CORRECT':0,'NO RESPONSE':1,'GENERIC TEMPLATE':2,'NO SOLUTION':3,'LOW RATING + NO EMPATHY':4,'WRONG ISSUE':5,'HIGH RATING + APOLOGY':6};
+        const ql=['Correct','No Response','Generic','No Solution','No Empathy','Wrong Issue','Apology/Hi★','Unwarranted Apology'];
+        const qc=[0,0,0,0,0,0,0,0];
+        const qm={'CORRECT':0,'NO RESPONSE':1,'GENERIC TEMPLATE':2,'NO SOLUTION':3,'LOW RATING + NO EMPATHY':4,'WRONG ISSUE':5,'HIGH RATING + APOLOGY':6,'UNWARRANTED APOLOGY':7};
         reviews.forEach(r => { const q=checkResponseQuality(r); if(q in qm) qc[qm[q]]++; });
 
         const callout = el('analysis-response-callout');
         if (callout) {
           const noReplyPct    = pct(qc[1], reviews.length);
           const poorReplyPct  = pct(qc[2]+qc[3], reviews.length);
-          const totalProblematicPct = pct(qc[1]+qc[2]+qc[3], reviews.length);
+          const unwantedApologyPct = pct(qc[7], reviews.length);
+          const totalProblematicPct = pct(qc[1]+qc[2]+qc[3]+qc[7], reviews.length);
           callout.innerHTML = `<div style="padding:8px 12px;background:#FEF3C7;border-radius:6px;border-left:3px solid #F59E0B;font-size:.8rem;">
-            <strong>⚠️ Finding:</strong> ${noReplyPct}% of reviews received <em>no reply at all</em>; a further ${poorReplyPct}% received a generic template or no actionable solution — <strong>${totalProblematicPct}% total</strong> need improvement. See Support Team Analysis below for the full breakdown.
+            <strong>⚠️ Finding:</strong> ${noReplyPct}% of reviews received <em>no reply at all</em>; a further ${poorReplyPct}% received a generic template or no actionable solution; ${unwantedApologyPct}% received an <em>unwarranted apology</em> (apologizing on neutral/positive reviews) — <strong>${totalProblematicPct}% total</strong> need improvement. See Support Team Analysis below for the full breakdown.
           </div>`;
         }
 
         Plotly.newPlot('analysis-response-chart', [{
           values: qc, labels: ql, type:'pie', hole:0.45,
-          marker:{colors:[COLORS.positive,COLORS.negative,COLORS.neutral,'#FBBF24','#DC2626','#B91C1C',COLORS.info]},
+          marker:{colors:[COLORS.positive,COLORS.negative,COLORS.neutral,'#FBBF24','#DC2626','#B91C1C',COLORS.info,'#F97316']},
           textinfo:'label+percent', textposition:'outside', insidetextorientation:'horizontal',
         }], baseLayout({
           height:CONFIG.ANALYSIS_CHART_HEIGHT, margin:{t:10,r:10,b:40,l:10}, showlegend:false,
