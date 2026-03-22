@@ -160,21 +160,21 @@
       });
     
     // 1. COMBINED: Sentiment Trend + Daily Volume by Platform
-    const platformVolume = {};
+    const platformVolumeData = {};
     FILTERED_REVIEWS.forEach(r => {
-      if (!platformVolume[r.date]) platformVolume[r.date] = {};
-      platformVolume[r.date][r.platform] = (platformVolume[r.date][r.platform] || 0) + 1;
+      if (!platformVolumeData[r.date]) platformVolumeData[r.date] = {};
+      platformVolumeData[r.date][r.platform] = (platformVolumeData[r.date][r.platform] || 0) + 1;
     });
     
-    const platformColors = { google_play: '#3DDC84', app_store: '#007AFF', windows_desktop: '#00BCF2' };
-    const platforms = ['google_play', 'app_store', 'windows_desktop'];
+    const platformColorMap = { google_play: '#3DDC84', app_store: '#007AFF', windows_desktop: '#00BCF2' };
+    const platformList = ['google_play', 'app_store', 'windows_desktop'];
     
-    const volumeTraces = platforms.map(p => ({
+    const volumeTraces = platformList.map(p => ({
       x: dates,
-      y: dates.map(d => platformVolume[d]?.[p] || 0),
+      y: dates.map(d => platformVolumeData[d]?.[p] || 0),
       name: p.replace('_', ' ').toUpperCase(),
       type: 'bar',
-      marker: { color: platformColors[p] || '#94A3B8' },
+      marker: { color: platformColorMap[p] || '#94A3B8' },
       yaxis: 'y2',
       opacity: 0.7
     }));
