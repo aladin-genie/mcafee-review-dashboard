@@ -663,16 +663,13 @@
         <td style="font-size:1.1rem;">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</td>
         <td><span class="badge badge-${r.sentiment.label}">${r.sentiment.label}</span></td>
         <td style="max-width: 300px;">
-          <div style="font-size: 0.85rem; line-height: 1.4;">${r.content.substring(0, 120)}${r.content.length > 120 ? '...' : ''}</div>
+          <div style="font-size: 0.85rem; line-height: 1.4;">${r.content}</div>
           ${r.themes?.length ? `<div style="margin-top: 4px;">${r.themes.map(t => `<span style="font-size: 0.7rem; background: #E2E8F0; padding: 2px 6px; border-radius: 4px; margin-right: 4px;">${t}</span>`).join('')}</div>` : ''}
         </td>
         <td style="max-width: 250px;">
           ${qualityBadge}
           ${r.developer_reply ? 
-            `<div class="mcafee-response" style="font-size: 0.8rem; line-height: 1.4; max-height: 60px; overflow: hidden; position: relative; cursor: pointer;" onclick="this.style.maxHeight='none'; this.style.cursor='default'; this.querySelector('.expand-hint').style.display='none';">
-              ${r.developer_reply}
-              <div class="expand-hint" style="position: absolute; bottom: 0; right: 0; background: linear-gradient(transparent, white); padding: 4px 8px; font-size: 0.7rem; color: #3B82F6; font-weight: 500;">Click to expand ↓</div>
-            </div>` : 
+            `<div style="font-size: 0.8rem; line-height: 1.4;">${r.developer_reply}</div>` : 
             '<span style="color:#EF4444; font-size: 0.8rem;">⚠️ No response from McAfee</span>'}
         </td>
         <td style="max-width: 280px;">
