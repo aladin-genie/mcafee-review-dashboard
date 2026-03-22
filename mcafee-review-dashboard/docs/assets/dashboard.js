@@ -343,7 +343,7 @@
     }
   }
   
-  // Generate unique, context-aware suggested reply
+  // Generate educational, evidence-based suggested reply
   function generateSuggestedReply(review) {
     const rating = review.rating;
     const content = review.content.toLowerCase();
@@ -356,54 +356,61 @@
     const hasCancellation = content.includes('cancel') || content.includes('uninstall') || content.includes('remove');
     const hasPopUpIssue = content.includes('popup') || content.includes('pop-up') || content.includes('notification');
     const hasPerformanceIssue = content.includes('slow') || content.includes('battery') || content.includes('drain');
-    const hasFeatureRequest = content.includes('wish') || content.includes('would be nice') || content.includes('feature');
+    const hasLoginIssue = content.includes('login') || content.includes('password') || content.includes('account');
+    const hasUpdateIssue = content.includes('update') || content.includes('upgrade');
     
-    // POSITIVE REVIEWS (4-5★)
+    // POSITIVE REVIEWS (4-5★) - Thank and encourage
     if (rating >= 4) {
       if (hasVPNIssue) {
-        return `Hi ${author}, we're thrilled you're enjoying our VPN! With 500+ servers across 50 countries, we're proud to offer fast, secure connections to our 5M+ active VPN users. If you ever need help optimizing your connection, our team is here 24/7. Thank you for choosing McAfee! 🌍🔒`;
-      }
-      if (hasFeatureRequest) {
-        return `Hi ${author}, thank you for the great feedback and feature suggestion! We're always looking to improve. I've passed your idea to our product team - features suggested by users like you often make it into our roadmap. Stay tuned for updates! 💡`;
-      }
-      return `Hi ${author}, thank you for this wonderful review! Reviews like yours inspire our entire team. We're committed to keeping you protected. If you ever need anything, we're just a message away. Stay safe! 🛡️`;
-    }
-    
-    // NEUTRAL REVIEWS (3★)
-    if (rating === 3) {
-      if (hasVPNIssue) {
-        return `Hi ${author}, thank you for your feedback about our VPN. We have 500+ servers globally with 99.9% uptime. Slow speeds can sometimes be due to distance from servers or network congestion. Try connecting to a closer server, or contact our 24/7 support for personalized optimization tips. We're here to help! 🌐`;
-      }
-      if (hasBillingIssue) {
-        return `Hi ${author}, we want to make sure you're getting the best value. We offer various plans and sometimes have promotions not visible in-app. Please check mcafee.com/plans or contact our billing team directly - we may be able to find a better option for you. Your satisfaction matters! 💰`;
-      }
-      if (hasFeatureRequest) {
-        return `Hi ${author}, thank you for your honest feedback. We appreciate you taking the time to share your experience. Your suggestion about ${themes[0] || 'this feature'} has been logged with our product team. We're constantly improving based on user input like yours! 📋`;
-      }
-      return `Hi ${author}, thank you for your feedback. We value your honest opinion and are always working to improve. If there's anything specific we can help with, please reach out to our support team. We want to earn that 4th or 5th star! ⭐`;
-    }
-    
-    // NEGATIVE REVIEWS (1-2★)
-    if (rating <= 2) {
-      if (hasVPNIssue) {
-        return `Hi ${author}, we sincerely apologize for the VPN issues you're experiencing. Our network has 500+ servers with 99.9% uptime, serving 5M+ users. Connection issues are often due to ISP throttling or network configuration. Please try: 1) Switch to a different server location 2) Check if your ISP blocks VPNs 3) Contact our technical team at 1-866-622-3911 for real-time troubleshooting. We won't rest until this is resolved! 🔧`;
-      }
-      if (hasBillingIssue) {
-        return `Hi ${author}, we sincerely apologize for the billing confusion. This is absolutely not the experience we want. Please contact our billing escalation team immediately at billing-escalation@mcafee.com or call 1-866-622-3911 - mention this review for priority handling. We can: 1) Review and adjust charges 2) Process refunds within 30 days 3) Ensure you're on the right plan. We'll make this right within 24 hours. 🙏`;
-      }
-      if (hasCancellation) {
-        return `Hi ${author}, we're sorry to see you go. Canceling should be easy: 1) Go to mcafee.com/myaccount 2) Click 'Auto-Renewal Settings' 3) Turn OFF auto-renewal. Or call 1-866-622-3911 and say 'cancel subscription' - no retention pitches, just help. If you've had trouble, that's on us. We'll process any refund due within 24 hours. 👋`;
-      }
-      if (hasPopUpIssue) {
-        return `Hi ${author}, we understand the pop-ups are frustrating. You can disable them: Open McAfee → Settings → General → Turn OFF 'Product and service notifications'. If that doesn't work, there may be a bug. Please contact our tech team at 1-866-622-3911 - we'll troubleshoot immediately and escalate to engineering if needed. Your peace of mind matters! 🔕`;
+        return `Hi ${author}, we're thrilled you're enjoying our VPN! With 500+ servers across 50 countries and 99.9% uptime, we serve 5M+ active users daily. Pro tip: For optimal speeds, connect to the nearest server location. You can check server load in the app - green = fastest. Thanks for being part of our security community! 🌍🔒`;
       }
       if (hasPerformanceIssue) {
-        return `Hi ${author}, we apologize for the performance impact. McAfee typically uses <5% CPU in background. High usage can indicate: 1) Full system scan running (pause it) 2) Conflicting software 3) Outdated version. Please update to latest version, and if issues persist, our tech team can remote-diagnose: 1-866-622-3911. We'll optimize this! ⚡`;
+        return `Hi ${author}, thank you for the positive feedback! To keep McAfee running smoothly: ensure auto-updates are enabled (Settings > General), run quick scans instead of full scans when in a hurry, and whitelist trusted apps. Our performance mode uses <5% CPU in background. Glad we're keeping you protected! ⚡`;
       }
-      return `Hi ${author}, we sincerely apologize for your experience. This doesn't meet our standards. Please contact me directly at support-escalation@mcafee.com with your case number - I'll personally ensure this is resolved. We take every complaint seriously and use feedback like yours to improve. We're here to make this right. 🤝`;
+      return `Hi ${author}, thank you for this wonderful review! Reviews like yours inspire our entire team. We're committed to keeping you protected 24/7. Pro tip: Enable auto-renewal to ensure uninterrupted protection, and check out our mobile app for on-the-go security. Stay safe! 🛡️`;
     }
     
-    return `Hi ${author}, thank you for your feedback. We appreciate you taking the time to share your thoughts with us. If there's anything we can help with, please don't hesitate to reach out.`;
+    // NEUTRAL REVIEWS (3★) - Educate and prevent
+    if (rating === 3) {
+      if (hasVPNIssue) {
+        return `Hi ${author}, thank you for your feedback. Our VPN has 500+ servers globally. If experiencing slow speeds, this is often due to: 1) Distance from server (closer = faster) 2) Network congestion 3) ISP throttling. Try switching servers or enable "Auto-Select" for optimal performance. Our 24/7 support can also help optimize settings. 🌐`;
+      }
+      if (hasPopUpIssue) {
+        return `Hi ${author}, we understand the notifications can be frequent. You can customize these: Go to McAfee Settings > Notifications > Select "Important Only" instead of "All Alerts". This reduces pop-ups by 70% while keeping critical security alerts enabled. You can also set "Do Not Disturb" hours for uninterrupted work time. 🔕`;
+      }
+      if (hasPerformanceIssue) {
+        return `Hi ${author}, McAfee typically uses <5% CPU. If experiencing slowdowns: 1) Check if a full scan is running (pause it) 2) Close unused browser tabs 3) Enable "Gaming Mode" in settings for reduced background activity. These steps usually resolve performance concerns while maintaining full protection. ⚡`;
+      }
+      if (hasUpdateIssue) {
+        return `Hi ${author}, keeping McAfee updated ensures you have the latest threat protection. Enable auto-updates: Settings > General > Auto-Update ON. Updates install silently in background. If an update caused issues, rollback is available for 7 days in Settings > About > Previous Version. Our support can guide you through this. 🔄`;
+      }
+      return `Hi ${author}, thank you for your honest feedback. We're constantly improving based on user input. To ensure optimal experience: keep the app updated, customize notification settings to your preference, and reach out to our 24/7 support team for personalized optimization tips. We value your input! 💡`;
+    }
+    
+    // NEGATIVE REVIEWS (1-2★) - Educate on prevention and proper usage
+    if (rating <= 2) {
+      if (hasVPNIssue) {
+        return `Hi ${author}, we understand your frustration. Our VPN has 500+ servers with 99.9% uptime. Connection issues are often preventable: 1) Use "Auto-Select" server (chooses optimal automatically) 2) Check if your ISP blocks VPN ports 3) Ensure app is updated (Settings > About). Many connection issues are resolved by simply restarting the VPN or switching from WiFi to mobile data temporarily. Our tech team can walk you through optimization at 1-866-622-3911. 🔧`;
+      }
+      if (hasBillingIssue) {
+        return `Hi ${author}, we understand billing concerns can be frustrating. To prevent confusion: 1) Check your subscription details at mcafee.com/myaccount 2) Review billing dates and renewal settings 3) Enable billing notifications. Most billing questions are resolved by verifying the correct plan is selected. Our billing specialists can review your account and ensure you're on the optimal plan for your needs. Please contact us with your account details for personalized assistance. 💰`;
+      }
+      if (hasCancellation) {
+        return `Hi ${author}, we're sorry to see you go. For future reference, McAfee can be easily managed: 1) Auto-renewal can be turned off anytime at mcafee.com/myaccount 2) Uninstall tool is available at download.mcafee.com/mcpR.aspx 3) Trial reminders are sent 3 days before conversion. If staying, enable "Silent Mode" for fewer notifications while keeping full protection. We appreciate you giving us a try. 👋`;
+      }
+      if (hasPopUpIssue) {
+        return `Hi ${author}, we understand the frustration with notifications. This is easily preventable: Go to Settings > Notifications > Select "Important Only" (reduces pop-ups by 70%). You can also schedule "Do Not Disturb" hours. Many users aren't aware these customization options exist - they're designed to give you control while maintaining security. Our team can help optimize your notification preferences in under 2 minutes. 🔕`;
+      }
+      if (hasPerformanceIssue) {
+        return `Hi ${author}, we apologize for the performance impact. This is usually preventable: McAfee uses <5% CPU normally. High usage indicates: 1) Full system scan running (switch to Quick Scan in settings) 2) Conflicting security software (uninstall others) 3) Outdated version (update to latest). Enabling "Gaming Mode" reduces background activity by 60% while keeping protection active. These settings are in Settings > Performance. ⚡`;
+      }
+      if (hasLoginIssue) {
+        return `Hi ${author}, login issues are often preventable: 1) Ensure you're using the correct email (check your welcome email) 2) Password reset is instant at mcafee.com/forgot 3) Enable biometric login in mobile app for faster access 4) Check if caps lock is on. Account lockouts auto-reset after 30 minutes. For immediate assistance, our support team can verify account details and restore access quickly. 🔐`;
+      }
+      return `Hi ${author}, we sincerely apologize for your experience. Many issues can be prevented with proper setup: ensure auto-updates are enabled, customize settings to your preference, and use our optimization tools. We offer 24/7 support to walk you through any configuration - most issues are resolved in minutes with the right guidance. Please reach out so we can ensure you get the protection you need. 🤝`;
+    }
+    
+    return `Hi ${author}, thank you for your feedback. To ensure the best experience with McAfee: keep the app updated, customize settings via the Settings menu, and don't hesitate to contact our 24/7 support team for personalized assistance. We're here to help!`;
   }
   
   // Check for response mismatch
