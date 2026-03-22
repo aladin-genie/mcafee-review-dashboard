@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 """
-Theme Classification Evaluation Script - Round 4 Improvements
+Theme Classification Evaluation Script - Round 5 Improvements
 Measures precision, recall, F1 for each theme category
 
-Changes from Round 3:
-- Enhanced Pop-ups/Ads keywords: added "pop-up", "pop-ups", "banner", "interstitial", "promo"
-- Enhanced Pricing keywords: added "charge", "charged", "billing", "payment", "fee", "renew", "renewal"
+Changes from Round 4:
+- Enhanced App Issues keywords: added "glitch", "freeze", "hang", "unresponsive", 
+  "frozen", "not responding", "stuck", "force close"
+- Enhanced UI/UX keywords: added "layout", "navigation", "menu", "menus", 
+  "cluttered", "hard to use", "difficult to use", "usability"
+- Enhanced Installation keywords: added "reinstall", "reinstalling", "installs"
 """
 
 import json
@@ -73,17 +76,23 @@ def classify_themes(text, experiment_dir):
     theme_keywords = {
         "VPN": ["vpn", "virtual private network", "ip address", "location"],
         "Performance": ["slow", "battery", "cpu", "memory", "lag", "freeze"],
-        "App Issues": ["crash", "bug", "error", "stopped working", "won't open"],
+        "App Issues": ["crash", "bug", "error", "stopped working", "won't open",
+                      "glitch", "freeze", "hang", "unresponsive", "frozen", 
+                      "not responding", "stuck", "force close", "not working",
+                      "failed", "failure", "broken"],
         "Customer Support": ["support", "customer service", "help desk", "agent"],
         "Pricing": ["price", "cost", "expensive", "cheap", "money", "subscription", 
                    "charge", "charged", "billing", "payment", "fee", "renew", "renewal"],
         "Auto-Renewal": ["auto-renew", "charged without", "cancel", "refund"],
-        "Security Features": ["antivirus", "protection", "scan", "malware", "virus", "secure", "hacked", "hack", "safety", "safe"],
+        "Security Features": ["antivirus", "protection", "malware", "virus", "secure", "hacked", "hack", "safety", "safe"],
         "Scam/Phishing": ["scam", "phishing", "fraud", "fake", "spoof", "deceptive"],
-        "UI/UX": ["interface", "design", "ui", "user experience", "confusing"],
+        "UI/UX": ["interface", "design", "ui", "user experience", "confusing",
+                 "layout", "navigation", "menu", "menus", "cluttered", 
+                 "hard to use", "difficult to use", "usability", "annoying"],
         "Pop-ups/Ads": ["popup", "pop-up", "pop-ups", "ads", "advertisement", 
                        "notification", "banner", "interstitial", "promo", "promotion"],
-        "Installation": ["install", "download", "setup", "uninstall"],
+        "Installation": ["install", "download", "setup",
+                        "installs", "installer"],
         "Dark Web": ["dark web", "identity theft", "breach"],
     }
     
