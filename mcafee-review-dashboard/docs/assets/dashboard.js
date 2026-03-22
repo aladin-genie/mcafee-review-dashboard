@@ -151,8 +151,8 @@
     };
     
     // Purge existing charts
-    ['chart-sentiment-trend', 'chart-rating-trend', 'chart-sentiment-dist', 
-     'chart-rating-dist', 'chart-platform-breakdown', 'chart-daily-volume', 'chart-themes',
+    ['chart-rating-trend', 'chart-sentiment-dist', 
+     'chart-rating-dist', 'chart-platform-breakdown', 'chart-themes',
      'chart-combined-sentiment-volume']
       .forEach(id => {
         const el = document.getElementById(id);
@@ -257,13 +257,7 @@
       marker: { color: Object.keys(platforms).map(p => platformColors[p] || '#94A3B8') }
     }], { ...layout, xaxis: { type: 'category' }}, {displayModeBar: false});
     
-    // 6. Daily Volume
-    Plotly.newPlot('chart-daily-volume', [{
-      x: dates, y: stats.map(d => d.total_reviews),
-      type: 'bar', marker: { color: '#3B82F6' }
-    }], layout, {displayModeBar: false});
-    
-    // 7. Top Themes with Sentiment Breakdown
+    // 6. Top Themes with Sentiment Breakdown
     const themesBySentiment = {};
     FILTERED_REVIEWS.forEach(r => {
       (r.themes || []).forEach(t => {
@@ -495,45 +489,90 @@
     return `Hi ${author}, thank you for your feedback. To ensure the best experience with McAfee: keep the app updated, customize settings via the Settings menu, and don't hesitate to contact our 24/7 support team for personalized assistance. We're here to help!`;
   }
   
-  // Check for response mismatch
-  function checkResponseMismatch(review) {
-    if (!review.developer_reply) return null;
+  // Check for response quality issues with detailed categorization
+  function checkResponseQuality(review) {
+    if (!review.developer_reply) {
+      return {
+        type: 'no_response',
+        severity: 'high',
+        category: '⚠️ NO RESPONSE',
+        message: 'McAfee has not responded to this review',
+        description: 'No developer reply'
+      };
+    }
     
     const reply = review.developer_reply.toLowerCase();
     const content = review.content.toLowerCase();
     const rating = review.rating;
     
-    const hasApology = reply.includes('sorry') || reply.includes('apologize') || reply.includes('unfortunate');
-    const hasPraise = reply.includes('thank') || reply.includes('appreciate') || reply.includes('awesome');
-    const isPositiveContent = content.includes('great') || content.includes('good') || content.includes('love') || content.includes('excellent');
+    const hasApology = reply.includes('sorry') || reply.includes('apologize') || reply.includes('unfortunate') || reply.includes('concerned about your experience');
+    const hasEmpathy = hasApology || reply.includes('understand') || reply.includes('frustrat');
+    const isGeneric = (reply.includes('contact our support team') || reply.includes('reach out')) && reply.length < 200;
+    const noSolution = reply.includes('contact') && !reply.includes('you can') && !reply.includes('try') && !reply.includes('disable');
     
-    // MISMATCH: High rating + apology
+    // 1. HIGH RATING + APOLOGY (Critical)
     if (rating >= 4 && hasApology) {
       return {
         type: 'mismatch',
-        severity: 'high',
-        message: '⚠️ HIGH RATING but APOLOGY given',
-        description: `${rating}★ review received apology response`
+        severity: 'critical',
+        category: '🔴 HIGH RATING + APOLOGY',
+        message: 'Positive review received apology',
+        description: `${rating}★ review with "sorry/apologize" in response`
       };
     }
     
-    // MISMATCH: Low rating + thanks (no apology)
-    if (rating <= 2 && hasPraise && !hasApology) {
+    // 2. LOW RATING + NO EMPATHY (High)
+    if (rating <= 2 && !hasEmpathy) {
       return {
         type: 'mismatch',
+        severity: 'high',
+        category: '🔴 LOW RATING + NO EMPATHY',
+        message: 'Angry customer got no acknowledgment',
+        description: `${rating}★ review lacks apology/understanding`
+      };
+    }
+    
+    // 3. GENERIC TEMPLATE (Medium)
+    if (isGeneric) {
+      return {
+        type: 'quality',
         severity: 'medium',
-        message: '⚠️ LOW RATING but NO EMPATHY',
-        description: `${rating}★ review received thanks without apology`
+        category: '🟡 GENERIC TEMPLATE',
+        message: 'Copy-paste response with no personalization',
+        description: 'Standard "contact support" with no specifics'
       };
     }
     
-    // MISMATCH: Positive content + apology
-    if (isPositiveContent && hasApology && rating >= 3) {
+    // 4. NO SOLUTION OFFERED (Medium)
+    if (noSolution) {
+      return {
+        type: 'quality',
+        severity: 'medium',
+        category: '🟡 NO SOLUTION',
+        message: 'Only "contact support" - no troubleshooting',
+        description: 'No actionable steps provided'
+      };
+    }
+    
+    // 5. WRONG ISSUE ADDRESSED (Check if response mentions different issue)
+    const reviewThemes = review.themes || [];
+    const replyMentionsVPN = reply.includes('vpn') || reply.includes('virtual private');
+    const replyMentionsBilling = reply.includes('bill') || reply.includes('charge') || reply.includes('payment');
+    const replyMentionsPopups = reply.includes('popup') || reply.includes('notification');
+    
+    const reviewMentionsVPN = content.includes('vpn');
+    const reviewMentionsBilling = content.includes('bill') || content.includes('charge');
+    const reviewMentionsPopups = content.includes('popup') || content.includes('notification');
+    
+    if ((replyMentionsVPN && !reviewMentionsVPN) ||
+        (replyMentionsBilling && !reviewMentionsBilling) ||
+        (replyMentionsPopups && !reviewMentionsPopups)) {
       return {
         type: 'mismatch',
         severity: 'high',
-        message: '⚠️ POSITIVE CONTENT but APOLOGY given',
-        description: 'Positive review content received apology'
+        category: '🔴 WRONG ISSUE',
+        message: 'Response addresses different problem',
+        description: 'Reply talks about unrelated issue'
       };
     }
     
@@ -601,15 +640,21 @@
     
     // Render rows
     tbody.innerHTML = reviews.map(r => {
-      const mismatch = checkResponseMismatch(r);
-      const rowClass = mismatch ? `style="border-left: 4px solid #EF4444; background: #FEF2F2;"` : '';
-      const mismatchBadge = mismatch ? 
-        `<div style="background: #FEE2E2; color: #991B1B; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; margin-bottom: 4px;">${mismatch.message}</div>` : '';
+      const quality = checkResponseQuality(r);
+      const rowStyle = quality?.severity === 'critical' ? 'border-left: 4px solid #DC2626; background: #FEF2F2;' : 
+                       quality?.severity === 'high' ? 'border-left: 4px solid #F59E0B; background: #FEF3C7;' : 
+                       quality?.severity === 'medium' ? 'border-left: 4px solid #3B82F6; background: #EFF6FF;' : '';
+      
+      const qualityBadge = quality ? 
+        `<div style="background: ${quality.severity === 'critical' ? '#FEE2E2' : quality.severity === 'high' ? '#FEF3C7' : '#DBEAFE'}; 
+                    color: ${quality.severity === 'critical' ? '#991B1B' : quality.severity === 'high' ? '#92400E' : '#1E40AF'}; 
+                    padding: 2px 8px; border-radius: 4px; font-size: 0.65rem; font-weight: 600; margin-bottom: 4px; display: inline-block;"
+        >${quality.category}</div>` : '';
       
       const suggestedReply = generateSuggestedReply(r);
       
       return `
-      <tr ${rowClass}>
+      <tr style="${rowStyle}">
         <td style="white-space:nowrap;font-size:0.75rem;color:#64748b;">
           <div>${r.date}</div>
           <div style="font-size:0.65rem;color:#94A3B8;">by ${r.author || 'Anonymous'}</div>
@@ -622,7 +667,7 @@
           ${r.themes?.length ? `<div style="margin-top: 4px;">${r.themes.map(t => `<span style="font-size: 0.7rem; background: #E2E8F0; padding: 2px 6px; border-radius: 4px; margin-right: 4px;">${t}</span>`).join('')}</div>` : ''}
         </td>
         <td style="max-width: 250px;">
-          ${mismatchBadge}
+          ${qualityBadge}
           ${r.developer_reply ? 
             `<div class="mcafee-response" style="font-size: 0.8rem; line-height: 1.4; max-height: 60px; overflow: hidden; position: relative; cursor: pointer;" onclick="this.style.maxHeight='none'; this.style.cursor='default'; this.querySelector('.expand-hint').style.display='none';">
               ${r.developer_reply}
@@ -643,7 +688,8 @@
     // Update summary
     const summary = document.getElementById('results-summary');
     if (summary) {
-      summary.innerHTML = `Showing <strong>${filtered.length > 0 ? start + 1 : 0}–${Math.min(start + REVIEWS_PER_PAGE, filtered.length)}</strong> of <strong>${filtered.length}</strong> reviews ${mismatch ? `(⚠️ ${filtered.filter(r => checkResponseMismatch(r)).length} mismatches detected)` : ''}`;
+      const qualityIssues = filtered.filter(r => checkResponseQuality(r)).length;
+      summary.innerHTML = `Showing <strong>${filtered.length > 0 ? start + 1 : 0}–${Math.min(start + REVIEWS_PER_PAGE, filtered.length)}</strong> of <strong>${filtered.length}</strong> reviews ${qualityIssues > 0 ? `(⚠️ ${qualityIssues} quality issues detected)` : ''}`;
     }
     
     // Render pagination
