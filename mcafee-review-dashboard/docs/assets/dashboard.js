@@ -635,17 +635,17 @@
   
   // Reviews Table
   function renderReviews() {
-    const container = document.getElementById('reviews-container');
+    const tbody = document.getElementById('reviews-tbody');
+    const summary = document.getElementById('results-summary');
     const filtered = filterReviews(FILTERED_REVIEWS);
     
     // Update results count
-    const countEl = document.getElementById('reviews-count');
-    if (countEl) {
-      countEl.textContent = `Showing ${Math.min(filtered.length, (currentPage-1)*REVIEWS_PER_PAGE + 1)}-${Math.min(filtered.length, currentPage*REVIEWS_PER_PAGE)} of ${filtered.length} reviews`;
+    if (summary) {
+      summary.textContent = `Showing ${Math.min(filtered.length, (currentPage-1)*REVIEWS_PER_PAGE + 1)}-${Math.min(filtered.length, currentPage*REVIEWS_PER_PAGE)} of ${filtered.length} reviews`;
     }
     
     if (filtered.length === 0) {
-      showEmptyState('reviews-container', 'No reviews match your filters');
+      if (tbody) tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:3rem;color:#94A3B8;">No reviews match your filters</td></tr>';
       renderPagination(0);
       return;
     }
@@ -655,49 +655,34 @@
     
     const html = pageReviews.map(r => {
       const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
-      const sentimentClass = 'badge-' + (r.sentiment?.label || 'neutral');
-      const platformClass = r.platform;
-      const themes = (r.themes || []).map(t => `<span class="badge badge-theme">${t}</span>`).join('');
+      const sentimentClass = r.sentiment?.label || 'neutral';
+      const themes = (r.themes || []).map(t => `<span class="badge badge-theme">${t}</span>`).join(' ');
       const quality = checkResponseQuality(r);
-      
-      const qualityBadge = {
-        'NO RESPONSE': '<span class="badge badge-negative">⏰ NO RESPONSE</span>',
-        'GENERIC TEMPLATE': '<span class="badge badge-neutral">📝 Generic</span>',
-        'HIGH RATING + APOLOGY': '<span class="badge badge-negative">⚠️ Apology on Positive</span>',
-        'LOW RATING + NO EMPATHY': '<span class="badge badge-negative">💔 No Empathy</span>',
-        'NO SOLUTION': '<span class="badge badge-neutral">❓ No Solution</span>',
-        'WRONG ISSUE': '<span class="badge badge-negative">❌ Wrong Issue</span>',
-        'CORRECT': '<span class="badge badge-positive">✓ Good</span>'
-      }[quality] || '';
       
       const responseGap = quality === 'NO RESPONSE' ? getResponseGap(r.date) : '';
       
       return `
-        <div class="review-card" data-review-id="${r.id}">
-          <div class="review-header">
-            <span class="badge badge-platform ${platformClass}">${r.platform.replace('_', ' ').toUpperCase()}</span>
-            <span class="stars">${stars}</span>
-            <span class="badge ${sentimentClass}">${r.sentiment?.label || 'neutral'}</span>
-            <span class="review-date">${r.date}</span>
-          </div>
-          <div class="review-themes">${themes}</div>
-          <div class="review-text">${r.text}</div>
-          ${r.developer_reply ? `
-            <div class="review-response">
-              <div class="response-label">McAfee Response:</div>
-              <div class="response-text">${r.developer_reply}</div>
-              ${r.developer_reply_date ? `<div class="response-date">Replied: ${r.developer_reply_date}</div>` : ''}
-            </div>
-          ` : ''}
-          <div class="review-footer">
-            ${qualityBadge}
-            ${responseGap ? `<span style="color: var(--danger); font-size: 0.75rem;">${responseGap}</span>` : ''}
-          </div>
-        </div>
+        <tr>
+          <td>${r.date}</td>
+          <td><span class="badge badge-platform ${r.platform}">${r.platform.replace('_', ' ').toUpperCase()}</span></td>
+          <td><span class="stars">${stars}</span></td>
+          <td><span class="badge badge-${sentimentClass}">${sentimentClass}</span></td>
+          <td>
+            <div style="max-width:300px;">${r.text}</div>
+            <div style="margin-top:4px;">${themes}</div>
+          </td>
+          <td>
+            ${r.developer_reply ? `<div style="max-width:250px;font-size:0.85rem;color:#64748B;">${r.developer_reply}</div>` : '<span style="color:#EF4444;font-size:0.8rem;">⏰ No response</span>'}
+            ${responseGap ? `<div style="color:#EF4444;font-size:0.75rem;margin-top:4px;">${responseGap}</div>` : ''}
+          </td>
+          <td>
+            ${r.suggested_reply ? `<div style="max-width:250px;font-size:0.85rem;color:#10B981;background:#F0FDF4;padding:8px;border-radius:4px;">${r.suggested_reply}</div>` : '-'}
+          </td>
+        </tr>
       `;
     }).join('');
     
-    if (container) container.innerHTML = html;
+    if (tbody) tbody.innerHTML = html;
     renderPagination(filtered.length);
   }
   
@@ -708,7 +693,7 @@
   
   function renderPagination(total) {
     const totalPages = Math.ceil(total / REVIEWS_PER_PAGE);
-    const el = document.getElementById('reviews-pagination');
+    const el = document.getElementById('pagination');
     
     if (!el) return;
     
@@ -737,7 +722,7 @@
   window.changePage = function(page) {
     currentPage = page;
     renderReviews();
-    document.getElementById('reviews-container')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('reviews-tbody')?.closest('.reviews-table-wrap')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
   
   // Analysis Tab Charts
