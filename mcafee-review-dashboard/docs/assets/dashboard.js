@@ -216,18 +216,56 @@
       type: 'bar', marker: { color: '#3B82F6' }
     }], layout, {displayModeBar: false});
     
-    // 7. Top Themes
-    const themes = {};
+    // 7. Top Themes with Sentiment Breakdown
+    const themesBySentiment = {};
     FILTERED_REVIEWS.forEach(r => {
-      (r.themes || []).forEach(t => themes[t] = (themes[t] || 0) + 1);
+      (r.themes || []).forEach(t => {
+        if (!themesBySentiment[t]) {
+          themesBySentiment[t] = { positive: 0, neutral: 0, negative: 0 };
+        }
+        themesBySentiment[t][r.sentiment.label]++;
+      });
     });
-    const sortedThemes = Object.entries(themes).sort((a, b) => b[1] - a[1]).slice(0, 8);
     
-    Plotly.newPlot('chart-themes', [{
-      x: sortedThemes.map(t => t[0]),
-      y: sortedThemes.map(t => t[1]),
-      type: 'bar', marker: { color: '#8B5CF6' }
-    }], { ...layout, xaxis: { type: 'category', tickangle: -45 }}, {displayModeBar: false});
+    // Sort by total mentions
+    const sortedThemes = Object.entries(themesBySentiment)
+      .map(([theme, counts]) => ({ 
+        theme, 
+        ...counts, 
+        total: counts.positive + counts.neutral + counts.negative 
+      }))
+      .sort((a, b) => b.total - a.total)
+      .slice(0, 8);
+    
+    Plotly.newPlot('chart-themes', [
+      {
+        x: sortedThemes.map(t => t.theme),
+        y: sortedThemes.map(t => t.positive),
+        name: 'Positive',
+        type: 'bar',
+        marker: { color: '#10B981' }
+      },
+      {
+        x: sortedThemes.map(t => t.theme),
+        y: sortedThemes.map(t => t.neutral),
+        name: 'Neutral',
+        type: 'bar',
+        marker: { color: '#F59E0B' }
+      },
+      {
+        x: sortedThemes.map(t => t.theme),
+        y: sortedThemes.map(t => t.negative),
+        name: 'Negative',
+        type: 'bar',
+        marker: { color: '#EF4444' }
+      }
+    ], { 
+      ...layout, 
+      barmode: 'stack',
+      xaxis: { type: 'category', tickangle: -45 },
+      legend: { orientation: 'h', y: -0.2 },
+      yaxis: { title: 'Review Count' }
+    }, {displayModeBar: false});
   }
   
   // ========== REVIEWS TAB ==========
