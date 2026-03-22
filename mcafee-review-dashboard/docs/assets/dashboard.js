@@ -322,25 +322,60 @@
   // ========== REVIEWS TAB ==========
   
   function initReviewFilters() {
-    ['filter-platform', 'filter-rating', 'filter-sentiment', 'filter-notable'].forEach(id => {
+    // Attach listeners to all filter dropdowns
+    const filterIds = ['filter-platform', 'filter-rating', 'filter-sentiment', 'filter-notable'];
+    
+    filterIds.forEach(id => {
       const el = document.getElementById(id);
       if (el) {
-        el.addEventListener('change', (e) => {
-          activeFilters[id.replace('filter-', '')] = e.target.value;
-          currentPage = 1;
-          renderReviews();
-        });
+        // Remove existing listeners to prevent duplicates
+        el.removeEventListener('change', handleFilterChange);
+        el.addEventListener('change', handleFilterChange);
       }
     });
     
+    // Search input with debounce
     const searchEl = document.getElementById('filter-search');
     if (searchEl) {
-      searchEl.addEventListener('input', (e) => {
-        activeFilters.search = e.target.value.toLowerCase();
-        currentPage = 1;
-        renderReviews();
-      });
+      searchEl.removeEventListener('input', handleSearchInput);
+      searchEl.addEventListener('input', debounce(handleSearchInput, 300));
     }
+  }
+  
+  function handleFilterChange(e) {
+    const id = e.target.id;
+    const value = e.target.value;
+    
+    // Update activeFilters
+    if (id === 'filter-platform') activeFilters.platform = value;
+    else if (id === 'filter-rating') activeFilters.rating = value;
+    else if (id === 'filter-sentiment') activeFilters.sentiment = value;
+    else if (id === 'filter-notable') activeFilters.notable = value;
+    
+    console.log('Filter changed:', id, value);
+    console.log('Active filters:', activeFilters);
+    
+    // Reset to page 1 and re-render
+    currentPage = 1;
+    renderReviews();
+  }
+  
+  function handleSearchInput(e) {
+    activeFilters.search = e.target.value.toLowerCase();
+    currentPage = 1;
+    renderReviews();
+  }
+  
+  function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
   }
   
   // Generate educational, evidence-based suggested reply
