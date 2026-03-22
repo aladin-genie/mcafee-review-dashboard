@@ -266,6 +266,57 @@
       legend: { orientation: 'h', y: -0.2 },
       yaxis: { title: 'Review Count' }
     }, {displayModeBar: false});
+
+    // 8. Individual Theme Analysis Charts
+    renderThemeAnalysis('Performance', ['Performance', 'Battery', 'Speed'], 'chart-theme-performance');
+    renderThemeAnalysis('VPN', ['VPN'], 'chart-theme-vpn');
+    renderThemeAnalysis('Security', ['Security Features'], 'chart-theme-security');
+    renderThemeAnalysis('Pricing', ['Pricing', 'Customer Support'], 'chart-theme-pricing');
+  }
+  
+  function renderThemeAnalysis(themeName, themeKeywords, containerId) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    
+    // Find reviews matching any of the keywords
+    const matchingReviews = FILTERED_REVIEWS.filter(r => {
+      return (r.themes || []).some(t => 
+        themeKeywords.some(kw => t.toLowerCase().includes(kw.toLowerCase()))
+      );
+    });
+    
+    if (matchingReviews.length === 0) {
+      el.innerHTML = '<div style="padding: 40px; text-align: center; color: #94A3B8;">No reviews with this theme</div>';
+      return;
+    }
+    
+    // Calculate sentiment distribution
+    const sentiments = { positive: 0, neutral: 0, negative: 0 };
+    matchingReviews.forEach(r => sentiments[r.sentiment.label]++);
+    
+    const total = matchingReviews.length;
+    const avgRating = matchingReviews.reduce((sum, r) => sum + r.rating, 0) / total;
+    
+    Plotly.newPlot(containerId, [{
+      values: [sentiments.positive, sentiments.neutral, sentiments.negative],
+      labels: ['Positive', 'Neutral', 'Negative'],
+      type: 'pie',
+      hole: 0.4,
+      marker: { colors: ['#10B981', '#F59E0B', '#EF4444'] },
+      textinfo: 'label+percent',
+      textposition: 'outside'
+    }], {
+      height: 300,
+      margin: { t: 60, r: 20, b: 20, l: 20 },
+      paper_bgcolor: 'transparent',
+      plot_bgcolor: 'transparent',
+      showlegend: false,
+      annotations: [{
+        text: `<b>${total}</b><br>reviews<br>⭐ ${avgRating.toFixed(1)}`,
+        showarrow: false,
+        font: { size: 14 }
+      }]
+    }, {displayModeBar: false});
   }
   
   // ========== REVIEWS TAB ==========
