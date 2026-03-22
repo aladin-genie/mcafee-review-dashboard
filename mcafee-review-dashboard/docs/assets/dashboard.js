@@ -470,26 +470,28 @@
       // Search
       if (activeFilters.search && !r.content.toLowerCase().includes(activeFilters.search)) return false;
       
-      // Notable/Alerts
+      // Response Quality filters
       if (activeFilters.notable !== 'all') {
-        const content = r.content.toLowerCase();
-        const mismatch = checkResponseMismatch(r);
+        const quality = checkResponseQuality(r);
         
         switch(activeFilters.notable) {
-          case 'response_mismatch':
-            return mismatch !== null;
-            
           case 'no_response':
-            return !r.developer_reply;
+            return quality?.type === 'no_response';
             
-          case 'billing_issue':
-            return content.includes('bill') || content.includes('charge') || 
-                   content.includes('payment') || content.includes('refund') ||
-                   content.includes('subscription') || content.includes('money');
+          case 'high_rating_apology':
+            return quality?.category?.includes('HIGH RATING + APOLOGY');
             
-          case 'cancellation':
-            return content.includes('cancel') || content.includes('uninstall') ||
-                   content.includes('remove') || content.includes('delete');
+          case 'low_rating_no_empathy':
+            return quality?.category?.includes('LOW RATING + NO EMPATHY');
+            
+          case 'generic_template':
+            return quality?.category?.includes('GENERIC TEMPLATE');
+            
+          case 'no_solution':
+            return quality?.category?.includes('NO SOLUTION');
+            
+          case 'wrong_issue':
+            return quality?.category?.includes('WRONG ISSUE');
             
           case 'critical':
             return r.rating === 1;
