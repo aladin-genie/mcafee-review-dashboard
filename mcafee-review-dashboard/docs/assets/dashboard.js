@@ -54,6 +54,11 @@
         this.classList.add('active');
         document.getElementById('tab-' + this.dataset.tab).classList.add('active');
         window.dispatchEvent(new Event('resize'));
+        
+        // Render analysis charts when analysis tab is clicked
+        if (this.dataset.tab === 'analysis') {
+          setTimeout(renderAnalysisCharts, 100);
+        }
       });
     });
   }
@@ -745,6 +750,84 @@
     document.getElementById('reviews-tbody').scrollIntoView({ behavior: 'smooth' });
   };
   
+  // ========== ANALYSIS TAB FUNCTIONS ==========
+  
+  function renderAnalysisCharts() {
+    // Theme Sentiment Horizontal Bar Chart
+    const themeData = [
+      { theme: 'Security Features', positive: 75.8, negative: 18.9, neutral: 5.3, total: 132 },
+      { theme: 'VPN', positive: 39.0, negative: 51.2, neutral: 9.8, total: 41 },
+      { theme: 'Pricing', positive: 53.8, negative: 43.1, neutral: 3.1, total: 65 },
+      { theme: 'Customer Support', positive: 61.2, negative: 30.5, neutral: 8.3, total: 54 },
+      { theme: 'Performance', positive: 28.6, negative: 71.4, neutral: 0, total: 28 }
+    ];
+    
+    const themeChartEl = document.getElementById('analysis-theme-chart');
+    if (themeChartEl) {
+      Plotly.newPlot('analysis-theme-chart', [
+        {
+          y: themeData.map(d => d.theme),
+          x: themeData.map(d => d.positive),
+          name: 'Positive %',
+          type: 'bar',
+          orientation: 'h',
+          marker: { color: '#10B981' },
+          text: themeData.map(d => `${d.positive}%`),
+          textposition: 'inside'
+        },
+        {
+          y: themeData.map(d => d.theme),
+          x: themeData.map(d => d.negative),
+          name: 'Negative %',
+          type: 'bar',
+          orientation: 'h',
+          marker: { color: '#EF4444' },
+          text: themeData.map(d => `${d.negative}%`),
+          textposition: 'inside'
+        }
+      ], {
+        barmode: 'stack',
+        height: 300,
+        margin: { t: 20, r: 20, b: 40, l: 120 },
+        paper_bgcolor: 'transparent',
+        plot_bgcolor: 'transparent',
+        legend: { orientation: 'h', y: -0.15 },
+        xaxis: { title: 'Sentiment %', range: [0, 100] }
+      }, {displayModeBar: false});
+    }
+    
+    // Response Quality Pie Chart
+    const responseChartEl = document.getElementById('analysis-response-chart');
+    if (responseChartEl) {
+      Plotly.newPlot('analysis-response-chart', [{
+        values: [162, 300, 47, 40, 11, 19, 5],
+        labels: ['Correct Response', 'No Solution', 'NO RESPONSE', 'Generic Template', 'High+Apology', 'Low+No Empathy', 'Wrong Issue'],
+        type: 'pie',
+        hole: 0.4,
+        marker: {
+          colors: ['#10B981', '#F59E0B', '#EF4444', '#FBBF24', '#DC2626', '#F97316', '#B91C1C']
+        },
+        textinfo: 'label+percent',
+        textposition: 'outside'
+      }], {
+        height: 300,
+        margin: { t: 10, r: 10, b: 10, l: 10 },
+        paper_bgcolor: 'transparent',
+        plot_bgcolor: 'transparent',
+        showlegend: false,
+        annotations: [{
+          text: '<b>584</b><br>reviews',
+          showarrow: false,
+          font: { size: 14 }
+        }]
+      }, {displayModeBar: false});
+    }
+  }
+  
   // Start
-  document.addEventListener('DOMContentLoaded', init);
+  document.addEventListener('DOMContentLoaded', function() {
+    init();
+    // Delay analysis chart render to ensure tab is accessible
+    setTimeout(renderAnalysisCharts, 500);
+  });
 })();
