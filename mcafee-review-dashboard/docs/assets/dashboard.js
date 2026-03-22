@@ -583,6 +583,16 @@
     
     return null;
   }
+
+  // Calculate days since review was posted (for NO RESPONSE)
+  function getResponseGap(dateString) {
+    const reviewDate = new Date(dateString);
+    const today = new Date();
+    const diffTime = Math.abs(today - reviewDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  }
+
   
   // Render Reviews Table
   function renderReviews() {
@@ -675,7 +685,11 @@
           ${qualityBadge}
           ${r.developer_reply ? 
             `<div style="font-size: 0.8rem; line-height: 1.4;">${r.developer_reply}</div>` : 
-            '<span style="color:#EF4444; font-size: 0.8rem;">⚠️ No response from McAfee</span>'}
+            '<span style="color:#EF4444; font-size: 0.8rem;">⚠️ No response from McAfee</span>' +
+            (() => {
+              const gap = getResponseGap(r.date);
+              return gap > 1 ? `<div style="font-size: 0.7rem; color: #DC2626; font-weight: 600; margin-top: 4px;">⏰ Waiting ${gap} days</div>` : '';
+            })()}
         </td>
         <td style="max-width: 280px;">
           <div style="font-size: 0.8rem; line-height: 1.4; background: #F0FDF4; padding: 8px; border-radius: 6px; border-left: 3px solid #10B981;">
