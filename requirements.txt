@@ -1,0 +1,11 @@
+# ── Scraper ────────────────────────────────────────────────────────────────────
+google-play-scraper>=1.2.7   # Google Play reviews
+requests>=2.31.0             # App Store RSS feed
+
+# ── Classifier ─────────────────────────────────────────────────────────────────
+pyyaml>=6.0                  # Read config/classification_prompt.yaml
+anthropic>=0.50.0            # Anthropic API (primary — set ANTHROPIC_API_KEY in env)
+boto3>=1.34.0                # AWS Bedrock   (secondary — falls back gracefully if absent)
+
+# ── Dashboard (local dev only — no install needed for static serving) ──────────
+# Run:  python -m http.server 8888 --directory docs

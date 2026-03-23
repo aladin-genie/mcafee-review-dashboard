@@ -1,4 +1,35 @@
-node_modules/
+# Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# Environment / secrets
 .env
-*.log
+.env.*
+*.env
+
+# macOS
 .DS_Store
+
+# Node (if ever used)
+node_modules/
+
+# Logs
+*.log
+
+# Editor
+.vscode/
+.idea/
+
+# Temp scraper output
+docs/data/scrape_checkpoint.json
+docs/data/dashboard_data.json.tmp
+
+# Archive folder — not deployed
+_archive/
