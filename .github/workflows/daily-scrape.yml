@@ -1,0 +1,57 @@
+name: Daily Review Scrape
+
+# Scrapes new reviews and commits updated data.
+# Classification (scripts/classify.py) is intentionally excluded — run it
+# locally where AWS Bedrock credentials are available, then push the result.
+
+on:
+  schedule:
+    # Run daily at 06:00 CST / 07:00 CDT (12:00 UTC)
+    - cron: "0 12 * * *"
+  workflow_dispatch:   # Allow manual trigger from the GitHub Actions UI
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install scraping dependencies
+        run: pip install google-play-scraper requests
+
+      - name: Scrape reviews (incremental)
+        run: python scripts/scrape.py
+
+      - name: Check for new data
+        id: check
+        run: |
+          if git diff --quiet docs/data/; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit and push updated data
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          git config user.email "action@github.com"
+          git config user.name  "GitHub Actions"
+          git add docs/data/dashboard_data.json docs/data/scrape_checkpoint.json
+          git commit -m "chore: scrape reviews $(date +%Y-%m-%d) [skip ci]"
+          git push
+
+      - name: Summary
+        run: |
+          if [ "${{ steps.check.outputs.changed }}" = "true" ]; then
+            echo "## ✅ New reviews scraped — $(date +%Y-%m-%d)" >> "$GITHUB_STEP_SUMMARY"
+            echo "Pull the latest and run \`python scripts/classify.py\` locally." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "## ℹ️ No new reviews found — $(date +%Y-%m-%d)" >> "$GITHUB_STEP_SUMMARY"
+          fi

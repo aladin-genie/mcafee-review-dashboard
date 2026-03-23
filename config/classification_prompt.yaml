@@ -1,0 +1,221 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# McAfee Review Classifier — Configuration
+# ─────────────────────────────────────────────────────────────────────────────
+# This file controls the LLM model selection, classification categories,
+# and the exact prompt sent to the model.  Edit freely — the code reads
+# everything from here, so no Python changes are needed.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Model settings ────────────────────────────────────────────────────────────
+# Backend priority at runtime (auto-detected by classify.py):
+#   1. Anthropic API   — set ANTHROPIC_API_KEY in environment
+#   2. AWS Bedrock     — boto3 installed + AWS credentials in ~/.aws/ or env vars
+#   3. CLI LLM         — any executable named by cli_command below
+#   4. Rule-based      — offline fallback, no credentials required
+model:
+  # Anthropic direct API (priority 1 — requires ANTHROPIC_API_KEY env var)
+  anthropic_model_id: "claude-haiku-4-5-20251001"
+
+  # AWS Bedrock model ID (priority 2 — requires boto3 + AWS credentials)
+  bedrock_model_id: "anthropic.claude-3-haiku-20240307-v1:0"
+  bedrock_region:   "us-east-1"
+
+  # CLI fallback (priority 3): name of the LLM tool on your machine.
+  # Common options: "llm" (Simon Willison's llm CLI), "claude", "ollama"
+  cli_command: "llm"
+
+  max_tokens:  512
+  temperature: 0.1   # Low temperature = consistent, deterministic classification
+
+# ── Processing settings ───────────────────────────────────────────────────────
+skip_already_classified: true   # Skip reviews that already have a quality_tag
+                                 # Set to false to re-classify everything
+
+# ── Classification schema ─────────────────────────────────────────────────────
+
+# INTENT — the emotional posture of the review
+intent_labels:
+  COMPLAINT:         "User is upset or dissatisfied with the product or company"
+  FEEDBACK:          "Mixed feelings; may include both praise and criticism, or suggestions"
+  NEUTRAL_STATEMENT: "Factual statement with no strong positive or negative emotion (e.g. 'Just installed it')"
+  PRAISE:            "Positive experience; customer is satisfied or grateful"
+
+# THEMES — up to 3 topics mentioned in the review
+theme_labels:
+  - Performance        # slow, lag, battery drain, freeze
+  - VPN                # VPN connectivity, speed, disconnections
+  - Security Features  # antivirus, threat detection, protection
+  - UI/UX              # interface design, navigation, usability
+  - Customer Support   # support interactions, agent quality, response time
+  - Pricing            # cost, value for money, subscription fees
+  - Auto-Renewal       # unexpected charges, hard to cancel, refund requests
+  - Dark Web           # dark web monitoring, identity theft alerts, breach notices
+  - Scam/Phishing      # users reporting scam emails/texts from or about McAfee
+  - Pop-ups/Ads        # in-app notifications, upsell prompts, banner ads
+  - Installation       # setup, uninstall, bloatware complaints
+  - App Issues         # crashes, bugs, errors, app not opening
+
+# QUALITY TAG — assessment of McAfee's developer reply (or lack thereof)
+quality_tags:
+  NO_RESPONSE:
+    label:       "No Response"
+    description: "McAfee did not reply to this review at all"
+    when:        "developer_reply is empty or blank"
+
+  UNWARRANTED_APOLOGY:
+    label:       "Unwarranted Apology"
+    description: "McAfee apologised when the review was neutral or positive — creates a confusing impression"
+    when:        "intent is NEUTRAL_STATEMENT or PRAISE, but reply contains 'sorry' or 'apologize'"
+
+  HIGH_RATING_APOLOGY:
+    label:       "High Rating + Apology"
+    description: "4-5 star review with a reply that apologises — signals that the agent did not read the review"
+    when:        "rating >= 4 AND reply contains 'sorry' or 'apologize'"
+
+  LOW_RATING_NO_EMPATHY:
+    label:       "Low Rating, No Empathy"
+    description: "1-2 star review with a cold, mechanical reply that shows no empathy for the customer's frustration"
+    when:        "rating <= 2 AND no empathy language in reply"
+
+  GENERIC_TEMPLATE:
+    label:       "Generic Template"
+    description: "Copy-paste response that ignores the specific issue raised — the customer feels unheard"
+    when:        "reply does not reference the specific complaint; contains phrases like 'we are elated' or simply directs to support"
+
+  WRONG_ISSUE:
+    label:       "Wrong Issue Addressed"
+    description: "Reply addresses a different topic than what was raised in the review"
+    when:        "reply talks about a different feature or issue than what the review mentions"
+
+  NO_SOLUTION:
+    label:       "No Solution Offered"
+    description: "Reply shows empathy but provides no actionable steps — customer is left without help"
+    when:        "reply says 'sorry' but only redirects to support without specific instructions"
+
+  CORRECT:
+    label:       "Correct"
+    description: "Reply is appropriate: matches the tone, addresses the specific issue, and offers an actionable resolution"
+    when:        "reply shows empathy (for complaints), is specific to the issue, and offers a clear next step"
+
+
+# ── Prompt template ───────────────────────────────────────────────────────────
+# Placeholders (Python .format() style):
+#   {platform}        — google_play | app_store | windows_desktop
+#   {rating}          — 1-5
+#   {content}         — review text
+#   {developer_reply} — McAfee's reply, or the string "None"
+#
+# The model MUST respond with a single JSON object and nothing else.
+# ─────────────────────────────────────────────────────────────────────────────
+prompt_template: |
+  You are a senior customer-experience analyst reviewing app-store responses for McAfee security products.
+  Your job is to classify a review and evaluate the quality of McAfee's reply.
+
+  ════════════════════════════════════════════════════════════════
+  REVIEW TO ANALYSE
+  ════════════════════════════════════════════════════════════════
+  Platform : {platform}
+  Rating   : {rating} / 5 stars
+  Text     :
+  {content}
+
+  McAfee reply:
+  {developer_reply}
+  ════════════════════════════════════════════════════════════════
+
+  INSTRUCTIONS
+  Return ONLY a valid JSON object — no markdown, no commentary, nothing else.
+  The JSON must have exactly these five keys:
+
+  "intent"
+    Classify the emotional posture of the REVIEW (not the reply).
+    Must be exactly one of:
+      COMPLAINT          – user is upset or dissatisfied
+      FEEDBACK           – mixed feelings or suggestions
+      NEUTRAL_STATEMENT  – factual, no strong emotion (e.g. "just installed")
+      PRAISE             – positive, satisfied customer
+
+  "themes"
+    Array of 1–3 topics the review mentions, chosen from:
+      Performance, VPN, Security Features, UI/UX, Customer Support,
+      Pricing, Auto-Renewal, Dark Web, Scam/Phishing, Pop-ups/Ads,
+      Installation, App Issues
+    Use an empty array [] if no theme matches clearly.
+
+  "quality_tag"
+    Assess McAfee's developer reply. Must be exactly one of:
+      NO_RESPONSE            – no reply at all
+      UNWARRANTED_APOLOGY    – apologised for a positive/neutral review
+      HIGH_RATING_APOLOGY    – rating ≥ 4 but reply says "sorry/apologize"
+      LOW_RATING_NO_EMPATHY  – rating ≤ 2, reply is cold or mechanical
+      GENERIC_TEMPLATE       – copy-paste; ignores the specific complaint
+      WRONG_ISSUE            – reply addresses a different topic
+      NO_SOLUTION            – empathy only, no actionable help offered
+      CORRECT                – appropriate, specific, and actionable
+
+  "suggested_reply"
+    A short, improved reply McAfee SHOULD send (1–3 sentences).
+    Rules:
+      • Match tone to intent: empathetic for COMPLAINT, warm for PRAISE
+      • Be specific — reference the exact issue if possible
+      • Do NOT apologise for PRAISE or NEUTRAL_STATEMENT reviews
+      • Include a concrete action step or contact channel for complaints
+      • Return null (JSON null, not the string "null") if the existing reply
+        is already tagged CORRECT — no change needed
+
+  "reasoning"
+    One sentence explaining your quality_tag choice.
+
+  ════════════════════════════════════════════════════════════════
+  FEW-SHOT EXAMPLES
+  ════════════════════════════════════════════════════════════════
+
+  Example 1 — PRAISE with unwarranted apology
+  Review (5★): "Best antivirus I've used! The VPN is fast and I feel totally secure."
+  Reply: "We are sorry to hear you are having issues. Please contact support."
+  Expected JSON:
+  {{
+    "intent": "PRAISE",
+    "themes": ["VPN", "Security Features"],
+    "quality_tag": "UNWARRANTED_APOLOGY",
+    "suggested_reply": "Thank you so much for the kind words! We are thrilled the VPN is working well for you. Stay protected!",
+    "reasoning": "The review is 5-star positive praise, yet McAfee's reply apologises and suggests the user has issues — clearly a template error."
+  }}
+
+  Example 2 — COMPLAINT, no response
+  Review (1★): "VPN disconnects every 5 minutes. Useless for working remotely. Waste of money."
+  Reply: (none)
+  Expected JSON:
+  {{
+    "intent": "COMPLAINT",
+    "themes": ["VPN", "Pricing"],
+    "quality_tag": "NO_RESPONSE",
+    "suggested_reply": "We are very sorry the VPN has been disconnecting — that is not acceptable for remote work. Please try toggling the VPN off and back on or reinstalling the app. If the issue persists, our specialists at 1-866-622-3911 will resolve it for you.",
+    "reasoning": "No developer reply was provided for a 1-star complaint about VPN stability."
+  }}
+
+  Example 3 — NEUTRAL_STATEMENT, correct reply
+  Review (3★): "Just started using this for myself and my kids. Haven't explored all features yet."
+  Reply: "Thanks for trying McAfee! Have you explored our VPN or Dark Web Monitoring? Both add great protection. Let us know if you need help getting started."
+  Expected JSON:
+  {{
+    "intent": "NEUTRAL_STATEMENT",
+    "themes": [],
+    "quality_tag": "CORRECT",
+    "suggested_reply": null,
+    "reasoning": "The reply is warm, relevant, non-apologetic, and encourages feature exploration — appropriate for a neutral first-impression review."
+  }}
+
+  Example 4 — COMPLAINT, generic template
+  Review (2★): "Auto-renew charged me without warning. I never agreed to this. Need a refund."
+  Reply: "We're sorry for the inconvenience. Please contact our support team at mcafee.com/support for assistance."
+  Expected JSON:
+  {{
+    "intent": "COMPLAINT",
+    "themes": ["Auto-Renewal", "Pricing"],
+    "quality_tag": "NO_SOLUTION",
+    "suggested_reply": "We sincerely apologise for the unexpected charge — this is not the experience we want. You can cancel auto-renewal and request a refund directly at mcafee.com/myaccount or by calling 1-866-622-3911. We will make this right within 24 hours.",
+    "reasoning": "The reply shows empathy but only redirects to a generic support page without explaining how to cancel or get a refund."
+  }}
+
+  Now classify the review above and return only the JSON object.
