@@ -28,7 +28,6 @@ node_modules/
 .idea/
 
 # Temp scraper output
-docs/data/scrape_checkpoint.json
 docs/data/dashboard_data.json.tmp
 
 # Archive folder — not deployed
